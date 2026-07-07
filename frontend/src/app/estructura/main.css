@@ -1,0 +1,13 @@
+/* El contenedor que envuelve al nav y al contenido */
+.d-flex {
+    width: 100%;
+    min-height: calc(100vh - 70px); /* Ajusta 70px si tu header es más alto o bajo */
+    display: flex;
+    flex: 1; /* Esto obliga a que el div se estire para llenar el espacio */
+}
+
+/* Asegura que el main principal tome todo el espacio restante */
+main {
+    flex-grow: 1;
+    width: 100%;
+}

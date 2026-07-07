@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Global InvestHub - Potencia tus Inversiones</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-main navbar-custom">
+        <div class="container-fluid px-0 px-md-4">
+            <a class="navbar-brand brand-logo" href="index.html">
+                Global <span class="hub">InvestHub</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Marketplace</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Engines</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Developers</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Pricing</a></li>
+                </ul>
+            </div>
+            <div class="d-none d-lg-flex align-items-center gap-3">
+                <a href="login.html" class="nav-link-custom text-decoration-none">Sign In</a>
+                <a href="dashboard.html" class="btn btn-cyan">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Market Ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker-item">EUR/USD <span class="ticker-value up">1.0847 ▲</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">BTC/USD <span class="ticker-value up">67,234 ▲</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">VIX <span class="ticker-value down">14.23 ▼</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">ETH/USD <span class="ticker-value down">3,812 ▼</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">NQ1! <span class="ticker-value up">19,876 ▲</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">GOLD <span class="ticker-value down">2,341.5 ▼</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">ES1! <span class="ticker-value up">5,254 ▲</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">DOW <span class="ticker-value down">39,120 ▼</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">GBP/USD <span class="ticker-value up">1.2742 ▲</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">NVDA <span class="ticker-value up">127.40 ▲</span><span class="ticker-separator">|</span></div>
+        <div class="ticker-item">TSLA <span class="ticker-value down">178.20 ▼</span></div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="container hero-section">
+        <h1 class="hero-title">Potencia tus Inversiones con<br>Algoritmos Avanzados</h1>
+        <p class="hero-subtitle">Explora, prueba y despliega sistemas de trading automatizados creados por desarrolladores expertos a nivel global.</p>
+        
+        <div class="d-flex justify-content-center gap-3 mb-5">
+            <a href="dashboard.html" class="btn btn-cyan px-4 py-2">Explorar Algoritmos</a>
+            <a href="#" class="btn btn-outline-custom px-4 py-2">Documentación</a>
+        </div>
+
+        <div class="row g-4 justify-content-center mt-5">
+            <div class="col-6 col-md-3">
+                <div class="home-metric-card">
+                    <div class="home-metric-val">+$45M</div>
+                    <div class="home-metric-label">Volumen Total Operado</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="home-metric-card">
+                    <div class="home-metric-val">&lt; 12ms</div>
+                    <div class="home-metric-label">Latencia de Ejecución</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="home-metric-card">
+                    <div class="home-metric-val">94.2%</div>
+                    <div class="home-metric-label">Uptime del Servidor</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="home-metric-card">
+                    <div class="home-metric-val">1,200+</div>
+                    <div class="home-metric-label">Algoritmos Activos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row gy-4 border-bottom border-secondary pb-4 mb-4" style="border-color: rgba(255,255,255,0.08) !important;">
+                <div class="col-lg-4 col-md-6">
+                    <div class="brand-logo mb-3">
+                        Global <span class="hub">InvestHub</span>
+                    </div>
+                    <p class="text-muted pe-md-5">"Plataforma avanzada de optimización, análisis e infraestructura para algoritmos y bots de trading a nivel global."</p>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="footer-title">Enlaces Rápidos</div>
+                    <a href="#" class="footer-link">Marketplace</a>
+                    <a href="#" class="footer-link">Engines</a>
+                    <a href="#" class="footer-link">Developers</a>
+                    <a href="#" class="footer-link">Pricing</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-title">Contacto</div>
+                    <a href="mailto:support@globalinvesthub.com" class="footer-link"><i class="bi bi-envelope me-2"></i>support@globalinvesthub.com</a>
+                    <span class="footer-link text-muted"><i class="bi bi-geo-alt me-2"></i>Soporte Global</span>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-title">Síguenos</div>
+                    <div class="d-flex">
+                        <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-discord"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-github"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-muted">
+                © 2026 Global InvestHub. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

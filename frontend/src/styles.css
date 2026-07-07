@@ -1,0 +1,13 @@
+/* Asegura que toda la aplicación ocupe al menos el alto de la pantalla */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Opcional: Para que no haya scrolls innecesarios */
+app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

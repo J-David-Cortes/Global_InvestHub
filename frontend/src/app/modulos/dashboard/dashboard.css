@@ -1,0 +1,5 @@
+:host {
+  display: block; /* Obliga al componente a comportarse como un contenedor */
+  width: 100%;    /* Ocupa el ancho disponible */
+  height: 100%;   /* Ocupa el alto disponible */
+}

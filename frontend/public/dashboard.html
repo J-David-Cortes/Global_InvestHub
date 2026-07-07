@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - Global InvestHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar d-none d-lg-flex">
+            <div class="sidebar-brand">
+                <a href="index.html" class="brand-logo">
+                    Global <span class="hub">InvestHub</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav mt-3">
+                <a href="#" class="sidebar-link active"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+                <a href="#" class="sidebar-link"><i class="bi bi-cpu"></i> Engines</a>
+                <a href="#" class="sidebar-link"><i class="bi bi-pie-chart"></i> Portfolio</a>
+                <a href="#" class="sidebar-link"><i class="bi bi-gear"></i> Settings</a>
+            </nav>
+
+            <div class="sidebar-profile">
+                <div class="avatar">JS</div>
+                <div>
+                    <div class="fw-semibold" style="font-size: 0.9rem;">John Smith</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">PRO Member</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Mobile Header -->
+            <div class="d-flex d-lg-none justify-content-between align-items-center mb-4">
+                <a href="index.html" class="brand-logo m-0">Global <span class="hub">InvestHub</span></a>
+                <button class="btn btn-outline-custom px-2 py-1"><i class="bi bi-list fs-4"></i></button>
+            </div>
+
+            <!-- Breadcrumbs -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-2" style="font-size: 0.8rem;">
+                    <li class="breadcrumb-item"><a href="#" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active text-teal" aria-current="page">Dashboard</li>
+                </ol>
+            </nav>
+
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="page-title m-0">OVERVIEW</h1>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-card border border-secondary rounded p-2"
+                        style="border-color: rgba(255,255,255,0.08) !important; width:38px; height:38px;"></div>
+                    <button class="btn btn-cyan"><i class="bi bi-plus-lg me-1"></i> New Engine</button>
+                </div>
+            </header>
+
+            <!-- Metrics -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="dashboard-metric-card">
+                        <div class="dashboard-metric-label">TOTAL EQUITY</div>
+                        <div class="dashboard-metric-value">$124,560.00</div>
+                        <div class="text-cyan" style="font-size: 0.85rem;"><i class="bi bi-arrow-up-right"></i> +12.5%
+                            this month</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dashboard-metric-card">
+                        <div class="dashboard-metric-label">ACTIVE ALGORITHMS</div>
+                        <div class="dashboard-metric-value">4 Engines</div>
+                        <div class="text-teal" style="font-size: 0.85rem;">MT5 & LEAN Running</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dashboard-metric-card">
+                        <div class="dashboard-metric-label">AVG. SHARPE RATIO</div>
+                        <div class="dashboard-metric-value text-gold">2.14</div>
+                        <div class="text-muted" style="font-size: 0.85rem;">Across all active portfolios</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-table-wrapper">
+                <div class="table-header">
+                    <h2 class="m-0 fs-6 fw-semibold">Active Engines</h2>
+                    <button class="btn btn-outline-custom py-1 px-3" style="font-size: 0.8rem;">View All</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>ALGORITHM</th>
+                                <th>PLATFORM</th>
+                                <th>STATUS</th>
+                                <th>PROFIT/LOSS</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="fw-medium">Quantum FX</div>
+                                    <div class="text-muted" style="font-size: 0.8rem;">Alpha</div>
+                                </td>
+                                <td><span class="badge-platform">MT5</span></td>
+                                <td>
+                                    <span class="status-dot status-running"></span>
+                                    <span class="text-cyan" style="font-size: 0.85rem;">Running</span>
+                                </td>
+                                <td><span class="text-cyan">+$4,230.50</span></td>
+                                <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="fw-medium">Crypto</div>
+                                    <div class="text-muted" style="font-size: 0.8rem;">Momentum</div>
+                                </td>
+                                <td><span class="badge-platform">LEAN</span></td>
+                                <td>
+                                    <span class="status-dot status-running"></span>
+                                    <span class="text-cyan" style="font-size: 0.85rem;">Running</span>
+                                </td>
+                                <td><span class="text-cyan">+$1,890.20</span></td>
+                                <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="fw-medium">Gold Hedge</div>
+                                    <div class="text-muted" style="font-size: 0.8rem;">Beta</div>
+                                </td>
+                                <td><span class="badge-platform">MT5</span></td>
+                                <td>
+                                    <span class="status-dot status-paused"></span>
+                                    <span class="text-gold" style="font-size: 0.85rem;">Paused</span>
+                                </td>
+                                <td><span class="text-gold">-$120.00</span></td>
+                                <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
