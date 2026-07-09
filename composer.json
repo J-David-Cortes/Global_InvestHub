@@ -1,0 +1,15 @@
+{
+    "name": "davetarget/marketplace_bots",
+    "autoload": {
+        "psr-4": {
+            "Davetarget\\MarketplaceBots\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "J-David-Cortes",
+            "email": "jhoann_cortes@soy.sena.edu.co"
+        }
+    ],
+    "require": {}
+}
