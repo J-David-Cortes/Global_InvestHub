@@ -33,5 +33,27 @@
 
             return $vec;
         }
+
+        public function insertar($params){
+            $sql = "INSERT INTO usuario(nombre, email, clave) VALUES('$params->nombre', '$params->email', '$params->clave')";
+            mysqli_query($this->conexion, $sql) or die("NO inserto el REGISTRO");
+
+            $vec = [];
+            $vec['Resultado'] = "OK";
+            $vec['mensaje'] = "Se inserto el registro";
+
+            return $vec;
+        }
+
+        public function editar($id, $params){
+            $sql = "UPDATE usuario SET nombre = '$params->nombre' WHERE id_usuario = $id";
+            mysqli_query($this->conexion, $sql) or die("NO edito el REGISTRO");
+
+            $vec = [];
+            $vec['Resultado'] = "OK";
+            $vec['mensaje'] = "Se edito el registro";
+
+            return $vec;
+        }
     }
 ?>
