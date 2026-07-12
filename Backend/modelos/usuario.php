@@ -35,7 +35,7 @@
         }
 
         public function insertar($params){
-            $sql = "INSERT INTO usuario(nombre, email, clave) VALUES('$params->nombre', '$params->email', '$params->clave')";
+            $sql = "INSERT INTO usuario(nombre, email, clave, fo_pais, fo_ciudad, fo_permiso_nivel, fo_area_cargo) VALUES('$params->nombre', '$params->email', '$params->clave', $params->pais, $params->ciudad, $params->permiso_nivel, $params->area_cargo)";
             mysqli_query($this->conexion, $sql) or die("NO inserto el REGISTRO");
 
             $vec = [];
