@@ -22,6 +22,19 @@
             return $vec;
         }
 
+        public function consulta2($id_departamento){
+            $sql = "SELECT * FORM ciudad WHERE fo_departamento = $id_departamento ORDER BY nombre";
+            $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla CIUDAD");
+
+            $vec = [];
+
+            while($row = mysql_fetch_array($res)){
+                $vec[] = $row;                
+            }
+
+            return $vec;
+        }
+
         public function eliminar($id){
             $sql = "DELETE FROM ciudad WHERE id_ciudad = $id";
             mysqli_query($this->conexion, $sql) or die("NO elimino el REGISTRO");
@@ -34,7 +47,7 @@
         }
 
         public function insertar($params){
-            $sql = "INSERT INTO ciudad(nombre, fo_departamento) VALUES('$params->nombre', '$params->email', '$params->clave')";
+            $sql = "INSERT INTO ciudad(nombre, fo_departamento) VALUES('$params->nombre', '$params->departamento')";
             mysqli_query($this->conexion, $sql) or die("NO inserto el REGISTRO");
 
             $vec = [];
@@ -45,7 +58,7 @@
         }
 
         public function editar($id, $params){
-            $sql = "UPDATE ciudad SET nombre = '$params->nombre' WHERE id_ciudad = $id";
+            $sql = "UPDATE ciudad SET nombre = '$params->nombre', fo_departamento = '$params->departamento' WHERE id_ciudad = $id";
             mysqli_query($this->conexion, $sql) or die("NO edito el REGISTRO");
 
             $vec = [];
