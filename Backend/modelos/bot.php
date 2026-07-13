@@ -11,7 +11,12 @@
         //Metodos
 
         public function consulta(){
-            $sql = "SELECT * FORM bot ORDER BY nombre";
+            $sql = "SELECT b.*, u.nombre AS Usuario, a.codigo AS Codigo, br.nombre AS Broker
+                FROM bot b
+                INNER JOIN usuario u ON b.fo_usuario = u.id_usuario
+                INNER JOIN api a ON b.fo_api = a.id_api
+                INNER JOIN broker br ON a.fo_broker = br.id_broker
+                ORDER BY b.nombre";
             $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla area_cargo");
 
             $vec = [];
@@ -35,7 +40,8 @@
         }
 
         public function insertar($params){
-            $sql = "INSERT INTO bot(nombre, codigo, fo_usuario, fo_api) VALUES('$params->nombre', '$params->codigo', '$params->usuario', '$params->api')";
+            $sql = "INSERT INTO bot(nombre, codigo, fo_usuario, fo_api) VALUES('$params->nombre', '$params->codigo', '$params->fo_usuario', '$params->fo_api')";
+            
             mysqli_query($this->conexion, $sql) or die("NO inserto el REGISTRO");
 
             $vec = [];
@@ -46,7 +52,7 @@
         }
 
         public function editar($id, $params){
-            $sql = "UPDATE bot SET nombre = '$params->nombre', codigo = '$params->codigo', fo_usuario = '$params->usuario', fo_api = '$params->api' WHERE id_usuario = $id";
+            $sql = "UPDATE bot SET nombre = '$params->nombre', codigo = '$params->codigo', fo_usuario = '$params->fo_usuario', fo_api = '$params->fo_api' WHERE id_usuario = $id";
             mysqli_query($this->conexion, $sql) or die("NO edito el REGISTRO");
 
             $vec = [];
