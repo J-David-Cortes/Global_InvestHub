@@ -11,12 +11,12 @@
         //Metodos
 
         public function consulta(){
-            $sql = "SELECT * FORM administrador ORDER BY administrador";
+            $sql = "SELECT * FROM administrador ORDER BY administrador";
             $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla administrador");
 
             $vec = [];
 
-            while($row = mysql_fetch_array($res)){
+            while($row = mysqli_fetch_array($res)){
                 $vec[] = $row;                
             }
 
@@ -35,7 +35,7 @@
         }
 
         public function insertar($params){
-            $sql = "INSERT INTO administrador(fo_permiso_nivel, fo_area_cargo) VALUES $params->permiso_nivel, '$params->area_cargo')";
+            $sql = "INSERT INTO administrador(fo_permiso_nivel, fo_area_cargo) VALUES ($params->permiso_nivel, '$params->area_cargo')";
             mysqli_query($this->conexion, $sql) or die("NO inserto el REGISTRO");
 
             $vec = [];
@@ -46,7 +46,7 @@
         }
 
         public function editar($id, $params){
-            $sql = "UPDATE administrador SET fo_permiso_nivel = $params->permiso_nivel, fo_area_cargo = '$params->area_cargo' WHERE id_usuario = $id";
+            $sql = "UPDATE administrador SET fo_permiso_nivel = $params->fo_permiso_nivel, fo_area_cargo = '$params->fo_area_cargo' WHERE id_administrador = $id";
             mysqli_query($this->conexion, $sql) or die("NO edito el REGISTRO");
 
             $vec = [];
