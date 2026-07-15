@@ -11,12 +11,13 @@
         //Metodos
 
         public function consulta(){
-            $sql = "SELECT * FROM administrador ORDER BY administrador";
-            $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla administrador");
+            // Cambia 'administrador' por la columna real por la que quieras ordenar (ej: id_administrador)
+            $sql = "SELECT * FROM administrador ORDER BY id_administrador"; 
+            $res = mysqli_query($this->conexion, $sql) or die("Error al consultar: " . mysqli_error     ($this->conexion));
 
             $vec = [];
-
-            while($row = mysqli_fetch_array($res)){
+            // Usamos fetch_assoc para obtener solo nombres de columna, no índices numéricos
+            while($row = mysqli_fetch_assoc($res)){
                 $vec[] = $row;                
             }
 
