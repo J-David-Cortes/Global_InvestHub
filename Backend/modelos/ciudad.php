@@ -1,37 +1,30 @@
 <?php
     class ciudad{
-        //atributos
         private $conexion;
 
         public function __construct($conexion){
             $this->conexion = $conexion;
         }
 
-        //Metodos
-
         public function consulta(){
-            $sql = "SELECT * FORM ciudad ORDER BY nombre";
-            $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla CIUDAD");
+            $sql = "SELECT * FROM ciudad ORDER BY nombre";
+            $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla ciudad");
 
             $vec = [];
-
-            while($row = mysql_fetch_array($res)){
+            while($row = mysqli_fetch_assoc($res)){
                 $vec[] = $row;                
             }
-
             return $vec;
         }
 
         public function consulta2($id_departamento){
-            $sql = "SELECT * FORM ciudad WHERE fo_departamento = $id_departamento ORDER BY nombre";
-            $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla CIUDAD");
+            $sql = "SELECT * FROM ciudad WHERE fo_departamento = $id_departamento ORDER BY nombre";
+            $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla ciudad");
 
             $vec = [];
-
-            while($row = mysql_fetch_array($res)){
+            while($row = mysqli_fetch_assoc($res)){
                 $vec[] = $row;                
             }
-
             return $vec;
         }
 
@@ -39,33 +32,22 @@
             $sql = "DELETE FROM ciudad WHERE id_ciudad = $id";
             mysqli_query($this->conexion, $sql) or die("NO elimino el REGISTRO");
 
-            $vec = [];
-            $vec['Resultado'] = "OK";
-            $vec['mensaje'] = "Se elimino el registro";
-
-            return $vec;
+            return ['Resultado' => "OK", 'mensaje' => "Se elimino el registro"];
         }
 
         public function insertar($params){
-            $sql = "INSERT INTO bot(nombre, fo_departamento) VALUES('$params->nombre', '$params->departamento')";
+            // Corregido: apuntas a la tabla ciudad, no bot
+            $sql = "INSERT INTO ciudad(nombre, fo_departamento) VALUES('$params->nombre', $params->departamento)";
             mysqli_query($this->conexion, $sql) or die("NO inserto el REGISTRO");
 
-            $vec = [];
-            $vec['Resultado'] = "OK";
-            $vec['mensaje'] = "Se inserto el registro";
-
-            return $vec;
+            return ['Resultado' => "OK", 'mensaje' => "Se inserto el registro"];
         }
 
         public function editar($id, $params){
-            $sql = "UPDATE ciudad SET nombre = '$params->nombre', fo_departamento = '$params->departamento' WHERE id_ciudad = $id";
+            $sql = "UPDATE ciudad SET nombre = '$params->nombre', fo_departamento = $params->departamento WHERE id_ciudad = $id";
             mysqli_query($this->conexion, $sql) or die("NO edito el REGISTRO");
 
-            $vec = [];
-            $vec['Resultado'] = "OK";
-            $vec['mensaje'] = "Se edito el registro";
-
-            return $vec;
+            return ['Resultado' => "OK", 'mensaje' => "Se edito el registro"];
         }
     }
 ?>

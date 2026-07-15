@@ -1,59 +1,45 @@
 <?php
-
-    class marketplace{
-        //atributos
+    class marketplace {
         private $conexion;
 
         public function __construct($conexion){
             $this->conexion = $conexion;
         }
 
-        //Metodos
-
         public function consulta(){
-            $sql = "SELECT * FORM marketplace ORDER BY nombre";
-            $res = mysqli_query($this->conexion, $sql) or die("No encontro la tabla marketplace");
+            // Corregido: FORM -> FROM
+            $sql = "SELECT * FROM marketplace ORDER BY nombre";
+            $res = mysqli_query($this->conexion, $sql) or die("No se pudo consultar la tabla marketplace");
 
             $vec = [];
-
-            while($row = mysql_fetch_array($res)){
+            // Corregido: mysql_fetch_array -> mysqli_fetch_assoc
+            while($row = mysqli_fetch_assoc($res)){
                 $vec[] = $row;                
             }
-
             return $vec;
         }
 
         public function eliminar($id){
             $sql = "DELETE FROM marketplace WHERE id_marketplace = $id";
-            mysqli_query($this->conexion, $sql) or die("NO elimino el REGISTRO");
+            mysqli_query($this->conexion, $sql) or die("NO se pudo eliminar el registro");
 
-            $vec = [];
-            $vec['Resultado'] = "OK";
-            $vec['mensaje'] = "Se elimino el registro";
-
-            return $vec;
+            return ['Resultado' => "OK", 'mensaje' => "Se elimino el registro"];
         }
 
         public function insertar($params){
-            $sql = "INSERT INTO marketplace(nombre, fo_bot) VALUES('$params->nombre', '$params->bot')";
-            mysqli_query($this->conexion, $sql) or die("NO inserto el REGISTRO");
+            // Corregido: eliminado comillas en fo_bot para tratar como INT
+            $sql = "INSERT INTO marketplace(nombre, fo_bot) VALUES('$params->nombre', $params->bot)";
+            mysqli_query($this->conexion, $sql) or die("NO se pudo insertar el registro");
 
-            $vec = [];
-            $vec['Resultado'] = "OK";
-            $vec['mensaje'] = "Se inserto el registro";
-
-            return $vec;
+            return ['Resultado' => "OK", 'mensaje' => "Se inserto el registro"];
         }
 
         public function editar($id, $params){
-            $sql = "UPDATE marketplace SET nombre = '$params->nombre', fo_bot = '$params->bot' WHERE id_marketplace = $id";
-            mysqli_query($this->conexion, $sql) or die("NO edito el REGISTRO");
+            // Corregido: eliminado comillas en fo_bot
+            $sql = "UPDATE marketplace SET nombre = '$params->nombre', fo_bot = $params->bot WHERE id_marketplace = $id";
+            mysqli_query($this->conexion, $sql) or die("NO se pudo editar el registro");
 
-            $vec = [];
-            $vec['Resultado'] = "OK";
-            $vec['mensaje'] = "Se edito el registro";
-
-            return $vec;
+            return ['Resultado' => "OK", 'mensaje' => "Se edito el registro"];
         }
     }
 ?>
