@@ -3,7 +3,8 @@
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
     require_once('../modelos/conexion.php');
-    require_once('../modelos/departamento.php');
+    // CAMBIO AQUÍ: Ahora apunta a la versión 2 que tiene los JOIN y la seguridad
+    require_once('../modelos/modelos_v2/departamento.php');
 
     $control = $_GET['control'];
     $departamento = new departamento($conexion);

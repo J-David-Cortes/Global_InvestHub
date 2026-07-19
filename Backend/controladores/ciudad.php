@@ -3,7 +3,8 @@
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
     require_once('../modelos/conexion.php');
-    require_once('../modelos/ciudad.php');
+    // CAMBIO AQUÍ: Ahora apunta a tu nueva versión profesional
+    require_once('../modelos/modelos_v2/ciudad.php');
 
     $control = $_GET['control'];
     $ciudad = new ciudad($conexion);

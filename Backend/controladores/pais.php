@@ -3,7 +3,8 @@
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
     require_once('../modelos/conexion.php');
-    require_once('../modelos/pais.php');
+    // CAMBIO AQUÍ: Apuntamos al modelo en la carpeta v2
+    require_once('../modelos/modelos_v2/pais.php');
 
     $control = $_GET['control'];
     $pais = new pais($conexion);

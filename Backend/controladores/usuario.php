@@ -3,7 +3,8 @@
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
     require_once('../modelos/conexion.php');
-    require_once('../modelos/usuario.php');
+    // RUTA CORREGIDA: entra a modelos y luego a modelos_v2
+    require_once('../modelos/modelos_v2/usuario.php');
 
     $control = $_GET['control'];
     $usuario = new Usuario($conexion);
