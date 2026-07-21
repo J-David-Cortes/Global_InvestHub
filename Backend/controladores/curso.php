@@ -4,32 +4,32 @@
     header('Content-Type: application/json');
 
     require_once('../modelos/conexion.php');
-    require_once('../modelos/modelos_v2/broker.php'); 
+    require_once('../modelos/modelos_v2/curso.php');
 
     $control = isset($_GET['control']) ? $_GET['control'] : '';
-    $broker = new Broker($conexion);
+    $curso = new Curso($conexion);
 
     switch($control){
         case 'consulta' :
-            $vec = $broker->consulta();
+            $vec = $curso->consulta();
         break;
 
         case 'insertar' :
             $json = file_get_contents('php://input');
             $params = json_decode($json);
-            $vec = $broker->insertar($params);
+            $vec = $curso->insertar($params);
         break;
 
         case 'editar' :
             $json = file_get_contents('php://input');
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
             $params = json_decode($json);
-            $vec = $broker->editar($id, $params);
+            $vec = $curso->editar($id, $params);
         break;
 
         case 'eliminar' :
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
-            $vec = $broker->eliminar($id);
+            $vec = $curso->eliminar($id);
         break;
 
         default:

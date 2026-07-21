@@ -4,32 +4,32 @@
     header('Content-Type: application/json');
 
     require_once('../modelos/conexion.php');
-    require_once('../modelos/modelos_v2/broker.php'); 
+    require_once('../modelos/modelos_v2/estado_suscripcion.php'); 
 
     $control = isset($_GET['control']) ? $_GET['control'] : '';
-    $broker = new Broker($conexion);
+    $estadoSuscripcion = new EstadoSuscripcion($conexion);
 
     switch($control){
         case 'consulta' :
-            $vec = $broker->consulta();
+            $vec = $estadoSuscripcion->consulta();
         break;
 
         case 'insertar' :
             $json = file_get_contents('php://input');
             $params = json_decode($json);
-            $vec = $broker->insertar($params);
+            $vec = $estadoSuscripcion->insertar($params);
         break;
 
         case 'editar' :
             $json = file_get_contents('php://input');
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
             $params = json_decode($json);
-            $vec = $broker->editar($id, $params);
+            $vec = $estadoSuscripcion->editar($id, $params);
         break;
 
         case 'eliminar' :
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
-            $vec = $broker->eliminar($id);
+            $vec = $estadoSuscripcion->eliminar($id);
         break;
 
         default:
