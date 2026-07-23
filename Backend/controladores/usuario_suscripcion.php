@@ -4,32 +4,32 @@
     header('Content-Type: application/json');
 
     require_once('../modelos/conexion.php');
-    require_once('../modelos/modelos_v2/avance_educacion.php'); 
+    require_once('../modelos/modelos_v2/usuario_suscripcion.php'); 
 
     $control = isset($_GET['control']) ? $_GET['control'] : '';
-    $avanceEducacion = new AvanceEducacion($conexion);
+    $usuarioSuscripcion = new UsuarioSuscripcion($conexion);
 
     switch($control){
         case 'consulta' :
-            $vec = $avanceEducacion->consulta();
+            $vec = $usuarioSuscripcion->consulta();
         break;
 
         case 'insertar' :
             $json = file_get_contents('php://input');
             $params = json_decode($json);
-            $vec = $avanceEducacion->insertar($params);
+            $vec = $usuarioSuscripcion->insertar($params);
         break;
 
         case 'editar' :
             $json = file_get_contents('php://input');
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
             $params = json_decode($json);
-            $vec = $avanceEducacion->editar($id, $params);
+            $vec = $usuarioSuscripcion->editar($id, $params);
         break;
 
         case 'eliminar' :
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
-            $vec = $avanceEducacion->eliminar($id);
+            $vec = $usuarioSuscripcion->eliminar($id);
         break;
 
         default:
