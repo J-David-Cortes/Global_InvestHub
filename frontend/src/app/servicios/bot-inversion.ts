@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class BotInversion {
 
-  url= "http://localhost/proyectos/marketplace_bots/backend/controladores/botinversion.php";
+  url= "http://localhost/proyectos/marketplace_bots/backend/controladores/bot_inversion.php";
 
   constructor(private http: HttpClient){};
 
