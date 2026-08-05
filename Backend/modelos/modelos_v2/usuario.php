@@ -8,9 +8,9 @@
 
         public function consulta(){
             // JOIN para traer el nombre del nivel de permiso
-            $sql = "SELECT u.id_usuario, u.nombre, u.email, u.fo_permiso_nivel, p.nombre AS nombre_nivel
+            $sql = "SELECT u.id_usuario, u.nombre, u.email, u.fo_permiso, p.nombre AS nombre_nivel
                     FROM usuario u
-                    INNER JOIN permiso_nivel p ON u.fo_permiso_nivel = p.id_permiso_nivel 
+                    INNER JOIN permiso_nivel p ON u.fo_permiso = p.id_permiso 
                     ORDER BY u.nombre";
             
             $res = mysqli_query($this->conexion, $sql) or die("Error en consulta usuario: " . mysqli_error($this->conexion));
