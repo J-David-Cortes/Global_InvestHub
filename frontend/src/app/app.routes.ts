@@ -8,7 +8,8 @@ import { Login } from './modulos/login/login';
 
 export const routes: Routes = [
     {
-        path: '', component: Main,
+        path: '', 
+        component: Main,
         children:
         [
             {path: 'dashboard', component: Dashboard},
