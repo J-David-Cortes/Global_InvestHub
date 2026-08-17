@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-engines',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './engines.html',
   styleUrl: './engines.css',
 })
