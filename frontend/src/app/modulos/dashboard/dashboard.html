@@ -6,7 +6,86 @@
 </nav>
 
 <div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="dashboard-metric-card">
+            <div class="dashboard-metric-label">TOTAL EQUITY</div>
+            <div class="dashboard-metric-value">$124,560.00</div>
+            <div class="text-cyan" style="font-size: 0.85rem;"><i class="bi bi-arrow-up-right"></i> +12.5% this month</div>
+        </div>
     </div>
+    <div class="col-md-4">
+        <div class="dashboard-metric-card">
+            <div class="dashboard-metric-label">ACTIVE ALGORITHMS</div>
+            <div class="dashboard-metric-value">4 Engines</div>
+            <div class="text-teal" style="font-size: 0.85rem;">MT5 & LEAN Running</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dashboard-metric-card">
+            <div class="dashboard-metric-label">AVG. SHARPE RATIO</div>
+            <div class="dashboard-metric-value text-gold">2.14</div>
+            <div class="text-muted" style="font-size: 0.85rem;">Across all active portfolios</div>
+        </div>
+    </div>
+</div>
 
 <div class="data-table-wrapper">
+    <div class="table-header">
+        <h2 class="m-0 fs-6 fw-semibold">Active Engines</h2>
+        <button class="btn btn-outline-custom py-1 px-3" style="font-size: 0.8rem;">View All</button>
     </div>
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>ALGORITHM</th>
+                    <th>PLATFORM</th>
+                    <th>STATUS</th>
+                    <th>PROFIT/LOSS</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="fw-medium">Quantum FX</div>
+                        <div class="text-muted" style="font-size: 0.8rem;">Alpha</div>
+                    </td>
+                    <td><span class="badge-platform">MT5</span></td>
+                    <td>
+                        <span class="status-dot status-running"></span>
+                        <span class="text-cyan" style="font-size: 0.85rem;">Running</span>
+                    </td>
+                    <td><span class="text-cyan">+$4,230.50</span></td>
+                    <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="fw-medium">Crypto</div>
+                        <div class="text-muted" style="font-size: 0.8rem;">Momentum</div>
+                    </td>
+                    <td><span class="badge-platform">LEAN</span></td>
+                    <td>
+                        <span class="status-dot status-running"></span>
+                        <span class="text-cyan" style="font-size: 0.85rem;">Running</span>
+                    </td>
+                    <td><span class="text-cyan">+$1,890.20</span></td>
+                    <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="fw-medium">Gold Hedge</div>
+                        <div class="text-muted" style="font-size: 0.8rem;">Beta</div>
+                    </td>
+                    <td><span class="badge-platform">MT5</span></td>
+                    <td>
+                        <span class="status-dot status-paused"></span>
+                        <span class="text-gold" style="font-size: 0.85rem;">Paused</span>
+                    </td>
+                    <td><span class="text-gold">-$120.00</span></td>
+                    <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
