@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { Main } from './estructura/main';
+import { Home } from './estructura/modulos/home/home';
 import { Dashboard } from './modulos/dashboard/dashboard';
 import { Engines } from './modulos/engines/engines';
 import { Portfolio } from './modulos/portfolio/portfolio';
@@ -7,11 +8,11 @@ import { Settings } from './modulos/settings/settings';
 import { Login } from './modulos/login/login';
 
 export const routes: Routes = [
+    { path: '', component: Home },
     {
-        path: '', 
+        path: 'app',
         component: Main,
-        children:
-        [
+        children: [
             {path: 'dashboard', component: Dashboard},
             {path: 'engines', component: Engines},
             {path: 'portfolio', component: Portfolio},
@@ -20,5 +21,5 @@ export const routes: Routes = [
         ]
     },
     {path: 'login', component: Login},
-    {path: '**', redirectTo: 'dashboard'}
+    {path: '**', redirectTo: ''}
 ];
