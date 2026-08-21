@@ -29,63 +29,150 @@
     </div>
 </div>
 
-<div class="data-table-wrapper">
-    <div class="table-header">
-        <h2 class="m-0 fs-6 fw-semibold">Active Engines</h2>
-        <button class="btn btn-outline-custom py-1 px-3" style="font-size: 0.8rem;">View All</button>
+<div class="data-table-wrapper mt-4">
+    <div class="table-header flex-wrap gap-2">
+        <div>
+            <h2 class="m-0 fs-6 fw-semibold">ACTIVE OPERATIONS</h2>
+            <span class="text-muted" style="font-size: 0.8rem;">6 positions · Total P&L: <span class="text-cyan">+$2,708</span></span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <div class="filter-group">
+                <button class="filter-btn active">ALL</button>
+                <button class="filter-btn">LONG</button>
+                <button class="filter-btn">SHORT</button>
+            </div>
+            <button class="btn btn-outline-custom py-1 px-3" style="font-size: 0.8rem;">
+                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+        </div>
     </div>
-    <div class="table-responsive">
-        <table class="custom-table">
-            <thead>
-                <tr>
-                    <th>ALGORITHM</th>
-                    <th>PLATFORM</th>
-                    <th>STATUS</th>
-                    <th>PROFIT/LOSS</th>
-                    <th>ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="fw-medium">Quantum FX</div>
-                        <div class="text-muted" style="font-size: 0.8rem;">Alpha</div>
-                    </td>
-                    <td><span class="badge-platform">MT5</span></td>
-                    <td>
-                        <span class="status-dot status-running"></span>
-                        <span class="text-cyan" style="font-size: 0.85rem;">Running</span>
-                    </td>
-                    <td><span class="text-cyan">+$4,230.50</span></td>
-                    <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="fw-medium">Crypto</div>
-                        <div class="text-muted" style="font-size: 0.8rem;">Momentum</div>
-                    </td>
-                    <td><span class="badge-platform">LEAN</span></td>
-                    <td>
-                        <span class="status-dot status-running"></span>
-                        <span class="text-cyan" style="font-size: 0.85rem;">Running</span>
-                    </td>
-                    <td><span class="text-cyan">+$1,890.20</span></td>
-                    <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="fw-medium">Gold Hedge</div>
-                        <div class="text-muted" style="font-size: 0.8rem;">Beta</div>
-                    </td>
-                    <td><span class="badge-platform">MT5</span></td>
-                    <td>
-                        <span class="status-dot status-paused"></span>
-                        <span class="text-gold" style="font-size: 0.85rem;">Paused</span>
-                    </td>
-                    <td><span class="text-gold">-$120.00</span></td>
-                    <td><button class="btn-action"><i class="bi bi-three-dots"></i></button></td>
-                </tr>
-            </tbody>
-        </table>
+
+    <div class="ops-grid">
+        <!-- Fila de encabezados -->
+        <div class="ops-row ops-head">
+            <div>#</div>
+            <div>BOT NAME</div>
+            <div>PAIR</div>
+            <div>TYPE</div>
+            <div>ENTRY</div>
+            <div>CURRENT</div>
+            <div>EXCHANGE</div>
+            <div>STATUS</div>
+            <div class="text-end">P&L</div>
+        </div>
+
+        <!-- Fila 1 -->
+        <div class="ops-row">
+            <div class="text-muted">1</div>
+            <div>
+                <div class="fw-medium">NeuralAlpha v2</div>
+                <div class="text-muted" style="font-size: 0.8rem;">ML Momentum</div>
+            </div>
+            <div>BTC/USDT</div>
+            <div><span class="op-badge op-long"><i class="bi bi-arrow-up-right"></i> LONG</span></div>
+            <div class="text-muted">$43,218</div>
+            <div class="text-cyan">$44,890</div>
+            <div><span class="badge-platform">Binance</span></div>
+            <div><span class="status-dot status-running"></span><span class="text-cyan" style="font-size: 0.85rem;">Active</span></div>
+            <div class="text-end">
+                <div class="text-cyan fw-medium">+$1,671</div>
+                <div class="text-cyan" style="font-size: 0.75rem;">+3.87%</div>
+            </div>
+        </div>
+
+        <!-- Fila 2 -->
+        <div class="ops-row">
+            <div class="text-muted">2</div>
+            <div>
+                <div class="fw-medium">ArbitEdge Pro</div>
+                <div class="text-muted" style="font-size: 0.8rem;">Cross-Exch Arbitr.</div>
+            </div>
+            <div>ETH/USDT</div>
+            <div><span class="op-badge op-long"><i class="bi bi-arrow-up-right"></i> LONG</span></div>
+            <div class="text-muted">$2,840</div>
+            <div class="text-cyan">$2,915</div>
+            <div><span class="badge-platform">Bybit</span></div>
+            <div><span class="status-dot status-running"></span><span class="text-cyan" style="font-size: 0.85rem;">Active</span></div>
+            <div class="text-end">
+                <div class="text-cyan fw-medium">+$482</div>
+                <div class="text-cyan" style="font-size: 0.75rem;">+2.64%</div>
+            </div>
+        </div>
+
+        <!-- Fila 3 -->
+        <div class="ops-row">
+            <div class="text-muted">3</div>
+            <div>
+                <div class="fw-medium">GridMaster X</div>
+                <div class="text-muted" style="font-size: 0.8rem;">Grid Trading</div>
+            </div>
+            <div>SOL/USDT</div>
+            <div><span class="op-badge op-short"><i class="bi bi-arrow-down-right"></i> SHORT</span></div>
+            <div class="text-muted">$142.50</div>
+            <div class="text-cyan">$138.10</div>
+            <div><span class="badge-platform">Binance</span></div>
+            <div><span class="status-dot status-running"></span><span class="text-cyan" style="font-size: 0.85rem;">Active</span></div>
+            <div class="text-end">
+                <div class="text-cyan fw-medium">+$310</div>
+                <div class="text-cyan" style="font-size: 0.75rem;">+3.08%</div>
+            </div>
+        </div>
+
+        <!-- Fila 4 -->
+        <div class="ops-row">
+            <div class="text-muted">4</div>
+            <div>
+                <div class="fw-medium">TrendSurfer</div>
+                <div class="text-muted" style="font-size: 0.8rem;">Breakout Trend</div>
+            </div>
+            <div>AVAX/USDT</div>
+            <div><span class="op-badge op-long"><i class="bi bi-arrow-up-right"></i> LONG</span></div>
+            <div class="text-muted">$38.10</div>
+            <div class="text-gold">$36.90</div>
+            <div><span class="badge-platform">OKX</span></div>
+            <div><span class="status-dot status-paused"></span><span class="text-gold" style="font-size: 0.85rem;">Paused</span></div>
+            <div class="text-end">
+                <div class="text-gold fw-medium">-$125</div>
+                <div class="text-gold" style="font-size: 0.75rem;">+3.87%</div>
+            </div>
+        </div>
+
+        <!-- Fila 5 -->
+        <div class="ops-row">
+            <div class="text-muted">5</div>
+            <div>
+                <div class="fw-medium">ScalpBot Ultra</div>
+                <div class="text-muted" style="font-size: 0.8rem;">High-Freq Scalping</div>
+            </div>
+            <div>LINK/USDT</div>
+            <div><span class="op-badge op-long"><i class="bi bi-arrow-up-right"></i> LONG</span></div>
+            <div class="text-muted">$18.40</div>
+            <div class="text-cyan">$19.25</div>
+            <div><span class="badge-platform">Coinbase</span></div>
+            <div><span class="status-dot status-running"></span><span class="text-cyan" style="font-size: 0.85rem;">Active</span></div>
+            <div class="text-end">
+                <div class="text-cyan fw-medium">+$215</div>
+                <div class="text-cyan" style="font-size: 0.75rem;">+4.61%</div>
+            </div>
+        </div>
+
+        <!-- Fila 6 -->
+        <div class="ops-row">
+            <div class="text-muted">6</div>
+            <div>
+                <div class="fw-medium">MacroSight</div>
+                <div class="text-muted" style="font-size: 0.8rem;">Macro Hedging</div>
+            </div>
+            <div>BTC/USDT</div>
+            <div><span class="op-badge op-short"><i class="bi bi-arrow-down-right"></i> SHORT</span></div>
+            <div class="text-muted">$44,100</div>
+            <div class="text-cyan">$43,850</div>
+            <div><span class="badge-platform">Kraken</span></div>
+            <div><span class="status-dot status-paused"></span><span class="text-gold" style="font-size: 0.85rem;">Closing</span></div>
+            <div class="text-end">
+                <div class="text-cyan fw-medium">+$156</div>
+                <div class="text-cyan" style="font-size: 0.75rem;">+0.56%</div>
+            </div>
+        </div>
     </div>
 </div>

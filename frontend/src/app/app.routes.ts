@@ -6,6 +6,7 @@ import { Engines } from './modulos/engines/engines';
 import { Portfolio } from './modulos/portfolio/portfolio';
 import { Settings } from './modulos/settings/settings';
 import { Login } from './modulos/login/login';
+import { Marketplace } from './modulos/marketplace/marketplace';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -14,6 +15,7 @@ export const routes: Routes = [
         component: Main,
         children: [
             {path: 'dashboard', component: Dashboard},
+            {path: 'marketplace', component: Marketplace},
             {path: 'engines', component: Engines},
             {path: 'portfolio', component: Portfolio},
             {path: 'settings', component: Settings},

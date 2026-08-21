@@ -1,5 +1,67 @@
-:host {
-  display: block; /* Obliga al componente a comportarse como un contenedor */
-  width: 100%;    /* Ocupa el ancho disponible */
-  height: 100%;   /* Ocupa el alto disponible */
+/* Grid de la tabla Active Operations */
+.ops-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.ops-row {
+    display: grid;
+    grid-template-columns: 30px 1.6fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.9rem;
+}
+.ops-row:last-child { border-bottom: none; }
+
+.ops-head {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+}
+
+/* Badges LONG / SHORT */
+.op-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.op-long {
+    background-color: rgba(88, 249, 242, 0.12);
+    color: var(--accent-cyan);
+}
+.op-short {
+    background-color: rgba(215, 160, 73, 0.12);
+    color: var(--accent-gold);
+}
+
+/* Botones de filtro ALL / LONG / SHORT */
+.filter-group {
+    display: flex;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 3px;
+}
+.filter-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.filter-btn.active {
+    background-color: var(--bg-card);
+    color: var(--text-main);
 }
