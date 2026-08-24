@@ -1,0 +1,79 @@
+<article class="bot-card">
+
+    <!-- Fila superior: badges de categoría/verificado a la izquierda, plataforma a la derecha -->
+    <header class="bot-card-header">
+        <div class="bot-card-badges">
+            <span class="badge-categoria">{{ bot.categoria | uppercase }}</span>
+            @if (bot.verificado) {
+            <span class="badge-verificado">
+                <i class="bi bi-patch-check-fill"></i> Verified
+            </span>
+            }
+        </div>
+        <span class="badge-plataforma">{{ bot.plataforma }}</span>
+    </header>
+
+    <!-- Nombre y subtítulo -->
+    <h3 class="bot-card-titulo">{{ bot.nombre }}</h3>
+    <p class="bot-card-subtitulo">{{ bot.subtitulo }}</p>
+
+    <!-- Descripción corta -->
+    <p class="bot-card-descripcion">{{ bot.descripcion }}</p>
+
+    <!-- Mini gráfico (sparkline) dibujado con SVG -->
+    <div class="bot-card-sparkline">
+        <svg viewBox="0 0 260 60" preserveAspectRatio="none">
+            <polyline [attr.points]="puntosSparkline" fill="none" stroke="var(--accent-cyan)" stroke-width="2" />
+        </svg>
+    </div>
+
+    <!-- Las 4 métricas en fila -->
+    <div class="bot-card-metricas">
+        <div class="metrica">
+            <span class="metrica-valor metrica-positiva">+{{ bot.rendimientoAnual }}%</span>
+            <span class="metrica-label">ANNUAL</span>
+        </div>
+        <div class="metrica">
+            <span class="metrica-valor">{{ bot.sharpeRatio }}</span>
+            <span class="metrica-label">SHARPE</span>
+        </div>
+        <div class="metrica">
+            <span class="metrica-valor metrica-alerta">{{ bot.maxDrawdown }}%</span>
+            <span class="metrica-label">MAX DD</span>
+        </div>
+        <div class="metrica">
+            <span class="metrica-valor">{{ bot.winRate }}%</span>
+            <span class="metrica-label">WIN R.</span>
+        </div>
+    </div>
+
+    <!-- Desarrollador + rating + suscriptores -->
+    <div class="bot-card-desarrollador">
+        <span class="desarrollador-nombre">{{ bot.desarrollador }}</span>
+        <div class="desarrollador-stats">
+            <span class="rating">
+                <i class="bi bi-star-fill"></i> {{ bot.rating }} ({{ bot.numeroReviews }})
+            </span>
+            <span class="suscriptores">
+                <i class="bi bi-people-fill"></i> {{ bot.numeroSuscriptores }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="bot-card-tags">
+        @for (tag of bot.tags; track tag) {
+        <span class="tag">{{ tag }}</span>
+        }
+    </div>
+
+    <!-- Footer: precio + botón -->
+    <footer class="bot-card-footer">
+        <div class="bot-card-precio">
+            <span class="precio-valor">${{ bot.precioMensual }}</span>
+            <span class="precio-periodo">/mo</span>
+        </div>
+        <button class="btn-suscribir">Subscribe</button>
+    </footer>
+
+</article>

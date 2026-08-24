@@ -1,0 +1,204 @@
+/* ===== Contenedor principal de la tarjeta ===== */
+.bot-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ===== Header: badges ===== */
+.bot-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bot-card-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge-categoria {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.badge-verificado {
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.badge-plataforma {
+    font-size: 0.7rem;
+    font-weight: 600;
+    background-color: var(--bg-input);
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    color: var(--text-main);
+}
+
+/* ===== Título y subtítulo ===== */
+.bot-card-titulo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.bot-card-subtitulo {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ===== Descripción ===== */
+.bot-card-descripcion {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* ===== Sparkline (mini gráfico) ===== */
+.bot-card-sparkline {
+    width: 100%;
+    height: 60px;
+}
+
+.bot-card-sparkline svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* ===== Métricas ===== */
+.bot-card-metricas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.metrica {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.metrica-valor {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.metrica-positiva {
+    color: var(--accent-cyan);
+}
+
+.metrica-alerta {
+    color: var(--accent-gold);
+}
+
+.metrica-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+/* ===== Desarrollador ===== */
+.bot-card-desarrollador {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.desarrollador-nombre {
+    color: var(--text-muted);
+}
+
+.desarrollador-stats {
+    display: flex;
+    gap: 0.75rem;
+    color: var(--text-muted);
+}
+
+.rating {
+    color: var(--accent-gold);
+}
+
+.rating i,
+.suscriptores i {
+    margin-right: 0.2rem;
+}
+
+/* ===== Tags ===== */
+.bot-card-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    background-color: var(--bg-input);
+    color: var(--text-muted);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.03em;
+}
+
+/* ===== Footer: precio + botón ===== */
+.bot-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.25rem;
+}
+
+.bot-card-precio {
+    display: flex;
+    align-items: baseline;
+    gap: 0.15rem;
+}
+
+.precio-valor {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.precio-periodo {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.btn-suscribir {
+    background-color: var(--accent-cyan);
+    color: var(--bg-main);
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-suscribir:hover {
+    opacity: 0.85;
+}

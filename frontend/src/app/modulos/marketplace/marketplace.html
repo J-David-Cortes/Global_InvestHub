@@ -1,1 +1,15 @@
-<p>marketplace works!</p>
+<div class="marketplace-container">
+
+    <header class="marketplace-header">
+        <p class="marketplace-breadcrumb">Home / Marketplace</p>
+        <h1 class="marketplace-titulo">MARKETPLACE</h1>
+        <p class="marketplace-subtitulo">{{ algoritmos.length }} algoritmos disponibles</p>
+    </header>
+
+    <div class="marketplace-grid">
+        @for (bot of algoritmos; track bot.id) {
+        <app-marketplace-card [bot]="bot" />
+        }
+    </div>
+
+</div>
