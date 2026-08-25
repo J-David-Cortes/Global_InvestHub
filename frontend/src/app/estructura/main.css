@@ -1,13 +1,15 @@
 /* El contenedor que envuelve al nav y al contenido */
 .d-flex {
     width: 100%;
-    min-height: calc(100vh - 70px); /* Ajusta 70px si tu header es más alto o bajo */
+    min-height: 100vh;
     display: flex;
-    flex: 1; /* Esto obliga a que el div se estire para llenar el espacio */
 }
 
-/* Asegura que el main principal tome todo el espacio restante */
-main {
-    flex-grow: 1;
+/* Asegura que el contenido principal tome todo el espacio restante,
+   dejando el ancho del sidebar (260px) como margen fijo */
+.flex-grow-1 {
     width: 100%;
+    margin-left: 260px;
+    min-height: 100vh;
+    overflow-y: auto;
 }
