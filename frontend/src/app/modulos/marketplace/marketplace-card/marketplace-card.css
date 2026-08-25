@@ -4,8 +4,8 @@
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto auto auto auto auto;
     gap: 0.75rem;
 }
 
@@ -161,12 +161,13 @@
     letter-spacing: 0.03em;
 }
 
-/* ===== Footer: precio + botón ===== */
 .bot-card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 0.25rem;
+    margin-top: auto;
+    /* ← empuja el footer siempre al fondo de la tarjeta */
+    padding-top: 0.25rem;
 }
 
 .bot-card-precio {
