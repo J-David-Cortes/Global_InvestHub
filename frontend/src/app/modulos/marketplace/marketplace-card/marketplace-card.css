@@ -206,3 +206,14 @@
 .btn-suscribir:hover {
     opacity: 0.85;
 }
+
+.btn-suscrito {
+    background-color: transparent;
+    color: var(--accent-cyan);
+    border: 1px solid var(--accent-cyan);
+}
+
+.btn-suscrito:hover {
+    background-color: rgba(88, 249, 242, 0.1);
+    opacity: 1;
+}

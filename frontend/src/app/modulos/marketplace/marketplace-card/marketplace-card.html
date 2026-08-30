@@ -73,7 +73,9 @@
             <span class="precio-valor">${{ bot.precioMensual }}</span>
             <span class="precio-periodo">/mo</span>
         </div>
-        <button class="btn-suscribir">Subscribe</button>
+        <button class="btn-suscribir" [class.btn-suscrito]="estaSuscrito()" (click)="alternarSuscripcion()">
+            {{ estaSuscrito() ? 'Subscribed ✓' : 'Subscribe' }}
+        </button>
     </footer>
 
 </article>
