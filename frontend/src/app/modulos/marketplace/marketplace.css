@@ -38,3 +38,118 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ===== Controles: buscador + orden ===== */
+.marketplace-controles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.marketplace-buscador {
+    position: relative;
+    flex: 1;
+    min-width: 240px;
+}
+
+.marketplace-buscador i {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.marketplace-buscador input {
+    width: 100%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.65rem 1rem 0.65rem 2.25rem;
+    font-size: 0.85rem;
+    color: var(--text-main);
+}
+
+.marketplace-buscador input::placeholder {
+    color: var(--text-muted);
+}
+
+.marketplace-buscador input:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+}
+
+.marketplace-orden {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.marketplace-orden i {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.marketplace-orden select {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.marketplace-orden select:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+}
+
+/* ===== Pills de categoría ===== */
+.marketplace-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.pill {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pill:hover {
+    color: var(--text-main);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pill-activa {
+    background-color: var(--accent-cyan);
+    color: var(--bg-main);
+    border-color: var(--accent-cyan);
+}
+
+.pill-activa:hover {
+    color: var(--bg-main);
+}
+
+/* ===== Estado vacío (sin resultados) ===== */
+.marketplace-vacio {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-muted);
+}
+
+.vacio-icono {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}

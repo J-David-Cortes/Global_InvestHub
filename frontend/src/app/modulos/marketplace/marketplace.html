@@ -3,13 +3,50 @@
     <header class="marketplace-header">
         <p class="marketplace-breadcrumb">Home / Marketplace</p>
         <h1 class="marketplace-titulo">MARKETPLACE</h1>
-        <p class="marketplace-subtitulo">{{ algoritmos.length }} algoritmos disponibles</p>
+        <p class="marketplace-subtitulo">{{ algoritmosFiltrados().length }} algoritmos disponibles</p>
     </header>
 
+    <!-- Buscador + Orden -->
+    <div class="marketplace-controles">
+        <div class="marketplace-buscador">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Buscar algoritmos, developers, tags..." [value]="terminoBusqueda()"
+                (input)="actualizarBusqueda($any($event.target).value)" />
+        </div>
+
+        <div class="marketplace-orden">
+            <i class="bi bi-sliders"></i>
+            <select [value]="ordenSeleccionado()" (change)="actualizarOrden($any($event.target).value)">
+                <option value="return">Sort: Annual Return</option>
+                <option value="sharpe">Sort: Sharpe Ratio</option>
+                <option value="price">Sort: Price</option>
+                <option value="popularity">Sort: Popularity</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Pills de categoría -->
+    <div class="marketplace-pills">
+        @for (cat of categorias; track cat) {
+        <button class="pill" [class.pill-activa]="categoriaSeleccionada() === cat" (click)="seleccionarCategoria(cat)">
+            {{ cat }}
+        </button>
+        }
+    </div>
+
+    <!-- Grid de tarjetas -->
     <div class="marketplace-grid">
-        @for (bot of algoritmos; track bot.id) {
+        @for (bot of algoritmosFiltrados(); track bot.id) {
         <app-marketplace-card [bot]="bot" />
         }
     </div>
+
+    <!-- Mensaje cuando no hay resultados -->
+    @if (algoritmosFiltrados().length === 0) {
+    <div class="marketplace-vacio">
+        <p class="vacio-icono">🔍</p>
+        <p>No se encontraron algoritmos para tu búsqueda</p>
+    </div>
+    }
 
 </div>
