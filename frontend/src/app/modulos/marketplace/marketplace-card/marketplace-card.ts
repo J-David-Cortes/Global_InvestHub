@@ -11,30 +11,42 @@ import { Algoritmo } from '../../../modelos/algoritmo.model';
 export class MarketplaceCard {
   @Input() bot!: Algoritmo;
 
-  // Estado de suscripción, propio de CADA tarjeta (empieza en "false" = no suscrito)
   estaSuscrito = signal(false);
+
+  // Ancho y alto del gráfico, los definimos una sola vez para reutilizarlos
+  private readonly anchoSparkline = 260;
+  private readonly altoSparkline = 60;
 
   get puntosSparkline(): string {
     const datos = this.bot.historialRendimiento;
-    const ancho = 260;
-    const alto = 60;
-
     const minimo = Math.min(...datos);
     const maximo = Math.max(...datos);
     const rango = maximo - minimo || 1;
 
     return datos
       .map((valor, indice) => {
-        const x = (indice / (datos.length - 1)) * ancho;
-        const y = alto - ((valor - minimo) / rango) * alto;
+        const x = (indice / (datos.length - 1)) * this.anchoSparkline;
+        const y = this.altoSparkline - ((valor - minimo) / rango) * this.altoSparkline;
         return `${x.toFixed(1)},${y.toFixed(1)}`;
       })
       .join(' ');
   }
 
-  // Se ejecuta cuando el usuario hace clic en el botón
+  // Nuevo: toma los mismos puntos de la línea, y les agrega 2 esquinas
+  // abajo para "cerrar" la forma y poder rellenarla con degradado.
+  get puntosRelleno(): string {
+    const inicioAbajo = `0,${this.altoSparkline}`;
+    const finAbajo = `${this.anchoSparkline},${this.altoSparkline}`;
+    return `${inicioAbajo} ${this.puntosSparkline} ${finAbajo}`;
+  }
+
+  // ID único para el degradado, evita que todas las tarjetas
+  // compartan por accidente la misma definición de degradado SVG
+  get idDegradado(): string {
+    return `degradado-sparkline-${this.bot.id}`;
+  }
+
   alternarSuscripcion() {
-    // .update() toma el valor ACTUAL del signal y lo transforma al nuevo valor
     this.estaSuscrito.update((valorActual) => !valorActual);
   }
 }
