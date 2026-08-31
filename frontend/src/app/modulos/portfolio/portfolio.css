@@ -1,0 +1,261 @@
+/* ===== Header ===== */
+.portfolio-container {
+    padding: 0;
+}
+
+.portfolio-header {
+    margin-bottom: 1.75rem;
+}
+
+.portfolio-breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-titulo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--text-main);
+    margin: 0;
+}
+
+/* ===== 4 tarjetas de métricas ===== */
+.portfolio-metricas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.metrica-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.metrica-etiqueta {
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+
+.metrica-valor {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+}
+
+.valor-positivo {
+    color: var(--accent-cyan);
+}
+
+.valor-negativo {
+    color: var(--accent-gold);
+}
+
+.metrica-cambio {
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.cambio-positivo {
+    color: var(--accent-cyan);
+    opacity: 0.7;
+}
+
+.cambio-negativo {
+    color: var(--accent-gold);
+    opacity: 0.7;
+}
+
+/* ===== Fila principal: allocation + tabla de posiciones abiertas ===== */
+.portfolio-fila-principal {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ===== Tarjeta de Asset Allocation ===== */
+.asignacion-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.card-subtitulo {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin: 0 0 1.25rem 0;
+}
+
+.asignacion-barra {
+    display: flex;
+    border-radius: 999px;
+    overflow: hidden;
+    height: 12px;
+    margin-bottom: 1.25rem;
+}
+
+.asignacion-segmento {
+    height: 100%;
+}
+
+.asignacion-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.asignacion-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.asignacion-item-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.asignacion-punto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.asignacion-nombre {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+}
+
+.asignacion-item-datos {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.asignacion-tamano {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-main);
+}
+
+.asignacion-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    width: 32px;
+    text-align: right;
+}
+
+/* ===== Tarjetas de tablas (compartida por Open y Closed positions) ===== */
+.posiciones-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.posiciones-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.posiciones-header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.posiciones-titulo-icono {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.posiciones-titulo-icono i {
+    color: var(--accent-cyan);
+    font-size: 0.9rem;
+}
+
+.posiciones-titulo-icono .card-subtitulo {
+    margin: 0;
+}
+
+.btn-ver-todo {
+    background-color: transparent;
+    border: 1px solid rgba(88, 249, 242, 0.3);
+    color: var(--accent-cyan);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-ver-todo:hover {
+    background-color: rgba(88, 249, 242, 0.1);
+}
+
+/* ===== Tablas ===== */
+.tabla-scroll {
+    overflow-x: auto;
+}
+
+.tabla-portfolio {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-portfolio thead tr {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tabla-portfolio th {
+    text-align: left;
+    font-size: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+}
+
+.tabla-portfolio tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background-color 0.15s ease;
+}
+
+.tabla-portfolio tbody tr:last-child {
+    border-bottom: none;
+}
+
+.tabla-portfolio tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.015);
+}
+
+.tabla-portfolio td {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem;
+}

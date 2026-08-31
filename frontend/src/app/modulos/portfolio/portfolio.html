@@ -1,11 +1,146 @@
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb mb-2" style="font-size: 0.8rem;">
-        <li class="breadcrumb-item"><a routerLink="/dashboard" class="text-muted text-decoration-none">Home</a></li>
-        <li class="breadcrumb-item active text-teal" aria-current="page">Portfolio</li>
-    </ol>
-</nav>
+<div class="portfolio-container">
 
-<div style="color: white;">
-    <h1>Portfolio</h1>
-    <p>Esta es la pantalla de Portfolio funcionando correctamente.</p>
+    <header class="portfolio-header">
+        <p class="portfolio-breadcrumb">Home / Portfolio</p>
+        <h1 class="portfolio-titulo">PORTFOLIO</h1>
+    </header>
+
+    <!-- 4 tarjetas de métricas -->
+    <div class="portfolio-metricas">
+        @for (metrica of metricas; track metrica.etiqueta) {
+        <div class="metrica-card">
+            <div class="metrica-etiqueta">{{ metrica.etiqueta }}</div>
+            <div class="metrica-valor" [class.valor-positivo]="metrica.esPositiva"
+                [class.valor-negativo]="!metrica.esPositiva">
+                {{ metrica.valor }}
+            </div>
+            <div class="metrica-cambio" [class.cambio-positivo]="metrica.esPositiva"
+                [class.cambio-negativo]="!metrica.esPositiva">
+                <i class="bi" [class.bi-arrow-up-right]="metrica.esPositiva"
+                    [class.bi-arrow-down-right]="!metrica.esPositiva"></i>
+                {{ metrica.cambio }}
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="portfolio-fila-principal">
+
+        <!-- Gráfico de distribución -->
+        <div class="asignacion-card">
+            <h3 class="card-subtitulo">Asset Allocation</h3>
+
+            <div class="asignacion-barra">
+                @for (holding of holdings; track holding.nombre; let i = $index) {
+                <div class="asignacion-segmento" [style.width.%]="holding.asignacionPct"
+                    [style.background-color]="colorDe(i)" [title]="holding.nombre + ' ' + holding.asignacionPct + '%'">
+                </div>
+                }
+            </div>
+
+            <div class="asignacion-lista">
+                @for (holding of holdings; track holding.nombre; let i = $index) {
+                <div class="asignacion-item">
+                    <div class="asignacion-item-info">
+                        <span class="asignacion-punto" [style.background-color]="colorDe(i)"></span>
+                        <span class="asignacion-nombre">{{ holding.nombre }}</span>
+                    </div>
+                    <div class="asignacion-item-datos">
+                        <span class="asignacion-tamano">{{ holding.tamano }}</span>
+                        <span class="asignacion-pct">{{ holding.asignacionPct }}%</span>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Tabla de posiciones abiertas -->
+        <div class="posiciones-card">
+            <div class="posiciones-header">
+                <h3 class="card-subtitulo">Open Positions</h3>
+            </div>
+            <div class="tabla-scroll">
+                <table class="tabla-portfolio">
+                    <thead>
+                        <tr>
+                            <th>ENGINE</th>
+                            <th>PAIR</th>
+                            <th>SIZE</th>
+                            <th>ENTRY</th>
+                            <th>CURRENT</th>
+                            <th>P&L</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (holding of holdingsConOperacion; track holding.nombre) {
+                        <tr>
+                            <td class="celda-nombre">{{ holding.nombre }}</td>
+                            <td class="celda-mono celda-muted">{{ holding.algoritmo }}</td>
+                            <td class="celda-mono">{{ holding.tamano }}</td>
+                            <td class="celda-mono celda-muted">{{ holding.entrada }}</td>
+                            <td class="celda-mono">{{ holding.actual }}</td>
+                            <td>
+                                <div class="celda-mono celda-ganancia" [class.valor-positivo]="holding.esPositiva"
+                                    [class.valor-negativo]="!holding.esPositiva">
+                                    {{ holding.ganancia }}
+                                </div>
+                                <div class="celda-mono celda-ganancia-pct" [class.valor-positivo]="holding.esPositiva"
+                                    [class.valor-negativo]="!holding.esPositiva">
+                                    {{ holding.gananciaPct }}
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tabla de posiciones cerradas -->
+    <div class="posiciones-card">
+        <div class="posiciones-header posiciones-header-flex">
+            <div class="posiciones-titulo-icono">
+                <i class="bi bi-graph-up-arrow"></i>
+                <h3 class="card-subtitulo">Closed Positions</h3>
+            </div>
+            <button class="btn-ver-todo">View All</button>
+        </div>
+        <div class="tabla-scroll">
+            <table class="tabla-portfolio">
+                <thead>
+                    <tr>
+                        <th>ENGINE</th>
+                        <th>CLOSE DATE</th>
+                        <th>INVESTED</th>
+                        <th>RETURNED</th>
+                        <th>P&L</th>
+                        <th>RETURN %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (posicion of posicionesCerradas; track posicion.nombre) {
+                    <tr>
+                        <td class="celda-nombre">{{ posicion.nombre }}</td>
+                        <td class="celda-mono celda-muted">{{ posicion.fechaCierre }}</td>
+                        <td class="celda-mono celda-muted">{{ posicion.invertido }}</td>
+                        <td class="celda-mono">{{ posicion.retornado }}</td>
+                        <td class="celda-mono celda-ganancia" [class.valor-positivo]="posicion.esPositiva"
+                            [class.valor-negativo]="!posicion.esPositiva">
+                            {{ posicion.ganancia }}
+                        </td>
+                        <td>
+                            <span class="badge-retorno" [class.valor-positivo-bg]="posicion.esPositiva"
+                                [class.valor-negativo-bg]="!posicion.esPositiva">
+                                {{ posicion.retornoPct }}
+                            </span>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
