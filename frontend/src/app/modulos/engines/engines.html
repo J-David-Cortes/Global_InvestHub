@@ -1,11 +1,178 @@
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb mb-2" style="font-size: 0.8rem;">
-        <li class="breadcrumb-item"><a routerLink="/dashboard" class="text-muted text-decoration-none">Home</a></li>
-        <li class="breadcrumb-item active text-teal" aria-current="page">Engines</li>
-    </ol>
-</nav>
+<div class="engines-container">
 
-<div style="color: white;">
-    <h1>Engines</h1>
-    <p>Esta es la pantalla de Engines funcionando correctamente.</p>
+    <header class="engines-header">
+    <p class="engines-breadcrumb">Home / Engines</p>
+    <h1 class="engines-titulo">ENGINES</h1>
+    <p class="engines-subtitulo">{{ engines().length }} algoritmos configurados</p>
+</header>
+
+    <!-- Tarjetas resumen -->
+    <div class="engines-resumen">
+        <div class="resumen-card">
+            <div class="resumen-icono resumen-icono-running">
+                <i class="bi bi-cpu"></i>
+            </div>
+            <div>
+                <div class="resumen-numero resumen-numero-running">{{ contarPorEstado('running') }}</div>
+                <div class="resumen-label">Running</div>
+            </div>
+        </div>
+        <div class="resumen-card">
+            <div class="resumen-icono resumen-icono-paused">
+                <i class="bi bi-cpu"></i>
+            </div>
+            <div>
+                <div class="resumen-numero resumen-numero-paused">{{ contarPorEstado('paused') }}</div>
+                <div class="resumen-label">Paused</div>
+            </div>
+        </div>
+        <div class="resumen-card">
+            <div class="resumen-icono resumen-icono-stopped">
+                <i class="bi bi-cpu"></i>
+            </div>
+            <div>
+                <div class="resumen-numero resumen-numero-stopped">{{ contarPorEstado('stopped') }}</div>
+                <div class="resumen-label">Stopped</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pills de filtro -->
+    <div class="engines-filtros">
+        <button class="pill-filtro" [class.pill-filtro-activa]="filtroActual() === 'all'"
+            (click)="seleccionarFiltro('all')">
+            All ({{ engines().length }})
+        </button>
+        <button class="pill-filtro" [class.pill-filtro-activa]="filtroActual() === 'running'"
+            (click)="seleccionarFiltro('running')">
+            Running ({{ contarPorEstado('running') }})
+        </button>
+        <button class="pill-filtro" [class.pill-filtro-activa]="filtroActual() === 'paused'"
+            (click)="seleccionarFiltro('paused')">
+            Paused ({{ contarPorEstado('paused') }})
+        </button>
+        <button class="pill-filtro" [class.pill-filtro-activa]="filtroActual() === 'stopped'"
+            (click)="seleccionarFiltro('stopped')">
+            Stopped ({{ contarPorEstado('stopped') }})
+        </button>
+    </div>
+
+    <!-- Lista de engines -->
+    <div class="engines-lista">
+        @for (engine of enginesFiltrados(); track engine.id) {
+        <div class="engine-fila">
+
+            <div class="engine-fila-principal">
+
+                <!-- Info -->
+                <div class="engine-info">
+                    <div class="engine-icono" [class.engine-icono-running]="engine.estado === 'running'"
+                        [class.engine-icono-paused]="engine.estado === 'paused'">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+                    <div>
+                        <div class="engine-nombre-fila">
+                            <span class="engine-nombre">{{ engine.nombre }}</span>
+                            <span class="engine-badge-plataforma">{{ engine.plataforma }}</span>
+                        </div>
+                        <div class="engine-sub-fila">
+                            <span>{{ engine.version }}</span>
+                            <span class="engine-separador">·</span>
+                            <span>{{ engine.par }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Métricas -->
+                <div class="engine-metricas">
+                    <div class="engine-metrica">
+                        <div class="engine-metrica-label">P&L</div>
+                        <div class="engine-metrica-valor" [class.valor-positivo]="engine.gananciaPositiva"
+                            [class.valor-negativo]="!engine.gananciaPositiva">
+                            {{ engine.ganancia }}
+                        </div>
+                    </div>
+                    <div class="engine-metrica">
+                        <div class="engine-metrica-label">Trades</div>
+                        <div class="engine-metrica-valor">{{ engine.numeroOperaciones }}</div>
+                    </div>
+                    <div class="engine-metrica">
+                        <div class="engine-metrica-label">Win Rate</div>
+                        <div class="engine-metrica-valor valor-exito">{{ engine.winRate }}</div>
+                    </div>
+                    <div class="engine-metrica">
+                        <div class="engine-metrica-label">Runtime</div>
+                        <div class="engine-metrica-valor">{{ engine.tiempoActivo }}</div>
+                    </div>
+                </div>
+
+                <!-- Estado + controles -->
+                <div class="engine-controles">
+                    <div class="engine-estado-indicador">
+                        <span class="engine-punto" [class.punto-running]="engine.estado === 'running'"
+                            [class.punto-paused]="engine.estado === 'paused'"
+                            [class.punto-stopped]="engine.estado === 'stopped'"></span>
+                        <span class="engine-estado-texto" [class.texto-running]="engine.estado === 'running'"
+                            [class.texto-paused]="engine.estado === 'paused'">
+                            {{ engine.estado === 'running' ? 'Running' : engine.estado === 'paused' ? 'Paused' :
+                            'Stopped' }}
+                        </span>
+                    </div>
+
+                    @if (engine.estado !== 'running') {
+                    <button class="btn-control btn-control-play" (click)="cambiarEstado(engine.id, 'running')"
+                        title="Start">
+                        <i class="bi bi-play-fill"></i>
+                    </button>
+                    }
+                    @if (engine.estado === 'running') {
+                    <button class="btn-control btn-control-pause" (click)="cambiarEstado(engine.id, 'paused')"
+                        title="Pause">
+                        <i class="bi bi-pause-fill"></i>
+                    </button>
+                    }
+                    @if (engine.estado !== 'stopped') {
+                    <button class="btn-control btn-control-stop" (click)="cambiarEstado(engine.id, 'stopped')"
+                        title="Stop">
+                        <i class="bi bi-stop-fill"></i>
+                    </button>
+                    }
+                    <button class="btn-control btn-control-log"
+                        [class.btn-control-log-activo]="logAbiertoId() === engine.id" (click)="alternarLog(engine.id)"
+                        title="Logs">
+                        <i class="bi bi-terminal"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Panel de logs -->
+            @if (logAbiertoId() === engine.id) {
+            <div class="engine-log-panel">
+                <div class="engine-log-header">
+                    <i class="bi bi-terminal"></i>
+                    <span>Live Log — {{ engine.nombre }}</span>
+                    <span class="engine-log-live">● LIVE</span>
+                </div>
+                <div class="engine-log-lineas">
+                    @for (linea of logLines; track $index) {
+                    <div class="engine-log-linea">{{ linea }}</div>
+                    }
+                </div>
+            </div>
+            }
+
+        </div>
+        }
+    </div>
+
+    <!-- Estado vacío -->
+    @if (enginesFiltrados().length === 0) {
+    <div class="engines-vacio">
+        <p class="vacio-icono">🤖</p>
+        <p>No hay engines en esta categoría</p>
+        <a routerLink="/app/marketplace" class="btn-explorar">Explorar Marketplace</a>
+    </div>
+    }
+
 </div>

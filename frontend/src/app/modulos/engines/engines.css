@@ -1,0 +1,448 @@
+/* ===== Header ===== */
+.engines-container {
+    padding: 0;
+}
+
+.engines-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.75rem;
+}
+
+.engines-breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.engines-titulo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--text-main);
+    margin: 0 0 0.25rem 0;
+}
+
+.engines-subtitulo {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.btn-add-engine {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--accent-cyan);
+    color: var(--bg-main);
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1.1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-add-engine:hover {
+    opacity: 0.85;
+    color: var(--bg-main);
+}
+
+/* ===== Tarjetas resumen ===== */
+.engines-resumen {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.resumen-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.resumen-icono {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.resumen-icono-running {
+    background-color: rgba(88, 249, 242, 0.1);
+    color: var(--accent-cyan);
+}
+
+.resumen-icono-paused {
+    background-color: rgba(240, 180, 41, 0.1);
+    color: var(--accent-gold);
+}
+
+.resumen-icono-stopped {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+}
+
+.resumen-numero {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.resumen-numero-running {
+    color: var(--accent-cyan);
+}
+
+.resumen-numero-paused {
+    color: var(--accent-gold);
+}
+
+.resumen-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ===== Pills de filtro ===== */
+.engines-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.pill-filtro {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pill-filtro:hover {
+    color: var(--text-main);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pill-filtro-activa {
+    background-color: var(--accent-cyan);
+    color: var(--bg-main);
+    border-color: var(--accent-cyan);
+}
+
+.pill-filtro-activa:hover {
+    color: var(--bg-main);
+}
+
+/* ===== Lista de engines ===== */
+.engines-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.engine-fila {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.engine-fila-principal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.1rem 1.25rem;
+    flex-wrap: wrap;
+}
+
+/* --- Info (ícono + nombre) --- */
+.engine-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 260px;
+    flex-shrink: 0;
+}
+
+.engine-icono {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.engine-icono-running {
+    background-color: rgba(88, 249, 242, 0.15);
+    color: var(--accent-cyan);
+}
+
+.engine-icono-paused {
+    background-color: rgba(240, 180, 41, 0.15);
+    color: var(--accent-gold);
+}
+
+.engine-nombre-fila {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.engine-nombre {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.engine-badge-plataforma {
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    background-color: var(--bg-input);
+    color: var(--text-main);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+}
+
+.engine-sub-fila {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+.engine-separador {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+/* --- Métricas --- */
+.engine-metricas {
+    display: grid;
+    grid-template-columns: repeat(4, 90px);
+    gap: 1.5rem;
+    flex-shrink: 0;
+}
+
+.engine-metrica-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.15rem;
+}
+
+.engine-metrica-valor {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.valor-positivo {
+    color: var(--accent-cyan);
+}
+
+.valor-negativo {
+    color: var(--accent-gold);
+}
+
+.valor-exito {
+    color: #20c997;
+}
+
+/* --- Estado + controles --- */
+.engine-controles {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.engine-estado-indicador {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-right: 0.5rem;
+}
+
+.engine-punto {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+}
+
+.punto-running {
+    background-color: var(--accent-cyan);
+    animation: parpadeo 2s ease-in-out infinite;
+}
+
+.punto-paused {
+    background-color: var(--accent-gold);
+}
+
+@keyframes parpadeo {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+}
+
+.engine-estado-texto {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.texto-running {
+    color: var(--accent-cyan);
+}
+
+.texto-paused {
+    color: var(--accent-gold);
+}
+
+.btn-control {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    color: var(--text-muted);
+}
+
+.btn-control-play {
+    background-color: rgba(88, 249, 242, 0.1);
+    color: var(--accent-cyan);
+}
+
+.btn-control-play:hover {
+    background-color: rgba(88, 249, 242, 0.2);
+}
+
+.btn-control-pause {
+    background-color: rgba(240, 180, 41, 0.1);
+    color: var(--accent-gold);
+}
+
+.btn-control-pause:hover {
+    background-color: rgba(240, 180, 41, 0.2);
+}
+
+.btn-control-stop {
+    background-color: rgba(240, 82, 82, 0.1);
+    color: #f05252;
+}
+
+.btn-control-stop:hover {
+    background-color: rgba(240, 82, 82, 0.2);
+}
+
+.btn-control-log:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+}
+
+.btn-control-log-activo {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+/* ===== Panel de logs ===== */
+.engine-log-panel {
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-main);
+    padding: 1rem 1.25rem;
+}
+
+.engine-log-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.engine-log-header i {
+    color: var(--accent-cyan);
+}
+
+.engine-log-live {
+    margin-left: auto;
+    color: var(--accent-cyan);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    animation: parpadeo 2s ease-in-out infinite;
+}
+
+.engine-log-lineas {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    max-height: 160px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.engine-log-linea {
+    color: var(--text-muted);
+}
+
+/* ===== Estado vacío ===== */
+.engines-vacio {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-muted);
+}
+
+.vacio-icono {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.btn-explorar {
+    display: inline-block;
+    margin-top: 1rem;
+    background-color: var(--accent-cyan);
+    color: var(--bg-main);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    text-decoration: none;
+}
