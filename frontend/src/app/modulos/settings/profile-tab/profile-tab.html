@@ -1,0 +1,71 @@
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Personal Information</h3>
+
+    <div class="avatar-fila">
+        <div class="avatar-circulo">JS</div>
+        <div>
+            <button class="btn-outline-cyan">Change Avatar</button>
+            <p class="avatar-nota">JPG or PNG, max 2MB</p>
+        </div>
+    </div>
+
+    <div class="campos-grid">
+        <div class="campo">
+            <label class="campo-label">Full Name</label>
+            <input type="text" class="campo-input" [value]="nombre()"
+                (input)="actualizarNombre($any($event.target).value)" />
+        </div>
+
+        <div class="campo">
+            <label class="campo-label">Email Address</label>
+            <input type="email" class="campo-input" [value]="email()"
+                (input)="actualizarEmail($any($event.target).value)" />
+        </div>
+
+        <div class="campo">
+            <label class="campo-label">Timezone</label>
+            <select class="campo-input" [value]="timezone()" (change)="actualizarTimezone($any($event.target).value)">
+                <option value="America/New_York">Eastern Time (ET)</option>
+                <option value="America/Chicago">Central Time (CT)</option>
+                <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                <option value="Europe/London">GMT / London</option>
+                <option value="Europe/Madrid">CET / Madrid</option>
+                <option value="Asia/Tokyo">JST / Tokyo</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label class="campo-label">Language</label>
+            <select class="campo-input" [value]="idioma()" (change)="actualizarIdioma($any($event.target).value)">
+                <option value="English">English</option>
+                <option value="Español">Español</option>
+                <option value="Português">Português</option>
+                <option value="Français">Français</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Account Plan</h3>
+
+    <div class="plan-fila">
+        <div class="plan-info">
+            <div class="plan-icono">PRO</div>
+            <div>
+                <div class="plan-nombre">PRO Member</div>
+                <div class="plan-descripcion">Acceso ilimitado a todos los algoritmos</div>
+            </div>
+        </div>
+        <span class="plan-badge">Active</span>
+    </div>
+</div>
+
+<div class="guardar-fila">
+    <button class="btn-guardar" [class.btn-guardado]="guardado()" (click)="guardar()">
+        @if (guardado()) {
+        <i class="bi bi-check-lg"></i>
+        }
+        {{ guardado() ? 'Saved!' : 'Save Changes' }}
+    </button>
+</div>

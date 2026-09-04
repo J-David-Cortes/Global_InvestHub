@@ -1,0 +1,167 @@
+/* ===== Tarjeta genérica de Settings (la reutilizaremos en TODAS las pestañas) ===== */
+.settings-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.settings-card-titulo {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ===== Avatar ===== */
+.avatar-fila {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.avatar-circulo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: rgba(88, 249, 242, 0.15);
+    color: var(--accent-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.btn-outline-cyan {
+    background-color: transparent;
+    border: 1px solid rgba(88, 249, 242, 0.25);
+    color: var(--accent-cyan);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-outline-cyan:hover {
+    background-color: rgba(88, 249, 242, 0.1);
+}
+
+.avatar-nota {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0.35rem 0 0 0;
+}
+
+/* ===== Campos del formulario ===== */
+.campos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.campo-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.campo-input {
+    width: 100%;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-main);
+}
+
+.campo-input:focus {
+    outline: none;
+    border-color: rgba(88, 249, 242, 0.4);
+}
+
+/* ===== Tarjeta de plan ===== */
+.plan-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.plan-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.plan-icono {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: rgba(88, 249, 242, 0.15);
+    color: var(--accent-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.plan-nombre {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.plan-descripcion {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.plan-badge {
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+    border: 1px solid rgba(88, 249, 242, 0.25);
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+}
+
+/* ===== Botón guardar ===== */
+.guardar-fila {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-guardar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--accent-cyan);
+    color: var(--bg-main);
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-guardar:hover {
+    opacity: 0.85;
+}
+
+.btn-guardado {
+    background-color: #20c997;
+}

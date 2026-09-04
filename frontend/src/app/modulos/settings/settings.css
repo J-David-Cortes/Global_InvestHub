@@ -1,0 +1,90 @@
+.settings-container {
+    padding: 0;
+}
+
+.settings-header {
+    margin-bottom: 1.75rem;
+}
+
+.settings-breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.settings-titulo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.settings-layout {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+/* ===== Sidebar de pestañas ===== */
+.settings-tabs-nav {
+    width: 190px;
+    flex-shrink: 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.settings-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+}
+
+.settings-tab-btn:hover {
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+.settings-tab-btn-activa {
+    background-color: rgba(88, 249, 242, 0.1);
+    color: var(--accent-cyan);
+}
+
+.settings-tab-btn-activa:hover {
+    color: var(--accent-cyan);
+    background-color: rgba(88, 249, 242, 0.1);
+}
+
+/* ===== Contenido ===== */
+.settings-contenido {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+    .settings-layout {
+        flex-direction: column;
+    }
+
+    .settings-tabs-nav {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+    }
+}

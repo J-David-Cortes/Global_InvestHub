@@ -1,0 +1,72 @@
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Change Password</h3>
+
+    <div class="password-campos">
+        <div class="campo">
+            <label class="campo-label">Current Password</label>
+            <input type="password" class="campo-input" value="••••••••••" disabled />
+        </div>
+
+        <div class="campos-grid">
+            <div class="campo">
+                <label class="campo-label">New Password</label>
+                <div class="campo-con-icono">
+                    <input [type]="mostrarPassword() ? 'text' : 'password'" class="campo-input"
+                        placeholder="Min. 8 characters" />
+                    <button class="btn-icono-input" (click)="alternarMostrarPassword()" type="button">
+                        <i class="bi" [class.bi-eye]="!mostrarPassword()" [class.bi-eye-slash]="mostrarPassword()"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="campo">
+                <label class="campo-label">Confirm Password</label>
+                <input type="password" class="campo-input" placeholder="" />
+            </div>
+        </div>
+
+        <button class="btn-cyan-solido">Update Password</button>
+    </div>
+</div>
+
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Two-Factor Authentication</h3>
+
+    <div class="toggle-fila">
+        <div>
+            <div class="toggle-titulo">Authenticator App</div>
+            <div class="toggle-descripcion">Google Authenticator or Authy</div>
+        </div>
+        <button class="toggle-switch" [class.toggle-switch-activo]="dosFA()" (click)="alternarDosFA()" type="button">
+            <span class="toggle-switch-perilla"></span>
+        </button>
+    </div>
+
+    @if (dosFA()) {
+    <div class="confirmacion-2fa">
+        <i class="bi bi-check-lg"></i>
+        2FA está activado. Tu cuenta está protegida.
+    </div>
+    }
+</div>
+
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Active Sessions</h3>
+
+    @for (sesion of sesiones; track sesion.dispositivo) {
+    <div class="sesion-fila">
+        <div>
+            <div class="sesion-dispositivo">
+                {{ sesion.dispositivo }}
+                @if (sesion.esActual) {
+                <span class="badge-actual">Current</span>
+                }
+            </div>
+            <div class="sesion-detalle">{{ sesion.ubicacion }} · {{ sesion.tiempo }}</div>
+        </div>
+        @if (!sesion.esActual) {
+        <button class="btn-revocar" (click)="revocarSesion(sesion.dispositivo)">Revoke</button>
+        }
+    </div>
+    }
+</div>

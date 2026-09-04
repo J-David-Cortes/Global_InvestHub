@@ -1,11 +1,34 @@
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb mb-2" style="font-size: 0.8rem;">
-        <li class="breadcrumb-item"><a routerLink="/dashboard" class="text-muted text-decoration-none">Home</a></li>
-        <li class="breadcrumb-item active text-teal" aria-current="page">Settings</li>
-    </ol>
-</nav>
+<div class="settings-container">
 
-<div style="color: white;">
-    <h1>Settings</h1>
-    <p>Esta es la pantalla de Settings funcionando correctamente.</p>
+    <header class="settings-header">
+        <p class="settings-breadcrumb">Home / Settings</p>
+        <h1 class="settings-titulo">SETTINGS</h1>
+    </header>
+
+    <div class="settings-layout">
+
+        <!-- Sidebar de pestañas -->
+        <nav class="settings-tabs-nav">
+            @for (pestana of pestanas; track pestana.id) {
+            <button class="settings-tab-btn" [class.settings-tab-btn-activa]="pestanaActiva() === pestana.id"
+                (click)="seleccionarPestana(pestana.id)">
+                <i class="bi" [class]="pestana.icono"></i>
+                {{ pestana.etiqueta }}
+            </button>
+            }
+        </nav>
+
+        <!-- Contenido de la pestaña activa -->
+        <div class="settings-contenido">
+            @switch (pestanaActiva()) {
+            @case ('profile') { <app-profile-tab /> }
+            @case ('security') { <app-security-tab /> }
+            @case ('notifications') { <app-notifications-tab /> }
+            @case ('apikeys') { <app-api-keys-tab /> }
+            @case ('billing') { <app-billing-tab /> }
+            }
+        </div>
+
+    </div>
+
 </div>
