@@ -1,0 +1,189 @@
+/* ===== Tarjeta genérica de Settings ===== */
+.settings-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.settings-card-titulo {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ===== Grid de planes ===== */
+.planes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.plan-card {
+    position: relative;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.plan-card-actual {
+    border-color: rgba(88, 249, 242, 0.4);
+    background-color: rgba(88, 249, 242, 0.05);
+}
+
+.plan-badge-actual {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-cyan);
+    background-color: rgba(88, 249, 242, 0.15);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.plan-card-nombre {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 0.15rem;
+}
+
+.plan-card-descripcion {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.plan-card-precio {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+}
+
+.plan-card-precio-periodo {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.plan-card-caracteristicas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.plan-caracteristica {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.plan-caracteristica i {
+    color: var(--accent-cyan);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+}
+
+.btn-plan-accion {
+    width: 100%;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.55rem;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background-color: transparent;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+}
+
+.btn-plan-accion:hover {
+    border-color: rgba(88, 249, 242, 0.3);
+    color: var(--accent-cyan);
+}
+
+.btn-plan-upgrade {
+    background-color: var(--accent-cyan);
+    color: var(--bg-main);
+    border: none;
+}
+
+.btn-plan-upgrade:hover {
+    opacity: 0.85;
+    color: var(--bg-main);
+}
+
+/* ===== Historial de pagos ===== */
+.pago-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pago-fila:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.pago-descripcion {
+    font-size: 0.8rem;
+    color: var(--text-main);
+}
+
+.pago-fecha {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+.pago-datos {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.pago-monto {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-main);
+}
+
+.pago-estado {
+    font-size: 0.65rem;
+    color: #20c997;
+    background-color: rgba(32, 201, 151, 0.1);
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+}
+
+.btn-pdf {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.btn-pdf:hover {
+    color: var(--accent-cyan);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 800px) {
+    .planes-grid {
+        grid-template-columns: 1fr;
+    }
+}

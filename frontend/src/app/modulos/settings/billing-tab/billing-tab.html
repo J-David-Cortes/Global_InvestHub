@@ -1,1 +1,53 @@
-<p>billing-tab works!</p>
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Current Plan</h3>
+
+    <div class="planes-grid">
+        @for (plan of planes; track plan.nombre) {
+        <div class="plan-card" [class.plan-card-actual]="plan.esActual">
+            @if (plan.esActual) {
+            <div class="plan-badge-actual">PLAN ACTUAL</div>
+            }
+            <div class="plan-card-nombre">{{ plan.nombre }}</div>
+            <div class="plan-card-descripcion">{{ plan.descripcion }}</div>
+            <div class="plan-card-precio">
+                @if (plan.precio === 0) {
+                Free
+                } @else {
+                ${{ plan.precio }}<span class="plan-card-precio-periodo">/mo</span>
+                }
+            </div>
+            <div class="plan-card-caracteristicas">
+                @for (caracteristica of plan.caracteristicas; track caracteristica) {
+                <div class="plan-caracteristica">
+                    <i class="bi bi-check-lg"></i>
+                    {{ caracteristica }}
+                </div>
+                }
+            </div>
+            @if (!plan.esActual) {
+            <button class="btn-plan-accion" [class.btn-plan-upgrade]="esUpgrade(plan)">
+                {{ plan.precio === 0 ? 'Downgrade' : 'Upgrade' }}
+            </button>
+            }
+        </div>
+        }
+    </div>
+</div>
+
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Payment History</h3>
+
+    @for (pago of pagos; track pago.fecha) {
+    <div class="pago-fila">
+        <div>
+            <div class="pago-descripcion">{{ pago.descripcion }}</div>
+            <div class="pago-fecha">{{ pago.fecha }}</div>
+        </div>
+        <div class="pago-datos">
+            <span class="pago-monto">{{ pago.monto }}</span>
+            <span class="pago-estado">{{ pago.estado }}</span>
+            <button class="btn-pdf">PDF</button>
+        </div>
+    </div>
+    }
+</div>
