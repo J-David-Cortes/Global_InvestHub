@@ -1,1 +1,33 @@
-<p>notifications-tab works!</p>
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Email Notifications</h3>
+
+    @for (item of itemsEmail; track item.clave) {
+    <div class="notif-fila">
+        <div>
+            <div class="notif-etiqueta">{{ item.etiqueta }}</div>
+            <div class="notif-descripcion">{{ item.descripcion }}</div>
+        </div>
+        <button class="toggle-switch" [class.toggle-switch-activo]="preferencias()[item.clave]"
+            (click)="alternarPreferencia(item.clave)" type="button">
+            <span class="toggle-switch-perilla"></span>
+        </button>
+    </div>
+    }
+</div>
+
+<div class="settings-card">
+    <h3 class="settings-card-titulo">Push Notifications</h3>
+
+    @for (item of itemsPush; track item.clave) {
+    <div class="notif-fila">
+        <div>
+            <div class="notif-etiqueta">{{ item.etiqueta }}</div>
+            <div class="notif-descripcion">{{ item.descripcion }}</div>
+        </div>
+        <button class="toggle-switch" [class.toggle-switch-activo]="preferencias()[item.clave]"
+            (click)="alternarPreferencia(item.clave)" type="button">
+            <span class="toggle-switch-perilla"></span>
+        </button>
+    </div>
+    }
+</div>

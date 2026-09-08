@@ -1,0 +1,74 @@
+/* ===== Tarjeta genérica de Settings ===== */
+.settings-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.settings-card-titulo {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ===== Filas de notificación ===== */
+.notif-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.notif-fila:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.notif-etiqueta {
+    font-size: 0.85rem;
+    color: var(--text-main);
+}
+
+.notif-descripcion {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+/* ===== Toggle switch (idéntico al de Security) ===== */
+.toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    border-radius: 999px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-switch-activo {
+    background-color: var(--accent-cyan);
+}
+
+.toggle-switch-perilla {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    transition: left 0.2s ease;
+}
+
+.toggle-switch-activo .toggle-switch-perilla {
+    left: 22px;
+}
