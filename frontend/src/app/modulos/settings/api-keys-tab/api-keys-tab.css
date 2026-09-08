@@ -1,0 +1,167 @@
+/* ===== Tarjeta genérica de Settings ===== */
+.settings-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.settings-card-titulo {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ===== Lista de claves ===== */
+.claves-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.clave-item {
+    background-color: var(--bg-main);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.clave-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.clave-nombre {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.clave-meta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+.clave-acciones {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge-plataforma {
+    font-size: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+}
+
+.badge-mt5 {
+    background-color: rgba(88, 249, 242, 0.1);
+    color: var(--accent-cyan);
+}
+
+.badge-lean {
+    background-color: rgba(32, 201, 151, 0.1);
+    color: #20c997;
+}
+
+.badge-api {
+    background-color: rgba(240, 180, 41, 0.1);
+    color: var(--accent-gold);
+}
+
+.btn-eliminar-clave {
+    background: transparent;
+    border: none;
+    color: #f05252;
+    padding: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 6px;
+}
+
+.btn-eliminar-clave:hover {
+    background-color: rgba(240, 82, 82, 0.1);
+}
+
+.clave-codigo-fila {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+}
+
+.clave-codigo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    flex: 1;
+}
+
+.btn-copiar {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.btn-copiar:hover {
+    color: var(--accent-cyan);
+}
+
+/* ===== Botón "Generate New Key" ===== */
+.btn-outline-cyan {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: transparent;
+    border: 1px solid rgba(88, 249, 242, 0.25);
+    color: var(--accent-cyan);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.6rem 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-outline-cyan:hover {
+    background-color: rgba(88, 249, 242, 0.1);
+}
+
+/* ===== Caja de advertencia ===== */
+.advertencia-caja {
+    display: flex;
+    gap: 0.75rem;
+    background-color: rgba(240, 180, 41, 0.08);
+    border: 1px solid rgba(240, 180, 41, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.advertencia-caja i {
+    color: var(--accent-gold);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.advertencia-texto {
+    font-size: 0.75rem;
+    color: var(--accent-gold);
+    opacity: 0.85;
+    line-height: 1.5;
+}

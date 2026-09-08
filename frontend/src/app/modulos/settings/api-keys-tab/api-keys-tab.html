@@ -1,1 +1,48 @@
-<p>api-keys-tab works!</p>
+<div class="settings-card">
+    <h3 class="settings-card-titulo">API Keys</h3>
+
+    <div class="claves-lista">
+        @for (clave of claves(); track clave.id) {
+        <div class="clave-item">
+            <div class="clave-header">
+                <div>
+                    <div class="clave-nombre">{{ clave.nombre }}</div>
+                    <div class="clave-meta">Creado {{ clave.fechaCreacion }} · Último uso: {{ clave.ultimoUso }}</div>
+                </div>
+                <div class="clave-acciones">
+                    <span class="badge-plataforma" [class.badge-mt5]="clave.plataforma === 'MT5'"
+                        [class.badge-lean]="clave.plataforma === 'LEAN'" [class.badge-api]="clave.plataforma === 'API'">
+                        {{ clave.plataforma }}
+                    </span>
+                    <button class="btn-eliminar-clave" (click)="eliminarClave(clave.id)" title="Eliminar">
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="clave-codigo-fila">
+                <code class="clave-codigo">{{ clave.claveOculta }}</code>
+                <button class="btn-copiar" (click)="copiarClave(clave)" title="Copiar">
+                    @if (idCopiado() === clave.id) {
+                    <i class="bi bi-check-lg"></i>
+                    } @else {
+                    <i class="bi bi-clipboard"></i>
+                    }
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+
+    <button class="btn-outline-cyan" (click)="generarNuevaClave()">
+        <i class="bi bi-plus-lg"></i>
+        Generate New Key
+    </button>
+</div>
+
+<div class="advertencia-caja">
+    <i class="bi bi-exclamation-triangle"></i>
+    <div class="advertencia-texto">
+        Nunca compartas tus API keys. Tratar cada clave como una contraseña.
+        Si crees que una clave está comprometida, elimínala inmediatamente y genera una nueva.
+    </div>
+</div>
