@@ -11,7 +11,8 @@
                            subtitulo, descripcion, categoria, plataforma, verificado,
                            rendimiento_anual AS rendimientoAnual, sharpe_ratio AS sharpeRatio, max_drawdown AS maxDrawdown,
                            win_rate AS winRate, desarrollador, rating, numero_reviews AS numeroReviews,
-                           tags, historial_rendimiento AS historialRendimiento
+                           tags, historial_rendimiento AS historialRendimiento,
+                           (SELECT COUNT(*) FROM usuario_bot ub WHERE ub.fo_bot = bot_inversion.id_bot AND ub.activo = 1) AS numeroSuscriptores
                     FROM bot_inversion ORDER BY nombre";
 
             $res = mysqli_query($this->conexion, $sql) or die("Error en consulta bot_inversion: " . mysqli_error($this->conexion));
@@ -22,6 +23,7 @@
                 $row['esVip'] = (bool) $row['esVip'];
                 $row['verificado'] = (bool) $row['verificado'];
                 $row['numeroReviews'] = (int) $row['numeroReviews'];
+                $row['numeroSuscriptores'] = (int) $row['numeroSuscriptores'];
                 $row['rendimientoAnual'] = $row['rendimientoAnual'] !== null ? (float) $row['rendimientoAnual'] : null;
                 $row['sharpeRatio'] = $row['sharpeRatio'] !== null ? (float) $row['sharpeRatio'] : null;
                 $row['maxDrawdown'] = $row['maxDrawdown'] !== null ? (float) $row['maxDrawdown'] : null;

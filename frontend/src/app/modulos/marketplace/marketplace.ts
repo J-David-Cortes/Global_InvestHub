@@ -49,7 +49,11 @@ export class Marketplace {
           case 'sharpe':
             return b.sharpeRatio - a.sharpeRatio;
           case 'price':
-            return a.precioMensual - b.precioMensual;
+            // TODO: precioMensual ya no existe -- reemplazar por logica de
+            // precioIndividual (solo VIP) o quitar esta opcion de sort hasta
+            // definir el nuevo comportamiento. Pendiente en sesion de chat.
+            // return a.precioMensual - b.precioMensual;
+            return 0; // sin reordenar mientras se resuelve
           case 'popularity':
             return b.numeroSuscriptores - a.numeroSuscriptores;
         }

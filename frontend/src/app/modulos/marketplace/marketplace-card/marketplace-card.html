@@ -77,8 +77,16 @@
     <!-- Footer: precio + botón -->
     <footer class="bot-card-footer">
         <div class="bot-card-precio">
-            <span class="precio-valor">${{ bot.precioMensual }}</span>
+            <!-- TODO: primer approach funcional, pendiente de diseño visual real.
+                 precioMensual ya no existe: si el bot es VIP se paga aparte
+                 (precioIndividual); si no, ya viene incluido en el plan de
+                 suscripcion del usuario (Starter/Pro/Enterprise). -->
+            @if (bot.esVip) {
+            <span class="precio-valor">${{ bot.precioIndividual }}</span>
             <span class="precio-periodo">/mo</span>
+            } @else {
+            <span class="precio-valor">Incluido en tu plan</span>
+            }
         </div>
         <button class="btn-suscribir" [class.btn-suscrito]="estaSuscrito()" (click)="alternarSuscripcion()">
             {{ estaSuscrito() ? 'Subscribed ✓' : 'Subscribe' }}

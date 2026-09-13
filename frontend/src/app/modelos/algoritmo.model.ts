@@ -23,7 +23,6 @@ export interface Algoritmo {
 
     tags: string[];
 
-    precioMensual: number;
     precioIndividual?: number | null;
 
     historialRendimiento: number[];
