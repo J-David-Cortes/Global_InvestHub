@@ -15,7 +15,7 @@ export class BotInversion {
   }
 
   insertar(params: any){
-    return this.http.post(`${this.url}?control=insetar`, JSON.stringify(params));
+    return this.http.post(`${this.url}?control=insertar`, JSON.stringify(params));
   }
 
   editar(id: number, params: any){

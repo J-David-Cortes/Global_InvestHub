@@ -9,6 +9,7 @@ export interface Algoritmo {
     categoria: CategoriaAlgoritmo;
     plataforma: PlataformaAlgoritmo;
     verificado: boolean;
+    esVip: boolean;
 
     rendimientoAnual: number;
     sharpeRatio: number;
@@ -23,6 +24,7 @@ export interface Algoritmo {
     tags: string[];
 
     precioMensual: number;
+    precioIndividual?: number | null;
 
     historialRendimiento: number[];
 }
