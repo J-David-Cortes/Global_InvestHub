@@ -18,6 +18,16 @@
 
             $vec = [];
             while($row = mysqli_fetch_assoc($res)){
+                $row['id'] = (int) $row['id'];
+                $row['esVip'] = (bool) $row['esVip'];
+                $row['verificado'] = (bool) $row['verificado'];
+                $row['numeroReviews'] = (int) $row['numeroReviews'];
+                $row['rendimientoAnual'] = $row['rendimientoAnual'] !== null ? (float) $row['rendimientoAnual'] : null;
+                $row['sharpeRatio'] = $row['sharpeRatio'] !== null ? (float) $row['sharpeRatio'] : null;
+                $row['maxDrawdown'] = $row['maxDrawdown'] !== null ? (float) $row['maxDrawdown'] : null;
+                $row['winRate'] = $row['winRate'] !== null ? (float) $row['winRate'] : null;
+                $row['rating'] = $row['rating'] !== null ? (float) $row['rating'] : null;
+                $row['precioIndividual'] = $row['precioIndividual'] !== null ? (float) $row['precioIndividual'] : null;
                 $row['tags'] = $row['tags'] !== null ? json_decode($row['tags']) : null;
                 $row['historialRendimiento'] = $row['historialRendimiento'] !== null ? json_decode($row['historialRendimiento']) : null;
                 $vec[] = $row;
