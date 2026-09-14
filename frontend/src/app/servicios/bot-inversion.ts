@@ -1,29 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiBase } from './api-base';
 
 @Injectable({
   providedIn: 'root',
 })
-export class BotInversion {
+export class BotInversion extends ApiBase {
 
-  url= "http://localhost/proyectos/marketplace_bots/backend/controladores/bot_inversion.php";
+  protected url = "http://localhost/proyectos/marketplace_bots/Backend/controladores/bot_inversion.php";
 
-  constructor(private http: HttpClient){};
-
-  consulta(){
-    return this.http.get(`${this.url}?control=consulta`)
-  }
-
-  insertar(params: any){
-    return this.http.post(`${this.url}?control=insertar`, JSON.stringify(params));
-  }
-
-  editar(id: number, params: any){
-    return this.http.post(`${this.url}?control=editar&id=${id}`, JSON.stringify(params));
-  }
-
-  eliminar(id: number){
-    return this.http.get(`${this.url}?control=eliminar&id=${id}`);
+  constructor(http: HttpClient) {
+    super(http);
   }
 
 }

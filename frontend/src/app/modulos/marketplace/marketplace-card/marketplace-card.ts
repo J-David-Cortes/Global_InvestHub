@@ -17,20 +17,26 @@ export class MarketplaceCard {
   private readonly anchoSparkline = 260;
   private readonly altoSparkline = 60;
 
-  get puntosSparkline(): string {
-    const datos = this.bot.historialRendimiento;
-    const minimo = Math.min(...datos);
-    const maximo = Math.max(...datos);
-    const rango = maximo - minimo || 1;
-
-    return datos
-      .map((valor, indice) => {
-        const x = (indice / (datos.length - 1)) * this.anchoSparkline;
-        const y = this.altoSparkline - ((valor - minimo) / rango) * this.altoSparkline;
-        return `${x.toFixed(1)},${y.toFixed(1)}`;
-      })
-      .join(' ');
+get puntosSparkline(): string {
+  // Si el bot no tiene historial cargado todavía (ej. datos de prueba
+  // recién creados), dibujamos una línea plana simple en vez de fallar.
+  const datos = this.bot.historialRendimiento;
+  if (!datos || datos.length === 0) {
+    return `0,${this.altoSparkline / 2} ${this.anchoSparkline},${this.altoSparkline / 2}`;
   }
+
+  const minimo = Math.min(...datos);
+  const maximo = Math.max(...datos);
+  const rango = maximo - minimo || 1;
+
+  return datos
+    .map((valor, indice) => {
+      const x = (indice / (datos.length - 1)) * this.anchoSparkline;
+      const y = this.altoSparkline - ((valor - minimo) / rango) * this.altoSparkline;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(' ');
+}
 
   // Nuevo: toma los mismos puntos de la línea, y les agrega 2 esquinas
   // abajo para "cerrar" la forma y poder rellenarla con degradado.
