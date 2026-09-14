@@ -75,10 +75,11 @@ export class Marketplace implements OnInit {
           case 'sharpe':
             return (b.sharpeRatio ?? 0) - (a.sharpeRatio ?? 0);
           case 'price':
-            // TODO: precioMensual ya no existe -- reemplazar por logica de
-            // precioIndividual (solo VIP) o quitar esta opcion de sort hasta
-            // definir el nuevo comportamiento. Pendiente en sesion de chat.
-            return 0; // sin reordenar mientras se resuelve
+          // Los bots no-VIP no tienen precio propio (van incluidos en el plan),
+          // así que los tratamos como "0" para que queden primero al ordenar
+          // de menor a mayor precio -- tiene sentido mostrar lo gratis/incluido
+          // antes que lo que cuesta aparte.
+          return (a.precioIndividual ?? 0) - (b.precioIndividual ?? 0);
           case 'popularity':
             return (b.numeroSuscriptores ?? 0) - (a.numeroSuscriptores ?? 0);
         }
