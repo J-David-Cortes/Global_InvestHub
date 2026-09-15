@@ -1,22 +1,28 @@
-// Este archivo define la "forma" que debe tener cada engine (bot activo)
-// que el usuario ya tiene corriendo, a diferencia del Marketplace que
-// muestra bots disponibles para SUSCRIBIRSE.
+// Estado simplificado: por ahora solo distinguimos "tiene acceso activo"
+// o no -- la base de datos real no guarda un tercer estado "paused"
+// todavía (ver TODO en engines.ts).
+export type EstadoEngine = 'running' | 'stopped';
 
 export interface Engine {
-    id: number;
-    nombre: string;              // Ej: "Quantum FX Alpha"
-    version: string;             // Ej: "v2.4.1"
-    plataforma: PlataformaEngine;
-    estado: EstadoEngine;
-    ganancia: string;            // Ej: "+$4,230.50" (ya formateado, como en Figma)
-    gananciaPositiva: boolean;   // true = ganancia (cyan), false = pérdida (gold)
-    numeroOperaciones: number;
-    winRate: string;             // Ej: "71.3%"
-    tiempoActivo: string;        // Ej: "12d 4h" o "—" si está detenido
-    par: string;                 // Ej: "EUR/USD"
-    fechaInicio: string;
-    equity: string;
-}
+    id: number;              // id_conexion (la fila de usuario_bot)
+    botId: number;
+    nombre: string;           // viene de botNombre
+    plataforma: string;       // viene de botPlataforma
+    categoria: string;        // viene de botCategoria
+    brokerNombre: string;
+    activo: boolean;          // dato real de la BD
+    fechaActivacion: string;
+    fechaDesactivacion: string | null;
 
-export type PlataformaEngine = 'MT5' | 'LEAN' | 'cTrader';
-export type EstadoEngine = 'running' | 'paused' | 'stopped';
+    // Campos SIN datos reales todavía (no existe motor de trading en vivo
+    // conectado). Se muestran como placeholder "—" en el HTML hasta que
+    // exista una tabla de operaciones/resultados real. Ver TODO en
+    // engines.html.
+    version?: string;
+    par?: string;
+    ganancia?: string;
+    gananciaPositiva?: boolean;
+    numeroOperaciones?: number;
+    winRate?: string;
+    equity?: string;
+}
