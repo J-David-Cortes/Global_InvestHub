@@ -47,13 +47,67 @@
             return ['Resultado' => "OK", 'mensaje' => "Se eliminó la conexión del bot"];
         }
 
+        // Limite de bots del plan activo del usuario (NULL = ilimitado,
+        // 0 si no tiene ninguna suscripcion activa hoy). "Activa" es
+        // fo_estado=1 (Activo) Y la fecha de hoy dentro de [fecha_inicio,
+        // fecha_fin] -- un trial es una fila mas aqui (fo_suscripcion
+        // apuntando al plan "Trial"), no un caso especial.
+        private function obtenerLimiteBotsUsuario($fo_usuario){
+            $sql = "SELECT s.limite_bots
+                    FROM usuario_suscripcion us
+                    INNER JOIN suscripcion s ON us.fo_suscripcion = s.id_suscripcion
+                    WHERE us.fo_usuario = $fo_usuario
+                      AND us.fo_estado = 1
+                      AND us.fecha_inicio <= CURDATE()
+                      AND us.fecha_fin >= CURDATE()
+                    ORDER BY us.fecha_inicio DESC
+                    LIMIT 1";
+            $res = mysqli_query($this->conexion, $sql) or die("Error al consultar suscripcion activa: " . mysqli_error($this->conexion));
+
+            if(mysqli_num_rows($res) === 0){
+                return 0;
+            }
+
+            $row = mysqli_fetch_assoc($res);
+            return $row['limite_bots'] !== null ? (int) $row['limite_bots'] : null;
+        }
+
+        private function contarBotsNoVipActivos($fo_usuario){
+            $sql = "SELECT COUNT(*) AS total
+                    FROM usuario_bot ub
+                    INNER JOIN bot_inversion bi ON ub.fo_bot = bi.id_bot
+                    WHERE ub.fo_usuario = $fo_usuario AND ub.activo = 1 AND bi.es_vip = 0";
+            $res = mysqli_query($this->conexion, $sql) or die("Error al contar bots activos: " . mysqli_error($this->conexion));
+            $row = mysqli_fetch_assoc($res);
+            return (int) $row['total'];
+        }
+
         public function insertar($params){
+            $fo_usuario = intval($params->fo_usuario);
+            $fo_bot = intval($params->fo_bot);
+
+            // Regla de negocio: un bot VIP siempre se permite activar, sin
+            // importar el plan del usuario ni cuantos bots tenga activos.
+            $sqlVip = "SELECT es_vip FROM bot_inversion WHERE id_bot = $fo_bot";
+            $resVip = mysqli_query($this->conexion, $sqlVip) or die("Error al consultar bot_inversion: " . mysqli_error($this->conexion));
+            $filaVip = mysqli_fetch_assoc($resVip);
+            $esVip = $filaVip !== null ? (bool) $filaVip['es_vip'] : false;
+
+            if(!$esVip){
+                $limite = $this->obtenerLimiteBotsUsuario($fo_usuario);
+
+                if($limite !== null){
+                    $activos = $this->contarBotsNoVipActivos($fo_usuario);
+                    if($activos >= $limite){
+                        return ['Resultado' => "Error", 'mensaje' => "Has alcanzado el límite de bots de tu plan"];
+                    }
+                }
+            }
+
             // Un insertar() siempre representa una activacion NUEVA:
             // fecha_activacion y activo quedan en su DEFAULT de la tabla
             // (CURRENT_TIMESTAMP y 1), no se confia en lo que mande el cliente.
             $api_key = mysqli_real_escape_string($this->conexion, $params->api_key);
-            $fo_usuario = intval($params->fo_usuario);
-            $fo_bot = intval($params->fo_bot);
             $fo_broker = intval($params->fo_broker);
             $fo_pasarela = isset($params->fo_pasarela) && $params->fo_pasarela !== null ? intval($params->fo_pasarela) : null;
             $fo_pasarela_sql = $fo_pasarela !== null ? $fo_pasarela : 'NULL';
