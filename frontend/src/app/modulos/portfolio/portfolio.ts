@@ -1,32 +1,57 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import {
-  METRICAS_MOCK,
-  COLORES_ASIGNACION,
-  HOLDINGS_MOCK,
-  POSICIONES_CERRADAS_MOCK,
-} from './portfolio-mock';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { OperacionTrading } from '../../servicios/operacion-trading';
+import { ResumenPortfolio, PosicionAbierta, PosicionCerrada } from '../../modelos/portfolio.model';
 
 @Component({
   selector: 'app-portfolio',
-  imports: [RouterLink],
+  imports: [DecimalPipe],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
 })
-export class Portfolio {
-  metricas = METRICAS_MOCK;
-  colores = COLORES_ASIGNACION;
-  holdings = HOLDINGS_MOCK;
-  posicionesCerradas = POSICIONES_CERRADAS_MOCK;
+export class Portfolio implements OnInit {
+  private operacionTradingService = inject(OperacionTrading);
 
-  // Excluimos "Cash Reserve" de la tabla de posiciones abiertas
-  // (Figma lo hace filtrando por algoritmo !== "USD")
-  get holdingsConOperacion() {
-    return this.holdings.filter((h) => h.algoritmo !== 'USD');
+  cargando = signal(true);
+
+  resumen = signal<ResumenPortfolio | null>(null);
+  posicionesAbiertas = signal<PosicionAbierta[]>([]);
+  posicionesCerradas = signal<PosicionCerrada[]>([]);
+
+  ngOnInit() {
+    this.cargarResumen();
+    this.cargarAbiertas();
+    this.cargarCerradas();
   }
 
-  // Le asigna a cada holding el color que le corresponde según su posición en el arreglo
-  colorDe(indice: number): string {
-    return this.colores[indice % this.colores.length];
+  cargarResumen() {
+    this.operacionTradingService.resumen().subscribe({
+      next: (respuesta) => {
+        this.resumen.set(respuesta as ResumenPortfolio);
+        this.cargando.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar el resumen de Portfolio:', err);
+        this.cargando.set(false);
+      },
+    });
+  }
+
+  cargarAbiertas() {
+    this.operacionTradingService.abiertas().subscribe({
+      next: (respuesta) => {
+        this.posicionesAbiertas.set(respuesta as PosicionAbierta[]);
+      },
+      error: (err) => console.error('Error al cargar posiciones abiertas:', err),
+    });
+  }
+
+  cargarCerradas() {
+    this.operacionTradingService.cerradas().subscribe({
+      next: (respuesta) => {
+        this.posicionesCerradas.set(respuesta as PosicionCerrada[]);
+      },
+      error: (err) => console.error('Error al cargar posiciones cerradas:', err),
+    });
   }
 }

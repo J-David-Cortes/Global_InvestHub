@@ -5,108 +5,91 @@
         <h1 class="portfolio-titulo">PORTFOLIO</h1>
     </header>
 
+    @if (cargando()) {
+    <div class="portfolio-vacio">
+        <p class="vacio-icono">⏳</p>
+        <p>Cargando datos del portfolio...</p>
+    </div>
+    } @else {
+
     <!-- 4 tarjetas de métricas -->
+    @if (resumen(); as r) {
     <div class="portfolio-metricas">
-        @for (metrica of metricas; track metrica.etiqueta) {
         <div class="metrica-card">
-            <div class="metrica-etiqueta">{{ metrica.etiqueta }}</div>
-            <div class="metrica-valor" [class.valor-positivo]="metrica.esPositiva"
-                [class.valor-negativo]="!metrica.esPositiva">
-                {{ metrica.valor }}
+            <div class="metrica-etiqueta">TOTAL EQUITY</div>
+            <div class="metrica-valor">${{ r.totalEquity | number:'1.2-2' }}</div>
+        </div>
+        <div class="metrica-card">
+            <div class="metrica-etiqueta">TODAY P&L</div>
+            <div class="metrica-valor" [class.valor-positivo]="r.pnlHoy > 0" [class.valor-negativo]="r.pnlHoy < 0">
+                ${{ r.pnlHoy | number:'1.2-2' }}
             </div>
-            <div class="metrica-cambio" [class.cambio-positivo]="metrica.esPositiva"
-                [class.cambio-negativo]="!metrica.esPositiva">
-                <i class="bi" [class.bi-arrow-up-right]="metrica.esPositiva"
-                    [class.bi-arrow-down-right]="!metrica.esPositiva"></i>
-                {{ metrica.cambio }}
+        </div>
+        <div class="metrica-card">
+            <div class="metrica-etiqueta">MTD P&L</div>
+            <div class="metrica-valor" [class.valor-positivo]="r.pnlMes > 0" [class.valor-negativo]="r.pnlMes < 0">
+                ${{ r.pnlMes | number:'1.2-2' }}
             </div>
+        </div>
+        <div class="metrica-card">
+            <div class="metrica-etiqueta">YTD P&L</div>
+            <div class="metrica-valor" [class.valor-positivo]="r.pnlAnio > 0" [class.valor-negativo]="r.pnlAnio < 0">
+                ${{ r.pnlAnio | number:'1.2-2' }}
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- Tabla de posiciones abiertas -->
+    <div class="posiciones-card">
+        <div class="posiciones-header">
+            <h3 class="card-subtitulo">Open Positions</h3>
+        </div>
+        @if (posicionesAbiertas().length === 0) {
+        <div class="portfolio-vacio-seccion">
+            <p>No tienes posiciones abiertas todavía.</p>
+            <p class="vacio-nota">Este panel se llenará automáticamente cuando actives un bot y este comience a operar.
+            </p>
+        </div>
+        } @else {
+        <div class="tabla-scroll">
+            <table class="tabla-portfolio">
+                <thead>
+                    <tr>
+                        <th>ENGINE</th>
+                        <th>ENTRY</th>
+                        <th>CURRENT</th>
+                        <th>INVESTED</th>
+                        <th>OPENED</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (pos of posicionesAbiertas(); track pos.id) {
+                    <tr>
+                        <td class="celda-nombre">{{ pos.botNombre }}</td>
+                        <td class="celda-mono">{{ pos.precioEntrada }}</td>
+                        <td class="celda-mono">{{ pos.precioActual ?? '—' }}</td>
+                        <td class="celda-mono">${{ pos.montoInvertido | number:'1.2-2' }}</td>
+                        <td class="celda-mono celda-muted">{{ pos.fechaApertura }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
         </div>
         }
     </div>
 
-    <div class="portfolio-fila-principal">
-
-        <!-- Gráfico de distribución -->
-        <div class="asignacion-card">
-            <h3 class="card-subtitulo">Asset Allocation</h3>
-
-            <div class="asignacion-barra">
-                @for (holding of holdings; track holding.nombre; let i = $index) {
-                <div class="asignacion-segmento" [style.width.%]="holding.asignacionPct"
-                    [style.background-color]="colorDe(i)" [title]="holding.nombre + ' ' + holding.asignacionPct + '%'">
-                </div>
-                }
-            </div>
-
-            <div class="asignacion-lista">
-                @for (holding of holdings; track holding.nombre; let i = $index) {
-                <div class="asignacion-item">
-                    <div class="asignacion-item-info">
-                        <span class="asignacion-punto" [style.background-color]="colorDe(i)"></span>
-                        <span class="asignacion-nombre">{{ holding.nombre }}</span>
-                    </div>
-                    <div class="asignacion-item-datos">
-                        <span class="asignacion-tamano">{{ holding.tamano }}</span>
-                        <span class="asignacion-pct">{{ holding.asignacionPct }}%</span>
-                    </div>
-                </div>
-                }
-            </div>
-        </div>
-
-        <!-- Tabla de posiciones abiertas -->
-        <div class="posiciones-card">
-            <div class="posiciones-header">
-                <h3 class="card-subtitulo">Open Positions</h3>
-            </div>
-            <div class="tabla-scroll">
-                <table class="tabla-portfolio">
-                    <thead>
-                        <tr>
-                            <th>ENGINE</th>
-                            <th>PAIR</th>
-                            <th>SIZE</th>
-                            <th>ENTRY</th>
-                            <th>CURRENT</th>
-                            <th>P&L</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (holding of holdingsConOperacion; track holding.nombre) {
-                        <tr>
-                            <td class="celda-nombre">{{ holding.nombre }}</td>
-                            <td class="celda-mono celda-muted">{{ holding.algoritmo }}</td>
-                            <td class="celda-mono">{{ holding.tamano }}</td>
-                            <td class="celda-mono celda-muted">{{ holding.entrada }}</td>
-                            <td class="celda-mono">{{ holding.actual }}</td>
-                            <td>
-                                <div class="celda-mono celda-ganancia" [class.valor-positivo]="holding.esPositiva"
-                                    [class.valor-negativo]="!holding.esPositiva">
-                                    {{ holding.ganancia }}
-                                </div>
-                                <div class="celda-mono celda-ganancia-pct" [class.valor-positivo]="holding.esPositiva"
-                                    [class.valor-negativo]="!holding.esPositiva">
-                                    {{ holding.gananciaPct }}
-                                </div>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
     <!-- Tabla de posiciones cerradas -->
     <div class="posiciones-card">
-        <div class="posiciones-header posiciones-header-flex">
-            <div class="posiciones-titulo-icono">
-                <i class="bi bi-graph-up-arrow"></i>
-                <h3 class="card-subtitulo">Closed Positions</h3>
-            </div>
-            <button class="btn-ver-todo">View All</button>
+        <div class="posiciones-header">
+            <h3 class="card-subtitulo">Closed Positions</h3>
         </div>
+        @if (posicionesCerradas().length === 0) {
+        <div class="portfolio-vacio-seccion">
+            <p>Aún no tienes operaciones cerradas.</p>
+            <p class="vacio-nota">Aquí aparecerá tu historial una vez que tus bots empiecen a operar.</p>
+        </div>
+        } @else {
         <div class="tabla-scroll">
             <table class="tabla-portfolio">
                 <thead>
@@ -116,31 +99,27 @@
                         <th>INVESTED</th>
                         <th>RETURNED</th>
                         <th>P&L</th>
-                        <th>RETURN %</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @for (posicion of posicionesCerradas; track posicion.nombre) {
+                    @for (pos of posicionesCerradas(); track pos.id) {
                     <tr>
-                        <td class="celda-nombre">{{ posicion.nombre }}</td>
-                        <td class="celda-mono celda-muted">{{ posicion.fechaCierre }}</td>
-                        <td class="celda-mono celda-muted">{{ posicion.invertido }}</td>
-                        <td class="celda-mono">{{ posicion.retornado }}</td>
-                        <td class="celda-mono celda-ganancia" [class.valor-positivo]="posicion.esPositiva"
-                            [class.valor-negativo]="!posicion.esPositiva">
-                            {{ posicion.ganancia }}
-                        </td>
-                        <td>
-                            <span class="badge-retorno" [class.valor-positivo-bg]="posicion.esPositiva"
-                                [class.valor-negativo-bg]="!posicion.esPositiva">
-                                {{ posicion.retornoPct }}
-                            </span>
+                        <td class="celda-nombre">{{ pos.botNombre }}</td>
+                        <td class="celda-mono celda-muted">{{ pos.fechaCierre }}</td>
+                        <td class="celda-mono">${{ pos.montoInvertido | number:'1.2-2' }}</td>
+                        <td class="celda-mono">${{ pos.montoRetornado | number:'1.2-2' }}</td>
+                        <td class="celda-mono" [class.valor-positivo]="pos.resultadoPnl > 0"
+                            [class.valor-negativo]="pos.resultadoPnl < 0">
+                            ${{ pos.resultadoPnl | number:'1.2-2' }}
                         </td>
                     </tr>
                     }
                 </tbody>
             </table>
         </div>
+        }
     </div>
+
+    }
 
 </div>
