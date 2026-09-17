@@ -22,6 +22,19 @@
             return $vec;
         }
 
+        public function consultaUno($fo_usuario){
+            $fo_usuario = intval($fo_usuario);
+
+            $sql = "SELECT u.id_usuario, u.nombre, u.email, u.fo_permiso, p.nombre AS nombre_nivel
+                    FROM usuario u
+                    INNER JOIN permiso_nivel p ON u.fo_permiso = p.id_permiso
+                    WHERE u.id_usuario = $fo_usuario";
+
+            $res = mysqli_query($this->conexion, $sql) or die("Error en consultaUno usuario: " . mysqli_error($this->conexion));
+
+            return mysqli_fetch_assoc($res);
+        }
+
         public function eliminar($id){
             $sql = "DELETE FROM usuario WHERE id_usuario = " . intval($id);
             mysqli_query($this->conexion, $sql) or die("NO eliminó el REGISTRO: " . mysqli_error($this->conexion));
