@@ -32,9 +32,16 @@
         public function insertar($params){
             $nombre = mysqli_real_escape_string($this->conexion, $params->nombre);
             $email = mysqli_real_escape_string($this->conexion, $params->email);
-            $fo_permiso_nivel = intval($params->fo_permiso_nivel);
-            
-            $sql = "INSERT INTO usuario(nombre, email, fo_permiso_nivel) VALUES('$nombre', '$email', $fo_permiso_nivel)";
+            $fo_ciudad = intval($params->fo_ciudad);
+            $fo_permiso = intval($params->fo_permiso);
+
+            // TODO SEGURIDAD: la clave se guarda en texto plano. Antes de
+            // cualquier uso real (mas alla de esta demo academica), esto DEBE
+            // reemplazarse por password_hash()/password_verify() de PHP.
+            // No usar este sistema con contraseñas reales de usuarios.
+            $clave = mysqli_real_escape_string($this->conexion, $params->clave);
+
+            $sql = "INSERT INTO usuario(nombre, email, clave, fo_ciudad, fo_permiso) VALUES('$nombre', '$email', '$clave', $fo_ciudad, $fo_permiso)";
             mysqli_query($this->conexion, $sql) or die("NO insertó el REGISTRO: " . mysqli_error($this->conexion));
 
             return ['Resultado' => "OK", 'mensaje' => "Se insertó el usuario"];
@@ -43,10 +50,21 @@
         public function editar($id, $params){
             $nombre = mysqli_real_escape_string($this->conexion, $params->nombre);
             $email = mysqli_real_escape_string($this->conexion, $params->email);
-            $fo_permiso_nivel = intval($params->fo_permiso_nivel);
+            $fo_permiso = intval($params->fo_permiso);
             $id = intval($id);
 
-            $sql = "UPDATE usuario SET nombre = '$nombre', email = '$email', fo_permiso_nivel = $fo_permiso_nivel WHERE id_usuario = $id";
+            $sql = "UPDATE usuario SET nombre = '$nombre', email = '$email', fo_permiso = $fo_permiso";
+
+            // TODO SEGURIDAD: la clave se guarda en texto plano. Antes de
+            // cualquier uso real (mas alla de esta demo academica), esto DEBE
+            // reemplazarse por password_hash()/password_verify() de PHP.
+            // No usar este sistema con contraseñas reales de usuarios.
+            if(isset($params->clave) && $params->clave !== ''){
+                $clave = mysqli_real_escape_string($this->conexion, $params->clave);
+                $sql .= ", clave = '$clave'";
+            }
+
+            $sql .= " WHERE id_usuario = $id";
             mysqli_query($this->conexion, $sql) or die("NO editó el REGISTRO: " . mysqli_error($this->conexion));
 
             return ['Resultado' => "OK", 'mensaje' => "Se editó el usuario"];
