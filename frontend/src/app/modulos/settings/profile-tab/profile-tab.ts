@@ -1,4 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { Usuario } from '../../../servicios/usuario';
+import { UsuarioPerfil } from '../../../modelos/usuario.model';
 
 @Component({
   selector: 'app-profile-tab',
@@ -6,15 +8,42 @@ import { Component, signal } from '@angular/core';
   templateUrl: './profile-tab.html',
   styleUrl: './profile-tab.css',
 })
-export class ProfileTab {
-  // Datos del formulario. Los inicializamos con los valores actuales del usuario.
-  nombre = signal('John Smith');
-  email = signal('john.smith@globalinvesthub.com');
+export class ProfileTab implements OnInit {
+  private usuarioService = inject(Usuario);
+
+  cargando = signal(true);
+
+  // Datos reales del backend
+  nombre = signal('');
+  email = signal('');
+  nombreNivel = signal('');
+
+  // TODO: sin respaldo real en la BD todavía -- placeholder hasta que
+  // se agreguen columnas de timezone/idioma/avatar a la tabla usuario.
   timezone = signal('America/New_York');
   idioma = signal('English');
 
-  // Controla el texto/color temporal del botón "Save Changes"
   guardado = signal(false);
+
+  ngOnInit() {
+    this.cargarPerfil();
+  }
+
+  cargarPerfil() {
+    this.cargando.set(true);
+    this.usuarioService.consultaUno().subscribe({
+      next: (respuesta: any) => {
+        this.nombre.set(respuesta.nombre);
+        this.email.set(respuesta.email);
+        this.nombreNivel.set(respuesta.nombre_nivel);
+        this.cargando.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar el perfil:', err);
+        this.cargando.set(false);
+      },
+    });
+  }
 
   actualizarNombre(valor: string) {
     this.nombre.set(valor);
@@ -33,10 +62,17 @@ export class ProfileTab {
   }
 
   guardar() {
-    this.guardado.set(true);
-    // Después de 2 segundos, el botón vuelve a su estado normal
-    setTimeout(() => {
-      this.guardado.set(false);
-    }, 2000);
+    // Ahora sí hace una petición real de guardado, no solo un signal local
+    this.usuarioService.editar(2, {
+      nombre: this.nombre(),
+      email: this.email(),
+      fo_permiso: 4, // TODO: usar el valor real del usuario, no fijo
+    }).subscribe({
+      next: () => {
+        this.guardado.set(true);
+        setTimeout(() => this.guardado.set(false), 2000);
+      },
+      error: (err) => console.error('Error al guardar el perfil:', err),
+    });
   }
 }
