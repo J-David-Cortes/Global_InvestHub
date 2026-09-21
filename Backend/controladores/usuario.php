@@ -38,6 +38,14 @@
             $vec = $usuario->eliminar($id);
         break;
 
+        case 'cambiarClave' :
+            $json = file_get_contents('php://input');
+            $params = json_decode($json);
+            $claveActual = isset($params->claveActual) ? $params->claveActual : '';
+            $claveNueva = isset($params->claveNueva) ? $params->claveNueva : '';
+            $vec = $usuario->cambiarClave($fo_usuario, $claveActual, $claveNueva);
+        break;
+
         default:
             $vec = ['resultado' => 'Error', 'mensaje' => 'Controlador no especificado'];
         break;
