@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { PreferenciaNotificacion } from '../../../servicios/preferencia-notificacion';
 import {
   PreferenciasNotificacion,
   ClavePreferencia,
@@ -11,7 +12,11 @@ import {
   templateUrl: './notifications-tab.html',
   styleUrl: './notifications-tab.css',
 })
-export class NotificationsTab {
+export class NotificationsTab implements OnInit {
+  private preferenciaService = inject(PreferenciaNotificacion);
+
+  cargando = signal(true);
+
   preferencias = signal<PreferenciasNotificacion>({
     emailTrades: true,
     emailAlerts: true,
@@ -33,11 +38,34 @@ export class NotificationsTab {
     { etiqueta: 'Market News', descripcion: 'Noticias relevantes para tus pares', clave: 'pushNews' },
   ];
 
-  // Recibe CUÁL de las 6 preferencias hay que alternar
+  ngOnInit() {
+    this.cargarPreferencias();
+  }
+
+  cargarPreferencias() {
+    this.cargando.set(true);
+    this.preferenciaService.obtener().subscribe({
+      next: (respuesta: any) => {
+        this.preferencias.set(respuesta);
+        this.cargando.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar preferencias de notificación:', err);
+        this.cargando.set(false);
+      },
+    });
+  }
+
   alternarPreferencia(clave: ClavePreferencia) {
+    // Actualizamos primero en pantalla (respuesta inmediata para el usuario)
     this.preferencias.update((actual) => ({
       ...actual,
       [clave]: !actual[clave],
     }));
+
+    // Y guardamos el objeto completo actualizado en el backend
+    this.preferenciaService.guardar(this.preferencias()).subscribe({
+      error: (err) => console.error('Error al guardar preferencias:', err),
+    });
   }
 }
