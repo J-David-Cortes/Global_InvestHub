@@ -17,4 +17,11 @@ export class Usuario extends ApiBase {
   consultaUno() {
     return this.http.get(`${this.url}?control=consultaUno`);
   }
+
+  cambiarClave(claveActual: string, claveNueva: string) {
+    return this.http.post(`${this.url}?control=cambiarClave`, JSON.stringify({
+      claveActual,
+      claveNueva,
+    }));
+  }
 }

@@ -4,15 +4,26 @@
     <div class="password-campos">
         <div class="campo">
             <label class="campo-label">Current Password</label>
-            <input type="password" class="campo-input" value="••••••••••" disabled />
+            <input
+                type="password"
+                class="campo-input"
+                [value]="claveActual()"
+                (input)="actualizarClaveActual($any($event.target).value)"
+                placeholder="Ingresa tu contraseña actual"
+            />
         </div>
 
         <div class="campos-grid">
             <div class="campo">
                 <label class="campo-label">New Password</label>
                 <div class="campo-con-icono">
-                    <input [type]="mostrarPassword() ? 'text' : 'password'" class="campo-input"
-                        placeholder="Min. 8 characters" />
+                    <input
+                        [type]="mostrarPassword() ? 'text' : 'password'"
+                        class="campo-input"
+                        [value]="claveNueva()"
+                        (input)="actualizarClaveNueva($any($event.target).value)"
+                        placeholder="Min. 8 characters"
+                    />
                     <button class="btn-icono-input" (click)="alternarMostrarPassword()" type="button">
                         <i class="bi" [class.bi-eye]="!mostrarPassword()" [class.bi-eye-slash]="mostrarPassword()"></i>
                     </button>
@@ -21,11 +32,24 @@
 
             <div class="campo">
                 <label class="campo-label">Confirm Password</label>
-                <input type="password" class="campo-input" placeholder="" />
+                <input
+                    type="password"
+                    class="campo-input"
+                    [value]="claveConfirmar()"
+                    (input)="actualizarClaveConfirmar($any($event.target).value)"
+                    placeholder=""
+                />
             </div>
         </div>
 
-        <button class="btn-cyan-solido">Update Password</button>
+        @if (mensajeClave(); as msg) {
+            <div class="mensaje-clave" [class.mensaje-exito]="msg.tipo === 'exito'" [class.mensaje-error]="msg.tipo === 'error'">
+                <i class="bi" [class.bi-check-circle]="msg.tipo === 'exito'" [class.bi-exclamation-circle]="msg.tipo === 'error'"></i>
+                {{ msg.texto }}
+            </div>
+        }
+
+        <button class="btn-cyan-solido" (click)="actualizarPassword()">Update Password</button>
     </div>
 </div>
 
