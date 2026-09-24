@@ -52,6 +52,7 @@
         // fo_estado=1 (Activo) Y la fecha de hoy dentro de [fecha_inicio,
         // fecha_fin] -- un trial es una fila mas aqui (fo_suscripcion
         // apuntando al plan "Trial"), no un caso especial.
+        // Mismo criterio que UsuarioSuscripcion::planActual(): mantener sincronizados.
         private function obtenerLimiteBotsUsuario($fo_usuario){
             $sql = "SELECT s.limite_bots
                     FROM usuario_suscripcion us

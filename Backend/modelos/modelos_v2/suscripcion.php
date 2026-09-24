@@ -18,6 +18,26 @@
             return $vec;
         }
 
+        // Catalogo completo de planes para las tarjetas de comparacion de Billing
+        // (no depende del usuario). Se ordena por precio, no por nombre.
+        public function listaPlanes(){
+            $sql = "SELECT id_suscripcion AS id, nombre, precio, limite_bots AS limiteBots
+                    FROM suscripcion
+                    ORDER BY precio, id_suscripcion";
+
+            $res = mysqli_query($this->conexion, $sql) or die("Error en listaPlanes: " . mysqli_error($this->conexion));
+
+            $vec = [];
+            while($row = mysqli_fetch_assoc($res)){
+                $row['id'] = (int) $row['id'];
+                $row['precio'] = (float) $row['precio'];
+                // NULL = ilimitado (Enterprise), 0 = sin bots: no convertir NULL a 0.
+                $row['limiteBots'] = $row['limiteBots'] !== null ? (int) $row['limiteBots'] : null;
+                $vec[] = $row;
+            }
+            return $vec;
+        }
+
         public function eliminar($id){
             $sql = "DELETE FROM suscripcion WHERE id_suscripcion = " . intval($id);
             mysqli_query($this->conexion, $sql) or die("Error al eliminar suscripción: " . mysqli_error($this->conexion));

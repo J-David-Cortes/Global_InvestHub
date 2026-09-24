@@ -9,9 +9,17 @@
     $control = isset($_GET['control']) ? $_GET['control'] : '';
     $usuarioSuscripcion = new UsuarioSuscripcion($conexion);
 
+    // TEMPORAL: usuario fijo hasta que exista login real con sesion.
+    // Reemplazar por el id del usuario autenticado cuando se implemente login.
+    $fo_usuario = 2;
+
     switch($control){
         case 'consulta' :
             $vec = $usuarioSuscripcion->consulta();
+        break;
+
+        case 'planActual' :
+            $vec = $usuarioSuscripcion->planActual($fo_usuario);
         break;
 
         case 'insertar' :

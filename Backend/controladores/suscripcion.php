@@ -14,6 +14,10 @@
             $vec = $suscripcion->consulta();
         break;
 
+        case 'listaPlanes' :
+            $vec = $suscripcion->listaPlanes();
+        break;
+
         case 'insertar' :
             $json = file_get_contents('php://input');
             $params = json_decode($json);
