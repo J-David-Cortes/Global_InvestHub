@@ -1,1 +1,5 @@
 /vendor/
+
+# Respaldos locales de la base de datos: nunca se versionan
+# (contienen datos de prueba, incluidas claves en texto plano).
+/Backend/respaldos/
