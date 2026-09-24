@@ -1,29 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiBase } from './api-base';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Suscripcion {
+export class Suscripcion extends ApiBase {
 
-  url= "http://localhost/proyectos/marketplace_bots/backend/controladores/suscripcion.php";
+  protected url = "http://localhost/proyectos/marketplace_bots/Backend/controladores/suscripcion.php";
 
-  constructor(private http: HttpClient){};
-
-  consulta(){
-    return this.http.get(`${this.url}?control=consulta`)
+  constructor(http: HttpClient) {
+    super(http);
   }
 
-  insertar(params: any){
-    return this.http.post(`${this.url}?control=insetar`, JSON.stringify(params));
+  listaPlanes() {
+    return this.http.get(`${this.url}?control=listaPlanes`);
   }
-
-  editar(id: number, params: any){
-    return this.http.post(`${this.url}?control=editar&id=${id}`, JSON.stringify(params));
-  }
-
-  eliminar(id: number){
-    return this.http.get(`${this.url}?control=eliminar&id=${id}`);
-  }
-
 }

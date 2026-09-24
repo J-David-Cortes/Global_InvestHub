@@ -187,3 +187,16 @@
         grid-template-columns: 1fr;
     }
 }
+
+.billing-cargando {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem 0;
+}
+
+.billing-vacio {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 1.5rem 0;
+    font-size: 0.85rem;
+}

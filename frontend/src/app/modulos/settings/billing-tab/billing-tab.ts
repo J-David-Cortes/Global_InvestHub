@@ -1,5 +1,12 @@
-import { Component } from '@angular/core';
-import { Plan, Pago } from '../../../modelos/plan.model';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Suscripcion } from '../../../servicios/suscripcion';
+import { UsuarioSuscripcion } from '../../../servicios/usuario-suscripcion';
+import {
+  PlanCatalogo,
+  PlanActual,
+  CARACTERISTICAS_PLAN,
+  viñetaLimiteBots,
+} from '../../../modelos/plan.model';
 
 @Component({
   selector: 'app-billing-tab',
@@ -7,41 +14,64 @@ import { Plan, Pago } from '../../../modelos/plan.model';
   templateUrl: './billing-tab.html',
   styleUrl: './billing-tab.css',
 })
-export class BillingTab {
-  planes: Plan[] = [
-    {
-      nombre: 'Starter',
-      precio: 0,
-      descripcion: 'Para comenzar',
-      caracteristicas: ['3 engines activos', 'Marketplace básico', 'Soporte por email'],
-      esActual: false,
-    },
-    {
-      nombre: 'Pro',
-      precio: 79,
-      descripcion: 'Más popular',
-      caracteristicas: ['Engines ilimitados', 'Todo el Marketplace', 'Analytics avanzado', 'Soporte prioritario'],
-      esActual: true,
-    },
-    {
-      nombre: 'Enterprise',
-      precio: 299,
-      descripcion: 'Para instituciones',
-      caracteristicas: ['API dedicada', 'SLA garantizado', 'Gestor de cuenta', 'Infraestructura dedicada'],
-      esActual: false,
-    },
-  ];
+export class BillingTab implements OnInit {
+  private suscripcionService = inject(Suscripcion);
+  private usuarioSuscripcionService = inject(UsuarioSuscripcion);
 
-  pagos: Pago[] = [
-    { fecha: 'Aug 1, 2026', descripcion: 'Pro Plan — Agosto 2026', monto: '$79.00', estado: 'Paid' },
-    { fecha: 'Jul 1, 2026', descripcion: 'Pro Plan — Julio 2026', monto: '$79.00', estado: 'Paid' },
-    { fecha: 'Jun 1, 2026', descripcion: 'Pro Plan — Junio 2026', monto: '$79.00', estado: 'Paid' },
-  ];
+  cargando = signal(true);
 
-  // El precio del plan Pro actual, para comparar y decidir "Upgrade" vs "Downgrade"
-  private precioPlanActual = this.planes.find((p) => p.esActual)?.precio ?? 0;
+  planActual = signal<PlanActual | null>(null);
+  todosLosPlanes = signal<PlanCatalogo[]>([]);
 
-  esUpgrade(plan: Plan): boolean {
-    return plan.precio > this.precioPlanActual;
+  ngOnInit() {
+    this.cargarPlanActual();
+    this.cargarListaPlanes();
+  }
+
+  cargarPlanActual() {
+    this.usuarioSuscripcionService.planActual().subscribe({
+      next: (respuesta: any) => {
+        this.planActual.set(respuesta);
+        this.cargando.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar el plan actual:', err);
+        this.cargando.set(false);
+      },
+    });
+  }
+
+  cargarListaPlanes() {
+    this.suscripcionService.listaPlanes().subscribe({
+      next: (respuesta: any) => {
+        this.todosLosPlanes.set(respuesta);
+      },
+      error: (err) => console.error('Error al cargar la lista de planes:', err),
+    });
+  }
+
+  // Solo mostramos Trial si es el plan actual del usuario -- nadie lo
+  // "elige" desde esta pantalla, se otorga aparte.
+  planesVisibles = computed(() => {
+    const actual = this.planActual();
+    return this.todosLosPlanes().filter((plan) => {
+      if (plan.nombre !== 'Trial') return true;
+      return actual?.nombre === 'Trial';
+    });
+  });
+
+  esPlanActual(plan: PlanCatalogo): boolean {
+    return this.planActual()?.id === plan.id;
+  }
+
+  caracteristicasDe(plan: PlanCatalogo): string[] {
+    const viñeta = viñetaLimiteBots(plan.limiteBots);
+    const resto = CARACTERISTICAS_PLAN[plan.nombre] ?? [];
+    return [viñeta, ...resto];
+  }
+
+  esUpgrade(plan: PlanCatalogo): boolean {
+    const precioActual = this.planActual()?.precio ?? 0;
+    return plan.precio > precioActual;
   }
 }

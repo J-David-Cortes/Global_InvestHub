@@ -1,14 +1,19 @@
+@if (cargando()) {
+<div class="settings-card">
+    <p class="billing-cargando">Cargando información de facturación...</p>
+</div>
+} @else {
+
 <div class="settings-card">
     <h3 class="settings-card-titulo">Current Plan</h3>
 
     <div class="planes-grid">
-        @for (plan of planes; track plan.nombre) {
-        <div class="plan-card" [class.plan-card-actual]="plan.esActual">
-            @if (plan.esActual) {
+        @for (plan of planesVisibles(); track plan.id) {
+        <div class="plan-card" [class.plan-card-actual]="esPlanActual(plan)">
+            @if (esPlanActual(plan)) {
             <div class="plan-badge-actual">PLAN ACTUAL</div>
             }
             <div class="plan-card-nombre">{{ plan.nombre }}</div>
-            <div class="plan-card-descripcion">{{ plan.descripcion }}</div>
             <div class="plan-card-precio">
                 @if (plan.precio === 0) {
                 Free
@@ -17,16 +22,16 @@
                 }
             </div>
             <div class="plan-card-caracteristicas">
-                @for (caracteristica of plan.caracteristicas; track caracteristica) {
+                @for (caracteristica of caracteristicasDe(plan); track caracteristica) {
                 <div class="plan-caracteristica">
                     <i class="bi bi-check-lg"></i>
                     {{ caracteristica }}
                 </div>
                 }
             </div>
-            @if (!plan.esActual) {
+            @if (!esPlanActual(plan)) {
             <button class="btn-plan-accion" [class.btn-plan-upgrade]="esUpgrade(plan)">
-                {{ plan.precio === 0 ? 'Downgrade' : 'Upgrade' }}
+                {{ esUpgrade(plan) ? 'Upgrade' : 'Downgrade' }}
             </button>
             }
         </div>
@@ -36,18 +41,11 @@
 
 <div class="settings-card">
     <h3 class="settings-card-titulo">Payment History</h3>
-
-    @for (pago of pagos; track pago.fecha) {
-    <div class="pago-fila">
-        <div>
-            <div class="pago-descripcion">{{ pago.descripcion }}</div>
-            <div class="pago-fecha">{{ pago.fecha }}</div>
-        </div>
-        <div class="pago-datos">
-            <span class="pago-monto">{{ pago.monto }}</span>
-            <span class="pago-estado">{{ pago.estado }}</span>
-            <button class="btn-pdf">PDF</button>
-        </div>
+    <!-- TODO: no existe ninguna tabla de facturas/pagos individuales todavia.
+            Placeholder hasta que exista una pasarela de pagos real conectada. -->
+    <div class="billing-vacio">
+        <p>El historial de pagos estará disponible cuando se conecte una pasarela de pagos real.</p>
     </div>
-    }
 </div>
+
+}
