@@ -24,4 +24,8 @@ export class OperacionTrading extends ApiBase {
   cerradas() {
     return this.http.get(`${this.url}?control=cerradas`);
   }
+
+  sharpe() {
+    return this.http.get(`${this.url}?control=sharpe`);
+  }
 }

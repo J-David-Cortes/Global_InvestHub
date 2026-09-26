@@ -1,178 +1,85 @@
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb mb-2" style="font-size: 0.8rem;">
-        <li class="breadcrumb-item"><a routerLink="/dashboard" class="text-muted text-decoration-none">Home</a></li>
-        <li class="breadcrumb-item active text-teal" aria-current="page">Dashboard</li>
-    </ol>
-</nav>
+<div class="dashboard-container">
 
-<div class="row g-4 mb-4">
-    <div class="col-md-4">
-        <div class="dashboard-metric-card">
-            <div class="dashboard-metric-label">TOTAL EQUITY</div>
-            <div class="dashboard-metric-value">$124,560.00</div>
-            <div class="text-cyan" style="font-size: 0.85rem;"><i class="bi bi-arrow-up-right"></i> +12.5% this month</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="dashboard-metric-card">
-            <div class="dashboard-metric-label">ACTIVE ALGORITHMS</div>
-            <div class="dashboard-metric-value">4 Engines</div>
-            <div class="text-teal" style="font-size: 0.85rem;">MT5 & LEAN Running</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="dashboard-metric-card">
-            <div class="dashboard-metric-label">AVG. SHARPE RATIO</div>
-            <div class="dashboard-metric-value text-gold">2.14</div>
-            <div class="text-muted" style="font-size: 0.85rem;">Across all active portfolios</div>
-        </div>
-    </div>
-</div>
+    <header class="dashboard-header">
+        <p class="dashboard-breadcrumb">Home / Dashboard</p>
+        <h1 class="dashboard-titulo">OVERVIEW</h1>
+    </header>
 
-<div class="data-table-wrapper mt-4">
-    <div class="table-header flex-wrap gap-2">
-        <div>
-            <h2 class="m-0 fs-6 fw-semibold">ACTIVE OPERATIONS</h2>
-            <span class="text-muted" style="font-size: 0.8rem;">6 positions · Total P&L: <span class="text-cyan">+$2,708</span></span>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-            <div class="filter-group">
-                <button class="filter-btn active">ALL</button>
-                <button class="filter-btn">LONG</button>
-                <button class="filter-btn">SHORT</button>
+    @if (cargando()) {
+    <div class="dashboard-vacio">
+        <p>Cargando datos del dashboard...</p>
+    </div>
+    } @else {
+
+    <!-- 3 tarjetas de métricas -->
+    <div class="dashboard-metricas">
+        <div class="metrica-card">
+            <div class="metrica-etiqueta">TOTAL EQUITY</div>
+            <div class="metrica-valor">${{ resumen()?.totalEquity ?? 0 | number:'1.2-2' }}</div>
+            <div class="metrica-nota">
+                <i class="bi bi-arrow-up-right"></i>
+                {{ resumen()?.pnlMes ?? 0 | number:'1.2-2' }} este mes
             </div>
-            <button class="btn btn-outline-custom py-1 px-3" style="font-size: 0.8rem;">
-                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
-            </button>
+        </div>
+
+        <div class="metrica-card">
+            <div class="metrica-etiqueta">ACTIVE ENGINES</div>
+            <div class="metrica-valor">{{ enginesActivos() }} Engines</div>
+            <div class="metrica-nota">Conexiones activas a brokers</div>
+        </div>
+
+        <div class="metrica-card">
+            <div class="metrica-etiqueta">SHARPE RATIO</div>
+            @if (sharpe()?.sharpeRatio !== null && sharpe()?.sharpeRatio !== undefined) {
+            <div class="metrica-valor">{{ sharpe()?.sharpeRatio }}</div>
+            <div class="metrica-nota">Sobre {{ sharpe()?.operacionesCerradas }} operaciones cerradas</div>
+            } @else {
+            <div class="metrica-valor">N/A</div>
+            <div class="metrica-nota">Se necesitan mínimo 2 operaciones cerradas</div>
+            }
         </div>
     </div>
 
-    <div class="ops-grid">
-        <!-- Fila de encabezados -->
-        <div class="ops-row ops-head">
-            <div>#</div>
-            <div>BOT NAME</div>
-            <div>PAIR</div>
-            <div>TYPE</div>
-            <div>ENTRY</div>
-            <div>CURRENT</div>
-            <div>EXCHANGE</div>
-            <div>STATUS</div>
-            <div class="text-end">P&L</div>
+    <!-- Tabla de posiciones activas -->
+    <div class="posiciones-card">
+        <div class="posiciones-header">
+            <h3 class="card-subtitulo">Active Operations</h3>
+            <span class="posiciones-contador">{{ posicionesActivas().length }} posiciones</span>
         </div>
 
-        <!-- Fila 1 -->
-        <div class="ops-row">
-            <div class="text-muted">1</div>
-            <div>
-                <div class="fw-medium">NeuralAlpha v2</div>
-                <div class="text-muted" style="font-size: 0.8rem;">ML Momentum</div>
-            </div>
-            <div>BTC/USDT</div>
-            <div><span class="op-badge op-long"><i class="bi bi-arrow-up-right"></i> LONG</span></div>
-            <div class="text-muted">$43,218</div>
-            <div class="text-cyan">$44,890</div>
-            <div><span class="badge-platform">Binance</span></div>
-            <div><span class="status-dot status-running"></span><span class="text-cyan" style="font-size: 0.85rem;">Active</span></div>
-            <div class="text-end">
-                <div class="text-cyan fw-medium">+$1,671</div>
-                <div class="text-cyan" style="font-size: 0.75rem;">+3.87%</div>
-            </div>
+        @if (posicionesActivas().length === 0) {
+        <div class="dashboard-vacio-seccion">
+            <p>No tienes operaciones activas todavía.</p>
+            <p class="vacio-nota">Este panel se llenará automáticamente cuando tus bots comiencen a operar.</p>
         </div>
-
-        <!-- Fila 2 -->
-        <div class="ops-row">
-            <div class="text-muted">2</div>
-            <div>
-                <div class="fw-medium">ArbitEdge Pro</div>
-                <div class="text-muted" style="font-size: 0.8rem;">Cross-Exch Arbitr.</div>
-            </div>
-            <div>ETH/USDT</div>
-            <div><span class="op-badge op-long"><i class="bi bi-arrow-up-right"></i> LONG</span></div>
-            <div class="text-muted">$2,840</div>
-            <div class="text-cyan">$2,915</div>
-            <div><span class="badge-platform">Bybit</span></div>
-            <div><span class="status-dot status-running"></span><span class="text-cyan" style="font-size: 0.85rem;">Active</span></div>
-            <div class="text-end">
-                <div class="text-cyan fw-medium">+$482</div>
-                <div class="text-cyan" style="font-size: 0.75rem;">+2.64%</div>
-            </div>
+        } @else {
+        <div class="tabla-scroll">
+            <table class="tabla-dashboard">
+                <thead>
+                    <tr>
+                        <th>ENGINE</th>
+                        <th>ENTRY</th>
+                        <th>CURRENT</th>
+                        <th>INVESTED</th>
+                        <th>OPENED</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (pos of posicionesActivas(); track pos.id) {
+                    <tr>
+                        <td class="celda-nombre">{{ pos.botNombre }}</td>
+                        <td class="celda-mono">{{ pos.precioEntrada }}</td>
+                        <td class="celda-mono">{{ pos.precioActual ?? '—' }}</td>
+                        <td class="celda-mono">${{ pos.montoInvertido | number:'1.2-2' }}</td>
+                        <td class="celda-mono celda-muted">{{ pos.fechaApertura }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-
-        <!-- Fila 3 -->
-        <div class="ops-row">
-            <div class="text-muted">3</div>
-            <div>
-                <div class="fw-medium">GridMaster X</div>
-                <div class="text-muted" style="font-size: 0.8rem;">Grid Trading</div>
-            </div>
-            <div>SOL/USDT</div>
-            <div><span class="op-badge op-short"><i class="bi bi-arrow-down-right"></i> SHORT</span></div>
-            <div class="text-muted">$142.50</div>
-            <div class="text-cyan">$138.10</div>
-            <div><span class="badge-platform">Binance</span></div>
-            <div><span class="status-dot status-running"></span><span class="text-cyan" style="font-size: 0.85rem;">Active</span></div>
-            <div class="text-end">
-                <div class="text-cyan fw-medium">+$310</div>
-                <div class="text-cyan" style="font-size: 0.75rem;">+3.08%</div>
-            </div>
-        </div>
-
-        <!-- Fila 4 -->
-        <div class="ops-row">
-            <div class="text-muted">4</div>
-            <div>
-                <div class="fw-medium">TrendSurfer</div>
-                <div class="text-muted" style="font-size: 0.8rem;">Breakout Trend</div>
-            </div>
-            <div>AVAX/USDT</div>
-            <div><span class="op-badge op-long"><i class="bi bi-arrow-up-right"></i> LONG</span></div>
-            <div class="text-muted">$38.10</div>
-            <div class="text-gold">$36.90</div>
-            <div><span class="badge-platform">OKX</span></div>
-            <div><span class="status-dot status-paused"></span><span class="text-gold" style="font-size: 0.85rem;">Paused</span></div>
-            <div class="text-end">
-                <div class="text-gold fw-medium">-$125</div>
-                <div class="text-gold" style="font-size: 0.75rem;">+3.87%</div>
-            </div>
-        </div>
-
-        <!-- Fila 5 -->
-        <div class="ops-row">
-            <div class="text-muted">5</div>
-            <div>
-                <div class="fw-medium">ScalpBot Ultra</div>
-                <div class="text-muted" style="font-size: 0.8rem;">High-Freq Scalping</div>
-            </div>
-            <div>LINK/USDT</div>
-            <div><span class="op-badge op-long"><i class="bi bi-arrow-up-right"></i> LONG</span></div>
-            <div class="text-muted">$18.40</div>
-            <div class="text-cyan">$19.25</div>
-            <div><span class="badge-platform">Coinbase</span></div>
-            <div><span class="status-dot status-running"></span><span class="text-cyan" style="font-size: 0.85rem;">Active</span></div>
-            <div class="text-end">
-                <div class="text-cyan fw-medium">+$215</div>
-                <div class="text-cyan" style="font-size: 0.75rem;">+4.61%</div>
-            </div>
-        </div>
-
-        <!-- Fila 6 -->
-        <div class="ops-row">
-            <div class="text-muted">6</div>
-            <div>
-                <div class="fw-medium">MacroSight</div>
-                <div class="text-muted" style="font-size: 0.8rem;">Macro Hedging</div>
-            </div>
-            <div>BTC/USDT</div>
-            <div><span class="op-badge op-short"><i class="bi bi-arrow-down-right"></i> SHORT</span></div>
-            <div class="text-muted">$44,100</div>
-            <div class="text-cyan">$43,850</div>
-            <div><span class="badge-platform">Kraken</span></div>
-            <div><span class="status-dot status-paused"></span><span class="text-gold" style="font-size: 0.85rem;">Closing</span></div>
-            <div class="text-end">
-                <div class="text-cyan fw-medium">+$156</div>
-                <div class="text-cyan" style="font-size: 0.75rem;">+0.56%</div>
-            </div>
-        </div>
+        }
     </div>
+
+    }
+
 </div>

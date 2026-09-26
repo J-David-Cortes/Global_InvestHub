@@ -1,67 +1,165 @@
-/* Grid de la tabla Active Operations */
-.ops-grid {
-    display: flex;
-    flex-direction: column;
+.dashboard-container {
+    padding: 0;
 }
 
-.ops-row {
+.dashboard-header {
+    margin-bottom: 1.75rem;
+}
+
+.dashboard-breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-titulo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.dashboard-vacio {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-muted);
+}
+
+.dashboard-metricas {
     display: grid;
-    grid-template-columns: 30px 1.6fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1fr;
-    align-items: center;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
 }
-.ops-row:last-child { border-bottom: none; }
 
-.ops-head {
-    font-size: 0.75rem;
+.metrica-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.metrica-etiqueta {
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 1.5rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
 }
 
-/* Badges LONG / SHORT */
-.op-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
+.metrica-valor {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-main);
 }
-.op-long {
-    background-color: rgba(88, 249, 242, 0.12);
+
+.metrica-nota {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+}
+
+.metrica-nota i {
     color: var(--accent-cyan);
 }
-.op-short {
-    background-color: rgba(215, 160, 73, 0.12);
-    color: var(--accent-gold);
+
+.posiciones-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
 }
 
-/* Botones de filtro ALL / LONG / SHORT */
-.filter-group {
+.posiciones-header {
     display: flex;
-    background-color: var(--bg-input);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 3px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
 }
-.filter-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 0.8rem;
+
+.card-subtitulo {
     font-weight: 600;
-    padding: 5px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.filter-btn.active {
-    background-color: var(--bg-card);
+    font-size: 0.9rem;
     color: var(--text-main);
+    margin: 0;
+}
+
+.posiciones-contador {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.dashboard-vacio-seccion {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    color: var(--text-muted);
+}
+
+.dashboard-vacio-seccion p {
+    margin: 0.25rem 0;
+    font-size: 0.85rem;
+}
+
+.vacio-nota {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.tabla-scroll {
+    overflow-x: auto;
+}
+
+.tabla-dashboard {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-dashboard thead tr {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tabla-dashboard th {
+    text-align: left;
+    font-size: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+}
+
+.tabla-dashboard tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.tabla-dashboard tbody tr:last-child {
+    border-bottom: none;
+}
+
+.tabla-dashboard td {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem;
+    color: var(--text-main);
+}
+
+.celda-nombre {
+    font-weight: 500;
+}
+
+.celda-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.celda-muted {
+    color: var(--text-muted);
+}
+
+@media (max-width: 900px) {
+    .dashboard-metricas {
+        grid-template-columns: 1fr;
+    }
 }
