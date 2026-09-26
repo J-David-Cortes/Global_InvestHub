@@ -26,6 +26,10 @@
             $vec = $operacionTrading->posicionesCerradas($fo_usuario);
         break;
 
+        case 'sharpe' :
+            $vec = $operacionTrading->sharpeRatio($fo_usuario);
+        break;
+
         default:
             $vec = ['resultado' => 'Error', 'mensaje' => 'Controlador no especificado'];
         break;

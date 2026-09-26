@@ -2,6 +2,12 @@
     class OperacionTrading {
         private $conexion;
 
+        // Tasa libre de riesgo asumida = 0, simplificacion academica
+        // (ver discusion: con datos sinteticos/vacios hoy, un valor
+        // distinto de 0 seria precision falsa). Cambiar solo aqui si
+        // en el futuro se decide usar otro valor.
+        const TASA_LIBRE_RIESGO = 0.0;
+
         public function __construct($conexion){
             $this->conexion = $conexion;
         }
@@ -27,6 +33,49 @@
                 'pnlHoy' => (float) $row['pnlHoy'],
                 'pnlMes' => (float) $row['pnlMes'],
                 'pnlAnio' => (float) $row['pnlAnio'],
+            ];
+        }
+
+        // Sharpe = (retorno promedio - tasa libre de riesgo) / desviacion
+        // estandar de los retornos. El retorno de cada operacion se
+        // normaliza como resultado_pnl / monto_invertido (no el pnl crudo,
+        // para no mezclar operaciones de montos distintos).
+        // Con 0 o 1 operacion cerrada, STDDEV_SAMP (muestral, n-1) da NULL
+        // en MariaDB -- no truena, se detecta antes de dividir y se
+        // devuelve sharpeRatio=null (no 0) para no simular una metrica
+        // real donde solo falta informacion.
+        public function sharpeRatio($fo_usuario){
+            $fo_usuario = intval($fo_usuario);
+
+            $sql = "SELECT
+                        COUNT(*) AS operacionesCerradas,
+                        AVG(resultado_pnl / monto_invertido) AS retornoPromedio,
+                        STDDEV_SAMP(resultado_pnl / monto_invertido) AS desviacionRetornos
+                    FROM operacion_trading
+                    WHERE fo_usuario = $fo_usuario
+                      AND fecha_cierre IS NOT NULL
+                      AND resultado_pnl IS NOT NULL
+                      AND monto_invertido <> 0";
+
+            $res = mysqli_query($this->conexion, $sql) or die("Error en sharpeRatio: " . mysqli_error($this->conexion));
+            $row = mysqli_fetch_assoc($res);
+
+            $operacionesCerradas = (int) $row['operacionesCerradas'];
+            $desviacion = $row['desviacionRetornos'] !== null ? (float) $row['desviacionRetornos'] : null;
+
+            if($operacionesCerradas < 2 || $desviacion === null || $desviacion == 0.0){
+                return [
+                    'sharpeRatio' => null,
+                    'operacionesCerradas' => $operacionesCerradas,
+                ];
+            }
+
+            $retornoPromedio = (float) $row['retornoPromedio'];
+            $sharpe = ($retornoPromedio - self::TASA_LIBRE_RIESGO) / $desviacion;
+
+            return [
+                'sharpeRatio' => round($sharpe, 4),
+                'operacionesCerradas' => $operacionesCerradas,
             ];
         }
 
