@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { ApiKey } from '../../../modelos/api-key.model';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { UsuarioBot } from '../../../servicios/usuario-bot';
+import { ConexionBroker } from '../../../modelos/conexion-broker.model';
 
 @Component({
   selector: 'app-api-keys-tab',
@@ -7,40 +8,59 @@ import { ApiKey } from '../../../modelos/api-key.model';
   templateUrl: './api-keys-tab.html',
   styleUrl: './api-keys-tab.css',
 })
-export class ApiKeysTab {
-  claves = signal<ApiKey[]>([
-    { id: 1, nombre: 'MT5 Production', plataforma: 'MT5', fechaCreacion: 'Aug 1, 2026', ultimoUso: 'Just now', claveOculta: 'gih_mt5_sk_...a4f2' },
-    { id: 2, nombre: 'LEAN Trading Engine', plataforma: 'LEAN', fechaCreacion: 'Jul 15, 2026', ultimoUso: '2h ago', claveOculta: 'gih_lean_sk_...c8d1' },
-    { id: 3, nombre: 'Webhook Integration', plataforma: 'API', fechaCreacion: 'Jul 3, 2026', ultimoUso: '1d ago', claveOculta: 'gih_wh_sk_...b3e9' },
-  ]);
+export class ApiKeysTab implements OnInit {
+  private usuarioBotService = inject(UsuarioBot);
 
-  // Guarda el id de la key que se acaba de copiar, para mostrar un mensaje temporal "Copiado ✓"
-  idCopiado = signal<number | null>(null);
+  cargando = signal(true);
+  conexiones = signal<ConexionBroker[]>([]);
 
-  copiarClave(clave: ApiKey) {
-    // navigator.clipboard es la API nativa del navegador para copiar texto
-    navigator.clipboard.writeText(clave.claveOculta);
+  valoresEditados = signal<Record<number, string>>({});
 
-    this.idCopiado.set(clave.id);
-    setTimeout(() => {
-      this.idCopiado.set(null);
-    }, 1500);
+  guardadoExitosoId = signal<number | null>(null);
+
+  ngOnInit() {
+    this.cargarConexiones();
   }
 
-  eliminarClave(id: number) {
-    this.claves.update((actuales) => actuales.filter((k) => k.id !== id));
+  cargarConexiones() {
+    this.cargando.set(true);
+    this.usuarioBotService.consultaSettings().subscribe({
+      next: (respuesta: any) => {
+        this.conexiones.set(respuesta);
+        this.cargando.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar las conexiones de broker:', err);
+        this.cargando.set(false);
+      },
+    });
   }
 
-  generarNuevaClave() {
-    const nuevoId = Math.max(...this.claves().map((k) => k.id), 0) + 1;
-    const nueva: ApiKey = {
-      id: nuevoId,
-      nombre: `New Key ${nuevoId}`,
-      plataforma: 'API',
-      fechaCreacion: 'Just now',
-      ultimoUso: 'Never',
-      claveOculta: `gih_api_sk_...${Math.random().toString(16).slice(2, 6)}`,
-    };
-    this.claves.update((actuales) => [...actuales, nueva]);
+  valorMostrado(conexion: ConexionBroker): string {
+    const editado = this.valoresEditados()[conexion.id];
+    return editado !== undefined ? editado : conexion.apiKey;
+  }
+
+  actualizarValorEditado(idConexion: number, valor: string) {
+    this.valoresEditados.update((actual) => ({ ...actual, [idConexion]: valor }));
+  }
+
+  guardarApiKey(conexion: ConexionBroker) {
+    const nuevaClave = this.valorMostrado(conexion);
+
+    this.usuarioBotService.editarApiKey(conexion.id, nuevaClave).subscribe({
+      next: (respuesta: any) => {
+        if (respuesta.Resultado === 'OK') {
+          this.conexiones.update((lista) =>
+            lista.map((c) => (c.id === conexion.id ? { ...c, apiKey: nuevaClave } : c))
+          );
+          this.guardadoExitosoId.set(conexion.id);
+          setTimeout(() => this.guardadoExitosoId.set(null), 2000);
+        } else {
+          console.error('Error al guardar la api key:', respuesta.mensaje);
+        }
+      },
+      error: (err) => console.error('Error al guardar la api key:', err),
+    });
   }
 }

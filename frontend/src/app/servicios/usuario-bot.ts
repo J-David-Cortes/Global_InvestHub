@@ -13,4 +13,14 @@ export class UsuarioBot extends ApiBase {
     super(http);
   }
 
+  editarApiKey(idConexion: number, apiKey: string) {
+    return this.http.post(`${this.url}?control=editarApiKey&id=${idConexion}`, JSON.stringify({
+      api_key: apiKey,
+    }));
+  }
+
+  consultaSettings() {
+    return this.http.get(`${this.url}?control=consultaSettings`);
+  }
+
 }
