@@ -31,6 +31,13 @@
             $vec = $usuarioBot->editar($id, $params);
         break;
 
+        case 'editarApiKey' :
+            $json = file_get_contents('php://input');
+            $id = isset($_GET['id']) ? $_GET['id'] : 0;
+            $params = json_decode($json);
+            $vec = $usuarioBot->editarApiKey($id, $fo_usuario, $params->api_key);
+        break;
+
         case 'eliminar' :
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
             $vec = $usuarioBot->eliminar($id);

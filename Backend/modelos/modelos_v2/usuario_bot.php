@@ -139,5 +139,32 @@
             mysqli_query($this->conexion, $sql) or die("Error al editar usuario_bot: " . mysqli_error($this->conexion));
             return ['Resultado' => "OK", 'mensaje' => "Se editó la conexión del bot"];
         }
+
+        // Uso exclusivo de Settings: solo actualiza api_key de una conexion
+        // ya existente, y solo si esa conexion pertenece a $fo_usuario.
+        // No toca fo_bot/fo_broker/activo/fo_pasarela (eso lo maneja
+        // Engines a traves de editar()).
+        public function editarApiKey($id, $fo_usuario, $api_key){
+            $id = intval($id);
+            $fo_usuario = intval($fo_usuario);
+
+            // Chequeo de propiedad ANTES de tocar la BD: evita que un id
+            // de otro usuario reciba el UPDATE.
+            $sqlOwner = "SELECT fo_usuario FROM usuario_bot WHERE id_conexion = $id";
+            $resOwner = mysqli_query($this->conexion, $sqlOwner) or die("Error al verificar la conexion: " . mysqli_error($this->conexion));
+            $filaOwner = mysqli_fetch_assoc($resOwner);
+
+            if($filaOwner === null){
+                return ['Resultado' => "Error", 'mensaje' => "La conexión no existe"];
+            }
+            if((int) $filaOwner['fo_usuario'] !== $fo_usuario){
+                return ['Resultado' => "Error", 'mensaje' => "No tienes permiso para editar esta conexión"];
+            }
+
+            $api_key = mysqli_real_escape_string($this->conexion, $api_key);
+            $sql = "UPDATE usuario_bot SET api_key = '$api_key' WHERE id_conexion = $id";
+            mysqli_query($this->conexion, $sql) or die("Error al editar api_key de usuario_bot: " . mysqli_error($this->conexion));
+            return ['Resultado' => "OK", 'mensaje' => "Se actualizó la api_key"];
+        }
     }
 ?>
