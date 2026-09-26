@@ -18,6 +18,10 @@
             $vec = $usuarioBot->consulta($fo_usuario);
         break;
 
+        case 'consultaSettings' :
+            $vec = $usuarioBot->consultaSettings($fo_usuario);
+        break;
+
         case 'insertar' :
             $json = file_get_contents('php://input');
             $params = json_decode($json);

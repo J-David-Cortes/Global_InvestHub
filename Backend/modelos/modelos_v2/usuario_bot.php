@@ -41,6 +41,47 @@
             return $vec;
         }
 
+        // Uso exclusivo de Settings ("Broker Connections"): igual que
+        // consulta(), pero incluye api_key (el usuario SI debe poder verla
+        // y editarla aqui) y NO filtra por activo=1, para que el usuario
+        // vea y pueda actualizar la key de cualquiera de sus conexiones,
+        // activas o inactivas.
+        public function consultaSettings($fo_usuario){
+            $fo_usuario = intval($fo_usuario);
+
+            $sql = "SELECT
+                        ub.id_conexion AS id,
+                        ub.api_key AS apiKey,
+                        ub.fo_bot AS botId,
+                        bi.nombre AS botNombre,
+                        bi.plataforma AS botPlataforma,
+                        bi.categoria AS botCategoria,
+                        ub.fo_broker AS brokerId,
+                        br.nombre AS brokerNombre,
+                        ub.activo AS activo,
+                        ub.fecha_activacion AS fechaActivacion,
+                        ub.fecha_desactivacion AS fechaDesactivacion,
+                        ub.fo_pasarela AS pasarelaId
+                    FROM usuario_bot ub
+                    INNER JOIN bot_inversion bi ON ub.fo_bot = bi.id_bot
+                    INNER JOIN broker br ON ub.fo_broker = br.id_broker
+                    WHERE ub.fo_usuario = $fo_usuario
+                    ORDER BY ub.fecha_activacion DESC";
+
+            $res = mysqli_query($this->conexion, $sql) or die("Error en consultaSettings usuario_bot: " . mysqli_error($this->conexion));
+
+            $vec = [];
+            while($row = mysqli_fetch_assoc($res)){
+                $row['id'] = (int) $row['id'];
+                $row['botId'] = (int) $row['botId'];
+                $row['brokerId'] = (int) $row['brokerId'];
+                $row['activo'] = (bool) $row['activo'];
+                $row['pasarelaId'] = $row['pasarelaId'] !== null ? (int) $row['pasarelaId'] : null;
+                $vec[] = $row;
+            }
+            return $vec;
+        }
+
         public function eliminar($id){
             $sql = "DELETE FROM usuario_bot WHERE id_conexion = " . intval($id);
             mysqli_query($this->conexion, $sql) or die("Error al eliminar usuario_bot: " . mysqli_error($this->conexion));
