@@ -6,6 +6,13 @@
         <p class="engines-subtitulo">{{ engines().length }} algoritmos configurados</p>
     </header>
 
+    @if (errorEstado(); as msg) {
+        <div class="mensaje-error-estado">
+            <i class="bi bi-exclamation-circle"></i>
+            {{ msg }}
+        </div>
+    }
+
     <!-- Tarjetas resumen -->
     <div class="engines-resumen">
         <div class="resumen-card">

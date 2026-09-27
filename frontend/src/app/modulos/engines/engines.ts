@@ -20,6 +20,9 @@ export class Engines implements OnInit {
 
   engines = signal<Engine[]>([]);
   cargando = signal(true);
+  // Mensaje de error de la ultima accion de start/stop (ej. limite del plan);
+  // null = sin error. Se limpia en el siguiente intento.
+  errorEstado = signal<string | null>(null);
 
   filtroActual = signal<FiltroEstado>('all');
   logAbiertoId = signal<number | null>(null);
@@ -97,14 +100,26 @@ export class Engines implements OnInit {
   }
 
   cambiarEstado(id: number, nuevoActivo: boolean) {
+    this.errorEstado.set(null);
     this.usuarioBotService.cambiarEstado(id, nuevoActivo).subscribe({
-      next: () => {
+      next: (respuesta: any) => {
+        // El backend responde 200 aun cuando rechaza la accion (limite del
+        // plan, duplicado, etc.): se detecta por Resultado, no por HTTP.
+        // No hay cambio optimista que revertir: el signal solo se toca aqui.
+        if (respuesta?.Resultado === 'Error') {
+          this.errorEstado.set(respuesta.mensaje ?? 'No se pudo cambiar el estado del engine');
+          return;
+        }
+
         // Actualizamos el signal local sin tener que recargar todo desde el backend
         this.engines.update((lista) =>
           lista.map((e) => (e.id === id ? { ...e, activo: nuevoActivo } : e))
         );
       },
-      error: (err) => console.error('Error al cambiar estado del engine:', err),
+      error: (err) => {
+        console.error('Error al cambiar estado del engine:', err);
+        this.errorEstado.set('No se pudo conectar con el servidor');
+      },
     });
   }
 
