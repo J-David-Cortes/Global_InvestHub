@@ -146,15 +146,14 @@
             return (int) $row['total'];
         }
 
-        public function insertar($params){
-            $fo_usuario = intval($params->fo_usuario);
-            $fo_bot = intval($params->fo_bot);
-            $fo_broker = intval($params->fo_broker);
-
+        // Reglas para que una conexion quede ACTIVA (usadas al insertar y al
+        // reactivar): sin duplicado bot+broker activo, y dentro del limite
+        // del plan (los bots VIP siempre se permiten). Devuelve el array de
+        // error, o null si todo esta bien.
+        private function validarActivacion($fo_usuario, $fo_bot, $fo_broker){
             // Bloquea duplicado: el mismo bot en el mismo broker ya activo
             // para este usuario (evita doble clic / doble suscripcion que
-            // consumiria dos cupos del plan). Las filas inactivas no cuentan,
-            // asi que reactivar un bot desactivado sigue permitido.
+            // consumiria dos cupos del plan). Las filas inactivas no cuentan.
             $sqlDup = "SELECT 1 FROM usuario_bot
                        WHERE fo_usuario = $fo_usuario AND fo_bot = $fo_bot
                          AND fo_broker = $fo_broker AND activo = 1
@@ -180,6 +179,19 @@
                         return ['Resultado' => "Error", 'mensaje' => "Has alcanzado el límite de bots de tu plan"];
                     }
                 }
+            }
+
+            return null;
+        }
+
+        public function insertar($params){
+            $fo_usuario = intval($params->fo_usuario);
+            $fo_bot = intval($params->fo_bot);
+            $fo_broker = intval($params->fo_broker);
+
+            $error = $this->validarActivacion($fo_usuario, $fo_bot, $fo_broker);
+            if($error !== null){
+                return $error;
             }
 
             // Un insertar() siempre representa una activacion NUEVA:
@@ -241,6 +253,46 @@
             $sql = "UPDATE usuario_bot SET api_key = '$api_key' WHERE id_conexion = $id";
             mysqli_query($this->conexion, $sql) or die("Error al editar api_key de usuario_bot: " . mysqli_error($this->conexion));
             return ['Resultado' => "OK", 'mensaje' => "Se actualizó la api_key"];
+        }
+
+        // Uso exclusivo de Engines (switch activar/desactivar): solo toca
+        // activo y fecha_desactivacion, y solo si la conexion pertenece a
+        // $fo_usuario. fecha_desactivacion la calcula el servidor. No toca
+        // fo_bot/fo_broker/api_key/fo_pasarela ni fecha_activacion.
+        public function cambiarEstado($id, $fo_usuario, $activo){
+            $id = intval($id);
+            $fo_usuario = intval($fo_usuario);
+            $activo = $activo ? 1 : 0;
+
+            $sqlFila = "SELECT fo_usuario, fo_bot, fo_broker, activo FROM usuario_bot WHERE id_conexion = $id";
+            $resFila = mysqli_query($this->conexion, $sqlFila) or die("Error al verificar la conexion: " . mysqli_error($this->conexion));
+            $fila = mysqli_fetch_assoc($resFila);
+
+            if($fila === null){
+                return ['Resultado' => "Error", 'mensaje' => "La conexión no existe"];
+            }
+            if((int) $fila['fo_usuario'] !== $fo_usuario){
+                return ['Resultado' => "Error", 'mensaje' => "No tienes permiso para editar esta conexión"];
+            }
+
+            // Sin cambio de estado: no se toca nada (evita pisar la
+            // fecha_desactivacion original al "desactivar" algo ya inactivo).
+            if((int) $fila['activo'] === $activo){
+                return ['Resultado' => "OK", 'mensaje' => "La conexión ya estaba en ese estado"];
+            }
+
+            // Reactivar consume un cupo: mismas reglas que insertar().
+            if($activo === 1){
+                $error = $this->validarActivacion($fo_usuario, (int) $fila['fo_bot'], (int) $fila['fo_broker']);
+                if($error !== null){
+                    return $error;
+                }
+            }
+
+            $fecha_desactivacion_sql = $activo === 1 ? 'NULL' : 'NOW()';
+            $sql = "UPDATE usuario_bot SET activo = $activo, fecha_desactivacion = $fecha_desactivacion_sql WHERE id_conexion = $id";
+            mysqli_query($this->conexion, $sql) or die("Error al cambiar estado de usuario_bot: " . mysqli_error($this->conexion));
+            return ['Resultado' => "OK", 'mensaje' => $activo === 1 ? "Se activó la conexión" : "Se desactivó la conexión"];
         }
     }
 ?>

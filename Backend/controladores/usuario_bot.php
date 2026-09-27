@@ -54,6 +54,19 @@
             $vec = $usuarioBot->editarApiKey($id, $fo_usuario, $params->api_key);
         break;
 
+        case 'cambiarEstado' :
+            $json = file_get_contents('php://input');
+            $id = isset($_GET['id']) ? $_GET['id'] : 0;
+            $params = json_decode($json);
+            // Solo se acepta un booleano real o 0/1: evita que "false" (string)
+            // se interprete como true.
+            if(!is_object($params) || !isset($params->activo) || !in_array($params->activo, [0, 1, true, false], true)){
+                $vec = ['Resultado' => 'Error', 'mensaje' => 'Datos inválidos'];
+                break;
+            }
+            $vec = $usuarioBot->cambiarEstado($id, $fo_usuario, $params->activo);
+        break;
+
         case 'eliminar' :
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
             $vec = $usuarioBot->eliminar($id);

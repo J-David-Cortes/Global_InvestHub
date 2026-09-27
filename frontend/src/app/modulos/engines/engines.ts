@@ -97,7 +97,7 @@ export class Engines implements OnInit {
   }
 
   cambiarEstado(id: number, nuevoActivo: boolean) {
-    this.usuarioBotService.editar(id, { activo: nuevoActivo ? 1 : 0 }).subscribe({
+    this.usuarioBotService.cambiarEstado(id, nuevoActivo).subscribe({
       next: () => {
         // Actualizamos el signal local sin tener que recargar todo desde el backend
         this.engines.update((lista) =>

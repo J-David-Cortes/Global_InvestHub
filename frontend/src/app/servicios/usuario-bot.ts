@@ -19,6 +19,12 @@ export class UsuarioBot extends ApiBase {
     }));
   }
 
+  cambiarEstado(idConexion: number, activo: boolean) {
+    return this.http.post(`${this.url}?control=cambiarEstado&id=${idConexion}`, JSON.stringify({
+      activo: activo,
+    }));
+  }
+
   consultaSettings() {
     return this.http.get(`${this.url}?control=consultaSettings`);
   }
