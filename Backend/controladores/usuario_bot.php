@@ -25,7 +25,19 @@
         case 'insertar' :
             $json = file_get_contents('php://input');
             $params = json_decode($json);
+            // fo_usuario NUNCA se lee del body: se fuerza el del controlador
+            // (TEMPORAL hasta que exista login real). Si el JSON es invalido
+            // o no es un objeto, se rechaza antes de tocar el modelo.
+            if(!is_object($params)){
+                $vec = ['Resultado' => 'Error', 'mensaje' => 'Datos inválidos'];
+                break;
+            }
+            $params->fo_usuario = $fo_usuario;
             $vec = $usuarioBot->insertar($params);
+        break;
+
+        case 'estadoBroker' :
+            $vec = $usuarioBot->estadoBroker($fo_usuario);
         break;
 
         case 'editar' :

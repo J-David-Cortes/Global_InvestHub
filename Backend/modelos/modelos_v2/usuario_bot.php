@@ -82,6 +82,28 @@
             return $vec;
         }
 
+        // Para el flujo "Subscribe": ¿el usuario ya tiene algun broker
+        // (activo o no)? Si si, sugiere el de su conexion mas reciente.
+        // Incluye inactivas a proposito: es el broker que el usuario ya
+        // conoce. Desempate por id_conexion por si dos filas comparten
+        // fecha_activacion. NO devuelve api_key (el frontend siempre la
+        // pide de nuevo: las credenciales de brokers reales expiran).
+        public function estadoBroker($fo_usuario){
+            $fo_usuario = intval($fo_usuario);
+
+            $sql = "SELECT fo_broker FROM usuario_bot
+                    WHERE fo_usuario = $fo_usuario
+                    ORDER BY fecha_activacion DESC, id_conexion DESC
+                    LIMIT 1";
+            $res = mysqli_query($this->conexion, $sql) or die("Error en estadoBroker: " . mysqli_error($this->conexion));
+            $fila = mysqli_fetch_assoc($res);
+
+            return [
+                'tieneBroker' => $fila !== null,
+                'ultimoBrokerId' => $fila !== null ? (int) $fila['fo_broker'] : null,
+            ];
+        }
+
         public function eliminar($id){
             $sql = "DELETE FROM usuario_bot WHERE id_conexion = " . intval($id);
             mysqli_query($this->conexion, $sql) or die("Error al eliminar usuario_bot: " . mysqli_error($this->conexion));
@@ -127,6 +149,20 @@
         public function insertar($params){
             $fo_usuario = intval($params->fo_usuario);
             $fo_bot = intval($params->fo_bot);
+            $fo_broker = intval($params->fo_broker);
+
+            // Bloquea duplicado: el mismo bot en el mismo broker ya activo
+            // para este usuario (evita doble clic / doble suscripcion que
+            // consumiria dos cupos del plan). Las filas inactivas no cuentan,
+            // asi que reactivar un bot desactivado sigue permitido.
+            $sqlDup = "SELECT 1 FROM usuario_bot
+                       WHERE fo_usuario = $fo_usuario AND fo_bot = $fo_bot
+                         AND fo_broker = $fo_broker AND activo = 1
+                       LIMIT 1";
+            $resDup = mysqli_query($this->conexion, $sqlDup) or die("Error al verificar duplicado: " . mysqli_error($this->conexion));
+            if(mysqli_num_rows($resDup) > 0){
+                return ['Resultado' => "Error", 'mensaje' => "Ya tienes este bot activo en este broker"];
+            }
 
             // Regla de negocio: un bot VIP siempre se permite activar, sin
             // importar el plan del usuario ni cuantos bots tenga activos.
@@ -150,7 +186,6 @@
             // fecha_activacion y activo quedan en su DEFAULT de la tabla
             // (CURRENT_TIMESTAMP y 1), no se confia en lo que mande el cliente.
             $api_key = mysqli_real_escape_string($this->conexion, $params->api_key);
-            $fo_broker = intval($params->fo_broker);
             $fo_pasarela = isset($params->fo_pasarela) && $params->fo_pasarela !== null ? intval($params->fo_pasarela) : null;
             $fo_pasarela_sql = $fo_pasarela !== null ? $fo_pasarela : 'NULL';
 
