@@ -1,0 +1,21 @@
+-- Migracion: indice UNIQUE sobre broker.nombre.
+--
+-- Contexto: broker.insertar() aceptaba cualquier nombre, incluido vacio o
+-- ya existente (verificado el 2026-09-26: 'roboforex' se insertaba como un
+-- segundo ROBOFOREX). Con la opcion "Otro" del modal de Subscribe, los
+-- usuarios pueden crear brokers desde el flujo normal, asi que la unicidad
+-- la debe garantizar la propia BD (dos usuarios creando el mismo broker a
+-- la vez no pueden colarse por una comprobacion hecha en el codigo).
+--
+-- Decisiones:
+--   1. La colacion utf8mb4_unicode_ci hace que el indice sea insensible a
+--      mayusculas, tildes y espacios finales: 'roboforex', 'ROBOFOREX ' y
+--      'Roboforéx' cuentan como el mismo broker y el segundo se rechaza.
+--   2. Verificado antes de aplicar: los 4 brokers actuales no tienen
+--      duplicados, asi que el indice se puede crear sin limpiar datos.
+--   3. Consecuencia: broker.editar() ahora falla (error 1062) si se
+--      renombra un broker a un nombre que ya existe. Es lo deseado.
+--
+-- Para revertir: ALTER TABLE `broker` DROP INDEX `uq_broker_nombre`;
+
+ALTER TABLE `broker` ADD UNIQUE KEY `uq_broker_nombre` (`nombre`);

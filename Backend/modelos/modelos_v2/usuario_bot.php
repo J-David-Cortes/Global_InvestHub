@@ -1,4 +1,6 @@
 <?php
+    require_once(__DIR__ . '/broker.php');
+
     class UsuarioBot {
         private $conexion;
 
@@ -187,13 +189,57 @@
         public function insertar($params){
             $fo_usuario = intval($params->fo_usuario);
             $fo_bot = intval($params->fo_bot);
-            $fo_broker = intval($params->fo_broker);
+
+            // El broker llega de UNA de dos formas: fo_broker (id de un broker
+            // existente) o broker_nuevo (nombre, "Otro" en el modal). Mandar
+            // las dos es ambiguo y se rechaza.
+            $hayNuevo = isset($params->broker_nuevo);
+            if($hayNuevo && isset($params->fo_broker)){
+                return ['Resultado' => "Error", 'mensaje' => "Datos inválidos"];
+            }
+
+            // Camino existente: sin transaccion, igual que siempre.
+            if(!$hayNuevo){
+                $fo_broker = intval($params->fo_broker);
+
+                $error = $this->validarActivacion($fo_usuario, $fo_bot, $fo_broker);
+                if($error !== null){
+                    return $error;
+                }
+
+                return $this->insertarConexion($params, $fo_usuario, $fo_bot, $fo_broker);
+            }
+
+            // Camino "Otro": crear (u obtener) el broker y suscribir van en UNA
+            // transaccion. Si la suscripcion se rechaza (duplicado, limite del
+            // plan) el ROLLBACK deshace tambien la creacion del broker, asi
+            // nunca queda un broker huerfano visible para los demas usuarios.
+            // Si algo falla con die(), la conexion se cierra y MariaDB revierte
+            // sola la transaccion abierta.
+            mysqli_begin_transaction($this->conexion);
+
+            $broker = new Broker($this->conexion);
+            $respuestaBroker = $broker->obtenerOCrear($params->broker_nuevo);
+            if($respuestaBroker['Resultado'] !== "OK"){
+                mysqli_rollback($this->conexion);
+                return $respuestaBroker;
+            }
+            $fo_broker = $respuestaBroker['id_broker'];
 
             $error = $this->validarActivacion($fo_usuario, $fo_bot, $fo_broker);
             if($error !== null){
+                mysqli_rollback($this->conexion);
                 return $error;
             }
 
+            $resultado = $this->insertarConexion($params, $fo_usuario, $fo_bot, $fo_broker);
+            mysqli_commit($this->conexion);
+            return $resultado;
+        }
+
+        // El INSERT en si, ya validado: mismo codigo que antes, extraido para
+        // compartirlo entre los dos caminos de insertar().
+        private function insertarConexion($params, $fo_usuario, $fo_bot, $fo_broker){
             // Un insertar() siempre representa una activacion NUEVA:
             // fecha_activacion y activo quedan en su DEFAULT de la tabla
             // (CURRENT_TIMESTAMP y 1), no se confia en lo que mande el cliente.
