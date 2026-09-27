@@ -1,0 +1,120 @@
+.modal-fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(5, 6, 12, 0.75);
+}
+
+.modal-panel {
+    width: 100%;
+    max-width: 440px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+}
+
+.modal-titulo {
+    margin: 0 0 0.35rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.modal-plataforma {
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+.modal-cerrar {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.modal-cerrar:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.modal-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+
+.modal-campo {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--bg-input);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.modal-campo:focus { outline: none; border-color: var(--accent-teal); }
+
+.modal-ayuda {
+    margin: -0.5rem 0 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.modal-cargando { color: var(--text-muted); font-size: 0.9rem; }
+
+.modal-error {
+    color: #f05252;
+    background-color: rgba(240, 82, 82, 0.1);
+    border: 1px solid rgba(240, 82, 82, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.btn-cancelar,
+.btn-confirmar {
+    border-radius: 8px;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-cancelar {
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn-confirmar {
+    background-color: var(--accent-cyan);
+    color: var(--bg-main);
+    border: none;
+    font-weight: 700;
+}
+
+.btn-cancelar:disabled,
+.btn-confirmar:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.modal-ayuda-info { color: var(--accent-cyan); }

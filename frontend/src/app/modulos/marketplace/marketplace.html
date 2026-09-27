@@ -37,7 +37,8 @@
     <!-- Grid de tarjetas -->
     <div class="marketplace-grid">
         @for (bot of algoritmosFiltrados(); track bot.id) {
-        <app-marketplace-card [bot]="bot" />
+        <app-marketplace-card [bot]="bot" [activo]="botsActivosIds().has(bot.id)"
+            (abrirSuscripcion)="abrirModal(bot)" />
         }
     </div>
 
@@ -50,3 +51,7 @@
     }
 
 </div>
+
+@if (botModal(); as bot) {
+<app-subscribe-modal [bot]="bot" (suscrito)="alSuscribir()" (cerrado)="cerrarModal()" />
+}

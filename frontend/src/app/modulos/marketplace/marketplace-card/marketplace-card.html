@@ -81,17 +81,21 @@
             <span class="precio-valor">${{ bot.precioIndividual }}</span>
             <span class="precio-periodo">/mo</span>
         </div>
-        <button class="btn-suscribir" [class.btn-suscrito]="estaSuscrito()" (click)="alternarSuscripcion()">
-            {{ estaSuscrito() ? 'Subscribed ✓' : 'Subscribe' }}
-        </button>
+        @if (activo) {
+        <a class="btn-suscribir btn-suscrito btn-enlace" routerLink="/app/engines" title="Ir a Engines">Activo ✓</a>
+        } @else {
+        <button class="btn-suscribir" (click)="abrirSuscripcion.emit()">Subscribe</button>
+        }
         } @else {
         <span class="incluido-plan">
             <i class="bi bi-check-circle"></i>
             Incluido en tu plan
         </span>
-        <button class="btn-activar" [class.btn-activado]="estaSuscrito()" (click)="alternarSuscripcion()">
-            {{ estaSuscrito() ? 'Activated ✓' : 'Activate' }}
-        </button>
+        @if (activo) {
+        <a class="btn-activar btn-activado btn-enlace" routerLink="/app/engines" title="Ir a Engines">Activo ✓</a>
+        } @else {
+        <button class="btn-activar" (click)="abrirSuscripcion.emit()">Activate</button>
+        }
         }
     </footer>
 

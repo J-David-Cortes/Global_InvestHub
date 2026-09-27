@@ -1,0 +1,59 @@
+<div class="modal-fondo" (click)="alClickFondo($event)">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="subscribe-titulo">
+
+        <header class="modal-header">
+            <div>
+                <h2 id="subscribe-titulo" class="modal-titulo">Activar {{ bot.nombre }}</h2>
+                <span class="modal-plataforma">{{ bot.plataforma }}</span>
+            </div>
+            <button type="button" class="modal-cerrar" aria-label="Cerrar" [disabled]="enviando()" (click)="cerrar()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </header>
+
+        @if (cargando()) {
+        <p class="modal-cargando">Cargando brokers...</p>
+        } @else {
+        <form (submit)="alEnviar($event)">
+            <label class="modal-label" for="subscribe-broker">Broker</label>
+            <select id="subscribe-broker" class="modal-campo" (change)="seleccionarBroker($any($event.target).value)">
+                <option value="" [selected]="brokerSeleccionadoId() === null && !modoOtro()" disabled>Selecciona un broker</option>
+                @for (b of brokers(); track b.id) {
+                <option [value]="b.id" [selected]="b.id === brokerSeleccionadoId()">{{ b.nombre }}</option>
+                }
+                <option [value]="opcionOtro" [selected]="modoOtro()">Otro (especificar)</option>
+            </select>
+
+            @if (modoOtro()) {
+            <label class="modal-label" for="subscribe-broker-nuevo">Nombre del broker</label>
+            <input id="subscribe-broker-nuevo" class="modal-campo" type="text" maxlength="100" autocomplete="off"
+                placeholder="Ej. Binance" [value]="brokerNuevo()"
+                (input)="actualizarBrokerNuevo($any($event.target).value)" />
+            @if (brokerCoincidente(); as existente) {
+            <p class="modal-ayuda modal-ayuda-info">Ya existe «{{ existente.nombre }}» en la lista: se usará ese broker.</p>
+            }
+            }
+
+            <label class="modal-label" for="subscribe-api-key">API key</label>
+            <input id="subscribe-api-key" class="modal-campo" type="password" autocomplete="off"
+                placeholder="Escribe tu API key vigente" [value]="apiKey()"
+                (input)="actualizarApiKey($any($event.target).value)" />
+            <p class="modal-ayuda">Siempre se pide de nuevo: las credenciales de los brokers expiran.</p>
+
+            @if (errorMensaje(); as msg) {
+            <div class="modal-error">
+                <i class="bi bi-exclamation-circle"></i>
+                {{ msg }}
+            </div>
+            }
+
+            <div class="modal-acciones">
+                <button type="button" class="btn-cancelar" [disabled]="enviando()" (click)="cerrar()">Cancelar</button>
+                <button type="submit" class="btn-confirmar" [disabled]="!puedeConfirmar()">
+                    @if (enviando()) { Activando... } @else { Confirmar }
+                </button>
+            </div>
+        </form>
+        }
+    </div>
+</div>

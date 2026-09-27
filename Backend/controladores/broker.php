@@ -14,6 +14,11 @@
             $vec = $broker->consulta();
         break;
 
+        // TODO SEGURIDAD: insertar y editar no tienen ninguna restriccion de
+        // acceso: cualquiera puede llamarlos desde fuera sin login. Antes de
+        // cualquier uso real (mas alla de esta demo academica), deben exigir
+        // un usuario autenticado con permiso de administrador.
+        // (eliminar no lo necesita: la FK de usuario_bot ya lo frena.)
         case 'insertar' :
             $json = file_get_contents('php://input');
             $params = json_decode($json);

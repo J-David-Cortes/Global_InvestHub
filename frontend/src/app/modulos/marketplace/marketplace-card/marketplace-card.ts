@@ -1,17 +1,21 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Algoritmo } from '../../../modelos/algoritmo.model';
 
 @Component({
   selector: 'app-marketplace-card',
-  imports: [UpperCasePipe],
+  imports: [UpperCasePipe, RouterLink],
   templateUrl: './marketplace-card.html',
   styleUrl: './marketplace-card.css',
 })
 export class MarketplaceCard {
   @Input() bot!: Algoritmo;
-
-  estaSuscrito = signal(false);
+  // ¿El usuario ya tiene una conexion activa con este bot? Lo decide el padre
+  // a partir de lo que confirma el backend, no un estado local de la tarjeta.
+  @Input() activo = false;
+  // Pide al padre abrir el modal de suscripcion para este bot.
+  @Output() abrirSuscripcion = new EventEmitter<void>();
 
   // Ancho y alto del gráfico, los definimos una sola vez para reutilizarlos
   private readonly anchoSparkline = 260;
@@ -50,9 +54,5 @@ get puntosSparkline(): string {
   // compartan por accidente la misma definición de degradado SVG
   get idDegradado(): string {
     return `degradado-sparkline-${this.bot.id}`;
-  }
-
-  alternarSuscripcion() {
-    this.estaSuscrito.update((valorActual) => !valorActual);
   }
 }
