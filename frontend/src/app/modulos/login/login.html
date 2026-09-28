@@ -7,27 +7,29 @@
             <p class="text-muted fs-6">Sign in to your account</p>
         </div>
 
-        <form action="dashboard.html">
+        <form (submit)="alEnviar($event)">
             <div class="mb-3">
                 <label class="form-label">Email Address</label>
                 <input type="email" class="form-control form-control-dark w-100" placeholder="name@company.com"
-                    required>
+                    [value]="email()" (input)="actualizarEmail($any($event.target).value)" required>
             </div>
 
             <div class="mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label class="form-label mb-0">Password</label>
-                    <a href="#" class="text-teal text-decoration-none" style="font-size: 0.85rem;">Forgot password?</a>
-                </div>
-                <input type="password" class="form-control form-control-dark w-100" placeholder="••••••••" required>
+                <label class="form-label mb-0">Password</label>
+                <input type="password" class="form-control form-control-dark w-100" placeholder="••••••••"
+                    [value]="clave()" (input)="actualizarClave($any($event.target).value)" required>
             </div>
 
-            <button type="submit" class="btn btn-cyan w-100 mb-4 py-2">Sign In</button>
-
-            <div class="text-center" style="font-size: 0.85rem;">
-                <span class="text-muted">Don't have an account?</span>
-                <a href="#" class="text-teal text-decoration-none">Get Started</a>
+            @if (errorMensaje(); as msg) {
+            <div class="mensaje-error-login">
+                <i class="bi bi-exclamation-circle"></i>
+                {{ msg }}
             </div>
+            }
+
+            <button type="submit" class="btn btn-cyan w-100 py-2" [disabled]="!puedeEnviar()">
+                @if (enviando()) { Signing in... } @else { Sign In }
+            </button>
         </form>
     </div>
 </div>

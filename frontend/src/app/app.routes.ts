@@ -7,12 +7,14 @@ import { Portfolio } from './modulos/portfolio/portfolio';
 import { Settings } from './modulos/settings/settings';
 import { Login } from './modulos/login/login';
 import { Marketplace } from './modulos/marketplace/marketplace';
+import { authGuard, soloInvitadoGuard } from './servicios/auth.guard';
 
 export const routes: Routes = [
     { path: '', component: Home },
     {
         path: 'app',
         component: Main,
+        canActivate: [authGuard],
         children: [
             {path: 'dashboard', component: Dashboard},
             {path: 'marketplace', component: Marketplace},
@@ -22,6 +24,6 @@ export const routes: Routes = [
             {path: '', redirectTo: 'dashboard', pathMatch: 'full'}
         ]
     },
-    {path: 'login', component: Login},
+    {path: 'login', component: Login, canActivate: [soloInvitadoGuard]},
     {path: '**', redirectTo: ''}
 ];

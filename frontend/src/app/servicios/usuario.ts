@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiBase } from './api-base';
+import { RespuestaLogin } from '../modelos/usuario-sesion.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,13 @@ export class Usuario extends ApiBase {
   // Método propio, además de los heredados de ApiBase
   consultaUno() {
     return this.http.get(`${this.url}?control=consultaUno`);
+  }
+
+  login(email: string, clave: string) {
+    return this.http.post<RespuestaLogin>(`${this.url}?control=login`, JSON.stringify({
+      email,
+      clave,
+    }));
   }
 
   cambiarClave(claveActual: string, claveNueva: string) {

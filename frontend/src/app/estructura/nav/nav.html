@@ -14,10 +14,15 @@
     </nav>
 
     <div class="sidebar-profile">
-        <div class="avatar">JS</div>
+        <div class="avatar">{{ iniciales() }}</div>
         <div>
-            <div class="fw-semibold" style="font-size: 0.9rem;">John Smith</div>
-            <div class="text-muted" style="font-size: 0.75rem;">PRO Member</div>
+            <div class="fw-semibold" style="font-size: 0.9rem;">{{ auth.usuario()?.nombre }}</div>
+            <div class="text-muted" style="font-size: 0.75rem;">
+                @if (planActual(); as plan) { {{ plan.nombre }} Member } @else { Member }
+            </div>
         </div>
+        <button type="button" class="btn-logout" title="Cerrar sesión" (click)="auth.logout()">
+            <i class="bi bi-box-arrow-right"></i>
+        </button>
     </div>
 </aside>

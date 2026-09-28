@@ -1,17 +1,25 @@
 <?php
-    header('Access-Control-Allow-Origin: *');
-    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+    header('Access-Control-Allow-Origin: http://localhost:4200');
+    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
     header('Content-Type: application/json');
+
+    // El navegador manda un preflight OPTIONS (sin Authorization) antes de
+    // cualquier peticion real que incluya ese header. Si no se corta aqui,
+    // el middleware de mas abajo lo rechazaria con 401 y el navegador
+    // bloquearia la peticion real como un fallo de CORS.
+    if($_SERVER['REQUEST_METHOD'] === 'OPTIONS'){
+        http_response_code(200);
+        exit;
+    }
 
     require_once('../modelos/conexion.php');
     require_once('../modelos/modelos_v2/preferencia_notificacion.php');
+    require_once('../modelos/auth_middleware.php');
 
     $control = isset($_GET['control']) ? $_GET['control'] : '';
     $preferenciaNotificacion = new PreferenciaNotificacion($conexion);
 
-    // TEMPORAL: usuario fijo hasta que exista login real con sesion.
-    // Reemplazar por el id del usuario autenticado cuando se implemente login.
-    $fo_usuario = 2;
+    $fo_usuario = exigirUsuarioAutenticado();
 
     switch($control){
         case 'obtener' :

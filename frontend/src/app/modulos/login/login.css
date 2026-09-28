@@ -1,0 +1,9 @@
+.mensaje-error-login {
+    color: #f05252;
+    background-color: rgba(240, 82, 82, 0.1);
+    border: 1px solid rgba(240, 82, 82, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
