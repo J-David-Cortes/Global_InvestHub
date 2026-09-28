@@ -48,6 +48,7 @@
         case 'editar' :
             $json = file_get_contents('php://input');
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
+            exigirPropioUsuarioOAdmin($conexion, $fo_usuario, $id);
             $params = json_decode($json);
             $vec = $usuario->editar($id, $params);
         break;

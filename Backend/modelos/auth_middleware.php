@@ -44,11 +44,12 @@ function exigirUsuarioAutenticado(){
     return (int) $payload['sub'];
 }
 
-// Exige que el usuario autenticado tenga rol de administrador. El rol se
-// consulta FRESCO desde la BD con $fo_usuario, nunca del token (el token
-// no lo lleva: ver jwt_helper.php, es a proposito). Corta con 403 si no
-// es admin, o con 401 si el usuario del token ya no existe.
-function exigirRolAdmin($conexion, $fo_usuario){
+// ¿El usuario tiene rol de administrador? El rol se consulta FRESCO desde
+// la BD con $fo_usuario, nunca del token (el token no lo lleva: ver
+// jwt_helper.php, es a proposito). No aborta por si sola -- solo corta con
+// 401 si el usuario del token ya no existe -- para poder combinarse con
+// otras condiciones (ver exigirPropioUsuarioOAdmin).
+function esAdmin($conexion, $fo_usuario){
     $fo_usuario = intval($fo_usuario);
     $res = mysqli_query($conexion, "SELECT fo_permiso FROM usuario WHERE id_usuario = $fo_usuario")
         or die("Error al verificar el rol: " . mysqli_error($conexion));
@@ -57,7 +58,29 @@ function exigirRolAdmin($conexion, $fo_usuario){
     if($fila === null){
         abortarAuth(401, 'No autenticado');
     }
-    if(!in_array((int) $fila['fo_permiso'], [1, 2], true)){
+    return in_array((int) $fila['fo_permiso'], [1, 2], true);
+}
+
+// Exige que el usuario autenticado tenga rol de administrador. Corta con
+// 403 si no lo es.
+function exigirRolAdmin($conexion, $fo_usuario){
+    if(!esAdmin($conexion, $fo_usuario)){
         abortarAuth(403, 'No tienes permiso para realizar esta acción');
     }
+}
+
+// Exige que el usuario autenticado sea el propio $idObjetivo, O tenga rol
+// de administrador (para que un admin pueda editar el perfil de otro
+// usuario). Corta con 403 si ninguna de las dos se cumple. Usado por
+// usuario.php?control=editar para cerrar el IDOR: antes, cualquier
+// usuario autenticado podia editar a cualquier otro con solo cambiar el
+// id en la URL.
+function exigirPropioUsuarioOAdmin($conexion, $fo_usuario, $idObjetivo){
+    if(intval($idObjetivo) === intval($fo_usuario)){
+        return;
+    }
+    if(esAdmin($conexion, $fo_usuario)){
+        return;
+    }
+    abortarAuth(403, 'No tienes permiso para editar este usuario');
 }
