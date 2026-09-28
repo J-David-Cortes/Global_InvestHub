@@ -1,6 +1,14 @@
 <?php
+    require_once(__DIR__ . '/../jwt_helper.php');
+
     class Usuario {
         private $conexion;
+
+        // Hash bcrypt constante, sin cuenta real asociada. Se usa SOLO para
+        // el password_verify() "dummy" cuando el email no existe: evita que
+        // el tiempo de respuesta delate si el email esta o no registrado
+        // (buscar y no encontrar es mas rapido que encontrar y verificar).
+        const HASH_DUMMY = '$2y$10$MpRmZ7bnrtATi8H8COkxj.UICz32yEM0bJ5Ybv7.WIYPEcip0Qa9C';
 
         public function __construct($conexion){
             $this->conexion = $conexion;
@@ -114,6 +122,48 @@
             mysqli_query($this->conexion, $sql) or die("Error al cambiar la clave: " . mysqli_error($this->conexion));
 
             return ['Resultado' => "OK", 'mensaje' => "Se cambió la contraseña"];
+        }
+
+        public function login($email, $clave){
+            if(!is_string($email) || !is_string($clave)){
+                return ['Resultado' => "Error", 'mensaje' => "Datos inválidos"];
+            }
+
+            $email = trim($email);
+            if($email === '' || $clave === ''){
+                return ['Resultado' => "Error", 'mensaje' => "Datos inválidos"];
+            }
+
+            $emailSql = mysqli_real_escape_string($this->conexion, $email);
+            $sql = "SELECT id_usuario, nombre, email, clave, fo_permiso FROM usuario WHERE email = '$emailSql' LIMIT 1";
+            $res = mysqli_query($this->conexion, $sql) or die("Error al consultar usuario: " . mysqli_error($this->conexion));
+            $fila = mysqli_fetch_assoc($res);
+
+            // Mismo mensaje para "no existe" y "clave incorrecta": no revela
+            // que emails estan registrados. El password_verify() "dummy" se
+            // ejecuta tambien cuando no existe, para que el tiempo de
+            // respuesta sea parejo en ambos casos.
+            if($fila === null){
+                password_verify($clave, self::HASH_DUMMY);
+                return ['Resultado' => "Error", 'mensaje' => "Email o contraseña incorrectos"];
+            }
+
+            if(!password_verify($clave, $fila['clave'])){
+                return ['Resultado' => "Error", 'mensaje' => "Email o contraseña incorrectos"];
+            }
+
+            $token = generarToken((int) $fila['id_usuario'], $fila['email']);
+
+            return [
+                'Resultado' => "OK",
+                'token' => $token,
+                'usuario' => [
+                    'id' => (int) $fila['id_usuario'],
+                    'nombre' => $fila['nombre'],
+                    'email' => $fila['email'],
+                    'fo_permiso' => (int) $fila['fo_permiso'],
+                ],
+            ];
         }
     }
 ?>

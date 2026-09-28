@@ -1,6 +1,6 @@
 <?php
-    header('Access-Control-Allow-Origin: *');
-    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+    header('Access-Control-Allow-Origin: http://localhost:4200');
+    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
     require_once('../modelos/conexion.php');
     // RUTA CORREGIDA: entra a modelos y luego a modelos_v2
@@ -44,6 +44,14 @@
             $claveActual = isset($params->claveActual) ? $params->claveActual : '';
             $claveNueva = isset($params->claveNueva) ? $params->claveNueva : '';
             $vec = $usuario->cambiarClave($fo_usuario, $claveActual, $claveNueva);
+        break;
+
+        case 'login' :
+            $json = file_get_contents('php://input');
+            $params = json_decode($json);
+            $email = isset($params->email) ? $params->email : '';
+            $clave = isset($params->clave) ? $params->clave : '';
+            $vec = $usuario->login($email, $clave);
         break;
 
         default:
