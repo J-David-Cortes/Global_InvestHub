@@ -48,11 +48,10 @@
             $fo_ciudad = intval($params->fo_ciudad);
             $fo_permiso = intval($params->fo_permiso);
 
-            // TODO SEGURIDAD: la clave se guarda en texto plano. Antes de
-            // cualquier uso real (mas alla de esta demo academica), esto DEBE
-            // reemplazarse por password_hash()/password_verify() de PHP.
-            // No usar este sistema con contraseñas reales de usuarios.
-            $clave = mysqli_real_escape_string($this->conexion, $params->clave);
+            // password_hash() con el algoritmo por defecto (bcrypt) produce
+            // un string de 60 caracteres; clave es varchar(150), asi que
+            // sobra espacio sin tocar el esquema.
+            $clave = mysqli_real_escape_string($this->conexion, password_hash($params->clave, PASSWORD_DEFAULT));
 
             $sql = "INSERT INTO usuario(nombre, email, clave, fo_ciudad, fo_permiso) VALUES('$nombre', '$email', '$clave', $fo_ciudad, $fo_permiso)";
             mysqli_query($this->conexion, $sql) or die("NO insertó el REGISTRO: " . mysqli_error($this->conexion));
@@ -68,12 +67,8 @@
 
             $sql = "UPDATE usuario SET nombre = '$nombre', email = '$email', fo_permiso = $fo_permiso";
 
-            // TODO SEGURIDAD: la clave se guarda en texto plano. Antes de
-            // cualquier uso real (mas alla de esta demo academica), esto DEBE
-            // reemplazarse por password_hash()/password_verify() de PHP.
-            // No usar este sistema con contraseñas reales de usuarios.
             if(isset($params->clave) && $params->clave !== ''){
-                $clave = mysqli_real_escape_string($this->conexion, $params->clave);
+                $clave = mysqli_real_escape_string($this->conexion, password_hash($params->clave, PASSWORD_DEFAULT));
                 $sql .= ", clave = '$clave'";
             }
 
@@ -108,16 +103,13 @@
             }
 
             // La comparacion se hace en PHP y no con WHERE clave = '...' porque
-            // la collation utf8mb4_unicode_ci ignora mayusculas/minusculas.
-            // TODO SEGURIDAD: la clave se guarda en texto plano. Antes de
-            // cualquier uso real (mas alla de esta demo academica), esto DEBE
-            // reemplazarse por password_hash()/password_verify() de PHP.
-            // No usar este sistema con contraseñas reales de usuarios.
-            if(!hash_equals($fila['clave'], $claveActual)){
+            // la collation utf8mb4_unicode_ci ignora mayusculas/minusculas
+            // (y aqui ya no aplicaria: el hash es sensible a mayusculas).
+            if(!password_verify($claveActual, $fila['clave'])){
                 return ['Resultado' => "Error", 'mensaje' => "La contraseña actual no es correcta"];
             }
 
-            $claveNuevaSql = mysqli_real_escape_string($this->conexion, $claveNueva);
+            $claveNuevaSql = mysqli_real_escape_string($this->conexion, password_hash($claveNueva, PASSWORD_DEFAULT));
             $sql = "UPDATE usuario SET clave = '$claveNuevaSql' WHERE id_usuario = $fo_usuario";
             mysqli_query($this->conexion, $sql) or die("Error al cambiar la clave: " . mysqli_error($this->conexion));
 
