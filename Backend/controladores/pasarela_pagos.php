@@ -3,10 +3,18 @@
     header('Access-Control-Allow-Origin: *');
     
     // Define los encabezados permitidos en las peticiones HTTP (como orígenes, tipos de contenido y tokens de aceptación)
-    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-    
+    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
+
     // Especifica que la respuesta del servidor se entregará estrictamente en formato JSON
     header('Content-Type: application/json');
+
+    // El navegador manda un preflight OPTIONS (sin Authorization) antes de
+    // cualquier peticion real que incluya ese header. Si no se corta aqui,
+    // el navegador bloquearia la peticion real como un fallo de CORS.
+    if($_SERVER['REQUEST_METHOD'] === 'OPTIONS'){
+        http_response_code(200);
+        exit;
+    }
 
     // Importa el archivo global que establece la conexión activa con la base de datos MySQL
     require_once('../modelos/conexion.php');
