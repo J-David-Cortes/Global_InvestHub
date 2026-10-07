@@ -1,0 +1,23 @@
+-- Migracion: fo_ciudad opcional en la tabla usuario.
+--
+-- Contexto: el registro publico no pide ciudad, asi que usuario.fo_ciudad
+-- debe poder quedar vacio. Hoy la columna es NOT NULL y el registro no
+-- podria insertar una fila sin ella.
+--
+-- Decisiones:
+--   1. Solo se cambia NULL/NOT NULL. La FK usuario_ibfk_1 (fo_ciudad ->
+--      ciudad.id_ciudad) se mantiene intacta: MySQL/MariaDB permite NULL en
+--      una FK sin cambios.
+--   2. Verificado antes de aplicar: ninguna consulta del backend hace JOIN
+--      sobre usuario.fo_ciudad (solo se escribe en usuario.insertar()), y el
+--      frontend no lee fo_ciudad del usuario. Ver el dump previo
+--      pre-fo_ciudad-opcional_2026-10-06_2131.sql.
+--   3. La reversion falla si ya hay filas con NULL, por eso primero se
+--      asigna una ciudad por defecto (107 existe en ciudad).
+--
+-- Aplicar:
+ALTER TABLE usuario MODIFY fo_ciudad INT(11) NULL;
+
+-- Revertir (solo si no hay usuarios sin ciudad, o tras rellenarlos):
+-- UPDATE usuario SET fo_ciudad = 107 WHERE fo_ciudad IS NULL;
+-- ALTER TABLE usuario MODIFY fo_ciudad INT(11) NOT NULL;

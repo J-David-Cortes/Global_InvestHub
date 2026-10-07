@@ -1,0 +1,22 @@
+-- Migracion: fo_pasarela opcional en usuario_suscripcion.
+--
+-- Contexto: el plan Trial no implica ningun pago, asi que no tiene pasarela.
+-- Hoy fo_pasarela es NOT NULL y no se puede registrar un Trial sin inventar
+-- una pasarela.
+--
+-- Decisiones:
+--   1. Solo cambia NULL/NOT NULL. La FK usuario_suscripcion_ibfk_3
+--      (fo_pasarela -> pasarela_pagos.id_pasarela, ON UPDATE CASCADE) y su
+--      indice se mantienen. Verificado con SHOW CREATE TABLE tras aplicar.
+--   2. Verificado antes de aplicar: ninguna consulta del backend hace JOIN
+--      entre usuario_suscripcion y pasarela_pagos (planActual() une con
+--      suscripcion). Por tanto las filas con NULL no desaparecen de las
+--      consultas actuales.
+--   3. Hoy hay 1 fila con fo_pasarela = 1 (pagoflex); no cambia.
+--
+-- Aplicar:
+ALTER TABLE usuario_suscripcion MODIFY fo_pasarela INT(11) NULL;
+
+-- Revertir (rellenar primero las filas sin pasarela):
+-- UPDATE usuario_suscripcion SET fo_pasarela = 1 WHERE fo_pasarela IS NULL;
+-- ALTER TABLE usuario_suscripcion MODIFY fo_pasarela INT(11) NOT NULL;

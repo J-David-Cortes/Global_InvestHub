@@ -1,0 +1,21 @@
+-- Migracion: indice UNIQUE sobre usuario.email.
+--
+-- Contexto: el registro publico necesita que dos cuentas no compartan
+-- correo. Hoy la columna no tiene restriccion de unicidad.
+--
+-- Decisiones:
+--   1. La colacion utf8mb4_unicode_ci hace que el indice sea insensible a
+--      mayusculas y espacios finales: 'Prueba@x.test' y 'prueba@x.test ' se
+--      consideran el mismo correo y el segundo se rechaza. Verificado con
+--      una transaccion que termina en ROLLBACK (no deja filas).
+--   2. Verificado antes de aplicar: ningun correo se repite al normalizar
+--      con LOWER(TRIM(email)), asi que el indice se puede crear sin limpiar
+--      datos.
+--   3. La aplicacion ademas normalizara el correo (minusculas y sin espacios)
+--      al guardar y al buscar; el indice es la garantia final.
+--
+-- Aplicar:
+ALTER TABLE usuario ADD UNIQUE KEY uq_usuario_email (email);
+
+-- Revertir:
+-- ALTER TABLE usuario DROP INDEX uq_usuario_email;
