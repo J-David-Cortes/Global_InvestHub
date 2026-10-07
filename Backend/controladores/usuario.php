@@ -50,7 +50,7 @@
             $id = isset($_GET['id']) ? $_GET['id'] : 0;
             exigirPropioUsuarioOAdmin($conexion, $fo_usuario, $id);
             $params = json_decode($json);
-            $vec = $usuario->editar($id, $params);
+            $vec = $usuario->editar($id, $params, $fo_usuario);
         break;
         case 'eliminar' :
             // Borrar la cuenta de otra persona: solo administradores.

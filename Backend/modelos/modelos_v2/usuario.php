@@ -67,13 +67,20 @@
             return ['Resultado' => "OK", 'mensaje' => "Se insertó el usuario"];
         }
 
-        public function editar($id, $params){
+        public function editar($id, $params, $fo_usuario){
             $nombre = mysqli_real_escape_string($this->conexion, $params->nombre);
             $email = mysqli_real_escape_string($this->conexion, $params->email);
-            $fo_permiso = intval($params->fo_permiso);
             $id = intval($id);
+            $fo_usuario = intval($fo_usuario);
 
-            $sql = "UPDATE usuario SET nombre = '$nombre', email = '$email', fo_permiso = $fo_permiso";
+            // fo_permiso solo lo cambia un administrador sobre OTRA cuenta.
+            // En cualquier otro caso se ignora el valor del cliente y se
+            // conserva el que ya tiene la base (no entra en el UPDATE).
+            $sql = "UPDATE usuario SET nombre = '$nombre', email = '$email'";
+            if($id !== $fo_usuario && isset($params->fo_permiso) && esAdmin($this->conexion, $fo_usuario)){
+                $fo_permiso = intval($params->fo_permiso);
+                $sql .= ", fo_permiso = $fo_permiso";
+            }
 
             if(isset($params->clave) && $params->clave !== ''){
                 $clave = mysqli_real_escape_string($this->conexion, password_hash($params->clave, PASSWORD_DEFAULT));
