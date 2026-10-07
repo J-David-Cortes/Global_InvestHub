@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { Auth } from '../../../servicios/auth';
 import { Usuario } from '../../../servicios/usuario';
 import { UsuarioPerfil } from '../../../modelos/usuario.model';
 
@@ -10,6 +11,7 @@ import { UsuarioPerfil } from '../../../modelos/usuario.model';
 })
 export class ProfileTab implements OnInit {
   private usuarioService = inject(Usuario);
+  private auth = inject(Auth);
 
   cargando = signal(true);
 
@@ -63,10 +65,9 @@ export class ProfileTab implements OnInit {
 
   guardar() {
     // Ahora sí hace una petición real de guardado, no solo un signal local
-    this.usuarioService.editar(2, {
+    this.usuarioService.editar(this.auth.usuario()?.id ?? 0, {
       nombre: this.nombre(),
       email: this.email(),
-      fo_permiso: 4, // TODO: usar el valor real del usuario, no fijo
     }).subscribe({
       next: () => {
         this.guardado.set(true);
