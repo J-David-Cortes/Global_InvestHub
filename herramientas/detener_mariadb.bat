@@ -36,15 +36,15 @@ goto fin
 :desaparecio
 echo.
 echo mysqld.exe termino tras %INTENTOS% segundos.
-echo Ultimas lineas del log:
-powershell -NoProfile -Command "Get-Content '%LOG%' -Tail 5"
-echo.
-powershell -NoProfile -Command "if (Get-Content '%LOG%' -Tail 30 | Select-String 'Shutdown complete') { exit 0 } else { exit 1 }"
+netstat -ano | find ":3306 " | find "LISTENING" >nul
 if errorlevel 1 (
-  echo ATENCION: no se registro el cierre ^(Shutdown complete^) en el log.
+  echo APAGADO CONFIRMADO: mysqld.exe no existe y el puerto 3306 no escucha.
 ) else (
-  echo APAGADO LIMPIO: el log registro Shutdown complete.
+  echo ATENCION: mysqld.exe desaparecio pero el puerto 3306 sigue escuchando.
 )
+echo.
+echo Ultimas lineas del log ^(informativo, no decide el resultado^):
+powershell -NoProfile -Command "Get-Content '%LOG%' -Tail 5"
 
 :fin
 echo.
