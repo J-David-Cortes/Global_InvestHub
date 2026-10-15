@@ -19,9 +19,9 @@
     $control = isset($_GET['control']) ? $_GET['control'] : '';
     $usuario = new Usuario($conexion);
 
-    // 'login' es la unica accion que no exige un token todavia -- es como
-    // se obtiene uno. Todo lo demas exige autenticacion.
-    if($control !== 'login'){
+    // 'login' y 'registro' son las unicas acciones que no exigen un token
+    // todavia -- son como se obtiene uno. Todo lo demas exige autenticacion.
+    if($control !== 'login' && $control !== 'registro'){
         $fo_usuario = exigirUsuarioAutenticado();
     }
 
@@ -73,6 +73,29 @@
             $email = isset($params->email) ? $params->email : '';
             $clave = isset($params->clave) ? $params->clave : '';
             $vec = $usuario->login($email, $clave);
+        break;
+
+        case 'registro' :
+            // Registro publico: sin token. Content-Length como primer filtro
+            // barato, y lectura acotada del cuerpo (no mas de 8193 bytes) para
+            // no procesar cuerpos grandes.
+            $mensajeGenerico = 'No se pudo crear la cuenta con estos datos. Si ya tienes cuenta, inicia sesión.';
+            $longitudDeclarada = isset($_SERVER['CONTENT_LENGTH']) ? (int) $_SERVER['CONTENT_LENGTH'] : 0;
+            if($longitudDeclarada > 8192){
+                $vec = ['Resultado' => 'Error', 'mensaje' => $mensajeGenerico];
+                break;
+            }
+            $json = file_get_contents('php://input', false, null, 0, 8193);
+            if(strlen($json) > 8192){
+                $vec = ['Resultado' => 'Error', 'mensaje' => $mensajeGenerico];
+                break;
+            }
+            $params = json_decode($json);
+            if($params === null){
+                $vec = ['Resultado' => 'Error', 'mensaje' => $mensajeGenerico];
+                break;
+            }
+            $vec = $usuario->registro($params);
         break;
 
         default:

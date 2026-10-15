@@ -159,6 +159,13 @@
                 return ['Resultado' => "Error", 'mensaje' => "Email o contraseña incorrectos"];
             }
 
+            return $this->respuestaSesion($fila);
+        }
+
+        // Arma la respuesta de sesion (token + datos minimos) a partir de una
+        // fila con id_usuario, nombre, email y fo_permiso. La usan login() y
+        // registro() para no duplicar el formato de respuesta.
+        private function respuestaSesion($fila){
             $token = generarToken((int) $fila['id_usuario'], $fila['email']);
 
             return [
@@ -171,6 +178,143 @@
                     'fo_permiso' => (int) $fila['fo_permiso'],
                 ],
             ];
+        }
+
+        // Mensaje unico para cualquier fallo de registro que no deba revelar
+        // detalles (incluido el correo duplicado y cualquier error interno):
+        // no dice si el correo ya existe ni expone motivos tecnicos.
+        private const MENSAJE_REGISTRO_GENERICO = "No se pudo crear la cuenta con estos datos. Si ya tienes cuenta, inicia sesión.";
+        private const VERSION_ACEPTACION = 'borrador-1';
+
+        public function registro($params){
+            $transaccionAbierta = false;
+            try {
+                if(!is_object($params)){
+                    return ['Resultado' => "Error", 'mensaje' => self::MENSAJE_REGISTRO_GENERICO];
+                }
+
+                $nombre = isset($params->nombre) && is_string($params->nombre) ? trim($params->nombre) : '';
+                $email  = isset($params->email) && is_string($params->email) ? mb_strtolower(trim($params->email), 'UTF-8') : '';
+                $clave  = isset($params->clave) && is_string($params->clave) ? $params->clave : '';
+                $confirmarClave = isset($params->confirmarClave) && is_string($params->confirmarClave) ? $params->confirmarClave : '';
+                $aceptaciones = isset($params->aceptaciones) && is_object($params->aceptaciones) ? $params->aceptaciones : null;
+
+                if(mb_strlen($nombre, 'UTF-8') < 2 || mb_strlen($nombre, 'UTF-8') > 150){
+                    return ['Resultado' => "Error", 'mensaje' => "Nombre inválido"];
+                }
+                if(preg_match('/[\x00-\x1F\x7F]/', $nombre)){
+                    return ['Resultado' => "Error", 'mensaje' => "Nombre inválido"];
+                }
+                if(!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 100){
+                    return ['Resultado' => "Error", 'mensaje' => "Correo inválido"];
+                }
+                if(mb_strlen($clave, 'UTF-8') < 10){
+                    return ['Resultado' => "Error", 'mensaje' => "La contraseña debe tener al menos 10 caracteres"];
+                }
+                // bcrypt trunca a 72 bytes: se rechaza, nunca se recorta.
+                if(strlen($clave) > 72){
+                    return ['Resultado' => "Error", 'mensaje' => "La contraseña es demasiado larga (máximo 72 bytes)"];
+                }
+                if(strpos($clave, "\0") !== false){
+                    return ['Resultado' => "Error", 'mensaje' => "La contraseña contiene caracteres no permitidos"];
+                }
+                if($clave !== $confirmarClave){
+                    return ['Resultado' => "Error", 'mensaje' => "Las contraseñas no coinciden"];
+                }
+                if($aceptaciones === null || ($aceptaciones->terminos ?? null) !== true || ($aceptaciones->riesgo ?? null) !== true){
+                    return ['Resultado' => "Error", 'mensaje' => "Debes aceptar los términos y el aviso de riesgo"];
+                }
+                $aceptaComercial = ($aceptaciones->comercial ?? null) === true;
+
+                // El hash se calcula ANTES de tocar la base: el tiempo de
+                // respuesta no debe delatar si el correo ya existe.
+                $hash = password_hash($clave, PASSWORD_DEFAULT);
+
+                mysqli_begin_transaction($this->conexion);
+                $transaccionAbierta = true;
+
+                $stmtUsuario = mysqli_prepare($this->conexion,
+                    "INSERT INTO usuario(nombre, email, clave, fo_permiso) VALUES (?, ?, ?, 4)");
+                if($stmtUsuario === false){
+                    throw new \RuntimeException('prepare_usuario:' . mysqli_errno($this->conexion));
+                }
+                mysqli_stmt_bind_param($stmtUsuario, 'sss', $nombre, $email, $hash);
+                $okUsuario = mysqli_stmt_execute($stmtUsuario);
+
+                if(!$okUsuario){
+                    $duplicado = mysqli_stmt_errno($stmtUsuario) === 1062;
+                    $codigoError = mysqli_stmt_errno($stmtUsuario);
+                    mysqli_stmt_close($stmtUsuario);
+                    mysqli_rollback($this->conexion);
+                    $transaccionAbierta = false;
+                    if(!$duplicado){
+                        error_log("registro(): fallo insert usuario, errno=$codigoError");
+                    }
+                    return ['Resultado' => "Error", 'mensaje' => self::MENSAJE_REGISTRO_GENERICO];
+                }
+
+                $idUsuario = mysqli_insert_id($this->conexion);
+                mysqli_stmt_close($stmtUsuario);
+
+                $tipos = ['terminos', 'riesgo'];
+                if($aceptaComercial){
+                    $tipos[] = 'comercial';
+                }
+                $version = self::VERSION_ACEPTACION;
+                $stmtAceptacion = mysqli_prepare($this->conexion,
+                    "INSERT INTO usuario_aceptacion(fo_usuario, tipo, version) VALUES (?, ?, ?)");
+                if($stmtAceptacion === false){
+                    throw new \RuntimeException('prepare_aceptacion:' . mysqli_errno($this->conexion));
+                }
+                foreach($tipos as $tipo){
+                    mysqli_stmt_bind_param($stmtAceptacion, 'iss', $idUsuario, $tipo, $version);
+                    if(!mysqli_stmt_execute($stmtAceptacion)){
+                        $codigoError = mysqli_stmt_errno($stmtAceptacion);
+                        mysqli_stmt_close($stmtAceptacion);
+                        mysqli_rollback($this->conexion);
+                        $transaccionAbierta = false;
+                        error_log("registro(): fallo insert usuario_aceptacion($tipo), errno=$codigoError");
+                        return ['Resultado' => "Error", 'mensaje' => self::MENSAJE_REGISTRO_GENERICO];
+                    }
+                }
+                mysqli_stmt_close($stmtAceptacion);
+
+                // Fechas calculadas en SQL (no en PHP): date.timezone de PHP
+                // y la zona horaria de MariaDB pueden diferir, y deben
+                // coincidir con el CURDATE() que usa planActual().
+                $stmtSuscripcion = mysqli_prepare($this->conexion,
+                    "INSERT INTO usuario_suscripcion(fecha_inicio, fecha_fin, fo_usuario, fo_suscripcion, fo_estado)
+                     VALUES (CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), ?, 5, 1)");
+                if($stmtSuscripcion === false){
+                    throw new \RuntimeException('prepare_suscripcion:' . mysqli_errno($this->conexion));
+                }
+                mysqli_stmt_bind_param($stmtSuscripcion, 'i', $idUsuario);
+                if(!mysqli_stmt_execute($stmtSuscripcion)){
+                    $codigoError = mysqli_stmt_errno($stmtSuscripcion);
+                    mysqli_stmt_close($stmtSuscripcion);
+                    mysqli_rollback($this->conexion);
+                    $transaccionAbierta = false;
+                    error_log("registro(): fallo insert usuario_suscripcion, errno=$codigoError");
+                    return ['Resultado' => "Error", 'mensaje' => self::MENSAJE_REGISTRO_GENERICO];
+                }
+                mysqli_stmt_close($stmtSuscripcion);
+
+                mysqli_commit($this->conexion);
+                $transaccionAbierta = false;
+
+                return $this->respuestaSesion([
+                    'id_usuario' => $idUsuario,
+                    'nombre' => $nombre,
+                    'email' => $email,
+                    'fo_permiso' => 4,
+                ]);
+            } catch (\Throwable $e) {
+                if($transaccionAbierta){
+                    mysqli_rollback($this->conexion);
+                }
+                error_log("registro(): excepcion " . get_class($e) . ": " . $e->getCode());
+                return ['Resultado' => "Error", 'mensaje' => self::MENSAJE_REGISTRO_GENERICO];
+            }
         }
     }
 ?>
