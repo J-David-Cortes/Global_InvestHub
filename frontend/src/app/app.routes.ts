@@ -8,6 +8,9 @@ import { Settings } from './modulos/settings/settings';
 import { Login } from './modulos/login/login';
 import { Marketplace } from './modulos/marketplace/marketplace';
 import { authGuard, soloInvitadoGuard } from './servicios/auth.guard';
+import { Terminos } from './modulos/legal/terminos/terminos';
+import { Privacidad } from './modulos/legal/privacidad/privacidad';
+import { AvisoRiesgo } from './modulos/legal/aviso-riesgo/aviso-riesgo';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -25,5 +28,8 @@ export const routes: Routes = [
         ]
     },
     {path: 'login', component: Login, canActivate: [soloInvitadoGuard]},
+    {path: 'terminos', component: Terminos},
+    {path: 'privacidad', component: Privacidad},
+    {path: 'aviso-riesgo', component: AvisoRiesgo},
     {path: '**', redirectTo: ''}
 ];

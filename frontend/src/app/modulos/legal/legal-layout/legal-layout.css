@@ -1,0 +1,66 @@
+.legal-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+.legal-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 720px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.legal-aviso-borrador {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(215, 160, 73, 0.12);
+    border: 1px solid rgba(215, 160, 73, 0.3);
+    color: var(--accent-gold);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+}
+.legal-titulo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--text-main);
+}
+.legal-version {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+.legal-contenido {
+    color: var(--text-main);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+.legal-contenido h2 {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-teal);
+}
+.legal-contenido ul {
+    padding-left: 1.25rem;
+}
+.legal-marcador {
+    color: var(--accent-gold);
+    font-weight: 600;
+}
+.legal-volver {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+.legal-separador {
+    margin: 0 0.5rem;
+    color: var(--text-muted);
+}
