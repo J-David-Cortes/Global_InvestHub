@@ -1,0 +1,123 @@
+<div class="login-wrapper">
+    <div class="login-card registro-card">
+        <div class="text-center mb-4">
+            <a routerLink="/" class="brand-logo d-block mb-2">
+                Global <span class="hub">InvestHub</span>
+            </a>
+            <p class="text-muted fs-6">Crea tu cuenta</p>
+        </div>
+
+        <form (submit)="alEnviar($event)" novalidate>
+            <div class="mb-3">
+                <label class="form-label" for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" class="form-control form-control-dark w-100"
+                    placeholder="Tu nombre completo" autocomplete="name" maxlength="150"
+                    [value]="nombre()" (input)="actualizarNombre($any($event.target).value)"
+                    (blur)="tocarNombre()" required
+                    [attr.aria-invalid]="errorNombre() ? true : null">
+                <div class="campo-error" aria-live="polite">
+                    @if (errorNombre(); as msg) { {{ msg }} }
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" class="form-control form-control-dark w-100"
+                    placeholder="name@company.com" autocomplete="email" maxlength="100"
+                    [value]="email()" (input)="actualizarEmail($any($event.target).value)"
+                    (blur)="tocarEmail()" required
+                    [attr.aria-invalid]="errorEmail() ? true : null">
+                <div class="campo-error" aria-live="polite">
+                    @if (errorEmail(); as msg) { {{ msg }} }
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label" for="clave">Contraseña</label>
+                <div class="campo-clave-wrapper">
+                    <input [type]="mostrarClave() ? 'text' : 'password'" id="clave" name="clave"
+                        class="form-control form-control-dark w-100" placeholder="••••••••"
+                        autocomplete="new-password"
+                        [value]="clave()" (input)="actualizarClave($any($event.target).value)"
+                        (blur)="tocarClave()" required
+                        [attr.aria-invalid]="errorClave() ? true : null">
+                    <button type="button" class="btn-mostrar-clave" (click)="alternarMostrarClave()"
+                        [attr.aria-label]="mostrarClave() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                        <i class="bi" [class.bi-eye]="!mostrarClave()" [class.bi-eye-slash]="mostrarClave()"></i>
+                    </button>
+                </div>
+                @if (clave().length > 0) {
+                <div class="fortaleza-clave">
+                    <div class="fortaleza-pista">
+                        <div class="fortaleza-relleno" [class]="'fortaleza-' + fortalezaClave().nivel"
+                            [style.width.%]="fortalezaClave().porcentaje"></div>
+                    </div>
+                    <span class="fortaleza-etiqueta">{{ fortalezaClave().etiqueta }}</span>
+                </div>
+                }
+                <div class="campo-error" aria-live="polite">
+                    @if (errorClave(); as msg) { {{ msg }} }
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="confirmarClave">Confirmar contraseña</label>
+                <input [type]="mostrarClave() ? 'text' : 'password'" id="confirmarClave" name="confirmarClave"
+                    class="form-control form-control-dark w-100" placeholder="••••••••"
+                    autocomplete="new-password"
+                    [value]="confirmarClave()" (input)="actualizarConfirmarClave($any($event.target).value)"
+                    (blur)="tocarConfirmarClave()" required
+                    [attr.aria-invalid]="errorConfirmarClave() ? true : null">
+                <div class="campo-error" aria-live="polite">
+                    @if (errorConfirmarClave(); as msg) { {{ msg }} }
+                </div>
+            </div>
+
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="aceptaTerminos" name="aceptaTerminos"
+                    [checked]="aceptaTerminos()" (change)="aceptaTerminos.set($any($event.target).checked)">
+                <label class="form-check-label checkbox-label" for="aceptaTerminos">
+                    Acepto los <a routerLink="/terminos" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a>
+                    y la <a routerLink="/privacidad" target="_blank" rel="noopener noreferrer">Política de Tratamiento de Datos Personales</a>
+                    (versión {{ versionTextosLegales }}).
+                </label>
+            </div>
+
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="aceptaRiesgo" name="aceptaRiesgo"
+                    [checked]="aceptaRiesgo()" (change)="aceptaRiesgo.set($any($event.target).checked)">
+                <label class="form-check-label checkbox-label" for="aceptaRiesgo">
+                    He leído y entiendo el <a routerLink="/aviso-riesgo" target="_blank" rel="noopener noreferrer">Aviso de Riesgo</a>:
+                    invertir implica riesgo de pérdida de capital (versión {{ versionTextosLegales }}).
+                </label>
+            </div>
+
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="aceptaComercial" name="aceptaComercial"
+                    [checked]="aceptaComercial()" (change)="aceptaComercial.set($any($event.target).checked)">
+                <label class="form-check-label checkbox-label" for="aceptaComercial">
+                    Quiero recibir novedades y comunicaciones comerciales (opcional).
+                </label>
+            </div>
+
+            <div class="campo-error mb-2" aria-live="polite">
+                @if (errorAceptaciones(); as msg) { {{ msg }} }
+            </div>
+
+            @if (errorMensaje(); as msg) {
+            <div class="mensaje-error-servidor" aria-live="polite">
+                <i class="bi bi-exclamation-circle"></i>
+                {{ msg }}
+            </div>
+            }
+
+            <button type="submit" class="btn btn-cyan w-100 py-2" [disabled]="enviando()">
+                @if (enviando()) { Creando cuenta... } @else { Crear cuenta }
+            </button>
+        </form>
+
+        <p class="text-center text-muted fs-6 mt-3 mb-0">
+            ¿Ya tienes cuenta? <a routerLink="/login" class="nav-link-custom">Inicia sesión</a>
+        </p>
+    </div>
+</div>

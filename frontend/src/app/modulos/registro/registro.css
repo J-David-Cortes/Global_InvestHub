@@ -1,0 +1,89 @@
+.registro-card {
+    max-width: 460px;
+}
+
+.mensaje-error-servidor {
+    color: #f05252;
+    background-color: rgba(240, 82, 82, 0.1);
+    border: 1px solid rgba(240, 82, 82, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+.campo-error {
+    color: #f05252;
+    font-size: 0.8rem;
+    min-height: 1.1rem;
+    margin-top: 0.25rem;
+}
+
+.campo-clave-wrapper {
+    position: relative;
+}
+.campo-clave-wrapper input {
+    padding-right: 2.5rem;
+}
+.btn-mostrar-clave {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+}
+.btn-mostrar-clave:hover {
+    color: var(--accent-cyan);
+}
+
+.fortaleza-clave {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+}
+.fortaleza-pista {
+    height: 4px;
+    width: 80px;
+    border-radius: 2px;
+    background-color: var(--border-color);
+    overflow: hidden;
+}
+.fortaleza-relleno {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.2s ease;
+}
+.fortaleza-debil { background-color: #f05252; }
+.fortaleza-media { background-color: var(--accent-gold); }
+.fortaleza-fuerte { background-color: var(--status-running); }
+.fortaleza-etiqueta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.checkbox-label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+.checkbox-label a {
+    color: var(--accent-teal);
+    text-decoration: underline;
+}
+.checkbox-label a:hover {
+    color: var(--accent-cyan);
+}
+
+/* Las casillas de Bootstrap no toman el tema oscuro por defecto */
+.form-check-input {
+    background-color: var(--bg-input);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+.form-check-input:checked {
+    background-color: var(--accent-teal);
+    border-color: var(--accent-teal);
+}

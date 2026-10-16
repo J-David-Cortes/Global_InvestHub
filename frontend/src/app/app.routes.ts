@@ -11,6 +11,7 @@ import { authGuard, soloInvitadoGuard } from './servicios/auth.guard';
 import { Terminos } from './modulos/legal/terminos/terminos';
 import { Privacidad } from './modulos/legal/privacidad/privacidad';
 import { AvisoRiesgo } from './modulos/legal/aviso-riesgo/aviso-riesgo';
+import { Registro } from './modulos/registro/registro';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -28,6 +29,7 @@ export const routes: Routes = [
         ]
     },
     {path: 'login', component: Login, canActivate: [soloInvitadoGuard]},
+    {path: 'registro', component: Registro, canActivate: [soloInvitadoGuard]},
     {path: 'terminos', component: Terminos},
     {path: 'privacidad', component: Privacidad},
     {path: 'aviso-riesgo', component: AvisoRiesgo},
