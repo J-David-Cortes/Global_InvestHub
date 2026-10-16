@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiBase } from './api-base';
-import { RespuestaLogin } from '../modelos/usuario-sesion.model';
+import { DatosRegistro, RespuestaLogin } from '../modelos/usuario-sesion.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +24,10 @@ export class Usuario extends ApiBase {
       email,
       clave,
     }));
+  }
+
+  registro(datos: DatosRegistro) {
+    return this.http.post<RespuestaLogin>(`${this.url}?control=registro`, JSON.stringify(datos));
   }
 
   cambiarClave(claveActual: string, claveNueva: string) {

@@ -3,7 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { Usuario } from './usuario';
-import { RespuestaLogin, UsuarioSesion } from '../modelos/usuario-sesion.model';
+import { DatosRegistro, RespuestaLogin, UsuarioSesion } from '../modelos/usuario-sesion.model';
 
 const CLAVE_TOKEN = 'auth_token';
 const CLAVE_USUARIO = 'auth_usuario';
@@ -36,15 +36,26 @@ export class Auth {
 
   login(email: string, clave: string) {
     return this.usuarioService.login(email, clave).pipe(
-      tap((respuesta: RespuestaLogin) => {
-        if (respuesta.Resultado === 'OK' && respuesta.token && respuesta.usuario) {
-          this.token.set(respuesta.token);
-          this.usuario.set(respuesta.usuario);
-          localStorage.setItem(CLAVE_TOKEN, respuesta.token);
-          localStorage.setItem(CLAVE_USUARIO, JSON.stringify(respuesta.usuario));
-        }
-      })
+      tap((respuesta) => this.guardarSesionSiOk(respuesta))
     );
+  }
+
+  registro(datos: DatosRegistro) {
+    return this.usuarioService.registro(datos).pipe(
+      tap((respuesta) => this.guardarSesionSiOk(respuesta))
+    );
+  }
+
+  // Mismo guardado de sesion que usaba login() antes de este cambio, ahora
+  // compartido con registro() (el backend devuelve el mismo formato en los
+  // dos casos: token + usuario minimo).
+  private guardarSesionSiOk(respuesta: RespuestaLogin) {
+    if (respuesta.Resultado === 'OK' && respuesta.token && respuesta.usuario) {
+      this.token.set(respuesta.token);
+      this.usuario.set(respuesta.usuario);
+      localStorage.setItem(CLAVE_TOKEN, respuesta.token);
+      localStorage.setItem(CLAVE_USUARIO, JSON.stringify(respuesta.usuario));
+    }
   }
 
   logout() {

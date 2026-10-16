@@ -17,3 +17,16 @@ export interface RespuestaLogin {
   token?: string;
   usuario?: UsuarioSesion;
 }
+
+// Cuerpo enviado a usuario.php?control=registro.
+export interface DatosRegistro {
+  nombre: string;
+  email: string;
+  clave: string;
+  confirmarClave: string;
+  aceptaciones: {
+    terminos: boolean;
+    riesgo: boolean;
+    comercial: boolean;
+  };
+}
