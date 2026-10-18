@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MarketplaceCard } from './marketplace-card/marketplace-card';
 import { BotInversion } from '../../servicios/bot-inversion';
 import { UsuarioBot } from '../../servicios/usuario-bot';
@@ -12,7 +13,7 @@ type OpcionOrden = 'return' | 'sharpe' | 'price' | 'popularity';
 
 @Component({
   selector: 'app-marketplace',
-  imports: [MarketplaceCard, SubscribeModal],
+  imports: [MarketplaceCard, SubscribeModal, RouterLink],
   templateUrl: './marketplace.html',
   styleUrl: './marketplace.css',
 })

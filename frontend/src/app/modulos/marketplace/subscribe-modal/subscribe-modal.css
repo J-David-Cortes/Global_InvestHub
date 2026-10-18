@@ -118,3 +118,21 @@
 .btn-confirmar:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .modal-ayuda-info { color: var(--accent-cyan); }
+
+.modal-aviso-riesgo {
+    margin: 0.75rem 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.modal-aviso-riesgo a {
+    color: var(--accent-teal);
+    text-decoration: underline;
+}
+.modal-aviso-riesgo .form-check-input {
+    background-color: var(--bg-input);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+.modal-aviso-riesgo .form-check-input:checked {
+    background-color: var(--accent-teal);
+    border-color: var(--accent-teal);
+}

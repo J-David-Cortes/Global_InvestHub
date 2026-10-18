@@ -40,6 +40,17 @@
                 (input)="actualizarApiKey($any($event.target).value)" />
             <p class="modal-ayuda">Siempre se pide de nuevo: las credenciales de los brokers expiran.</p>
 
+            <div class="form-check modal-aviso-riesgo">
+                <input class="form-check-input" type="checkbox" id="subscribe-acepta-riesgo"
+                    [checked]="aceptaRiesgoActivacion()"
+                    (change)="aceptaRiesgoActivacion.set($any($event.target).checked)">
+                <label class="form-check-label" for="subscribe-acepta-riesgo">
+                    Entiendo que invertir implica riesgo de pérdida de capital y que las rentabilidades
+                    pasadas no garantizan resultados futuros
+                    (<a routerLink="/aviso-riesgo" target="_blank" rel="noopener noreferrer">ver aviso de riesgo</a>).
+                </label>
+            </div>
+
             @if (errorMensaje(); as msg) {
             <div class="modal-error">
                 <i class="bi bi-exclamation-circle"></i>

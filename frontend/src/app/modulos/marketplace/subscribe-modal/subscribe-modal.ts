@@ -1,4 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
 import { Broker } from '../../../servicios/broker';
 import { UsuarioBot } from '../../../servicios/usuario-bot';
@@ -17,6 +18,7 @@ function normalizar(texto: string): string {
 
 @Component({
   selector: 'app-subscribe-modal',
+  imports: [RouterLink],
   templateUrl: './subscribe-modal.html',
   styleUrl: './subscribe-modal.css',
 })
@@ -32,6 +34,10 @@ export class SubscribeModal implements OnInit {
 
   brokers = signal<BrokerOpcion[]>([]);
   brokerSeleccionadoId = signal<number | null>(null);
+  // Obligatoria antes de activar: el @if de marketplace.html destruye y
+  // vuelve a crear este componente en cada apertura, asi que siempre
+  // arranca en false.
+  aceptaRiesgoActivacion = signal(false);
   readonly opcionOtro = OPCION_OTRO;
   // Modo "Otro": el broker no esta en la lista y el usuario escribe su nombre.
   modoOtro = signal(false);
@@ -51,7 +57,7 @@ export class SubscribeModal implements OnInit {
   });
 
   puedeConfirmar = computed(() => {
-    if (this.cargando() || this.enviando() || this.apiKey().trim() === '') return false;
+    if (this.cargando() || this.enviando() || this.apiKey().trim() === '' || !this.aceptaRiesgoActivacion()) return false;
     return this.modoOtro()
       ? this.brokerNuevo().trim() !== ''
       : this.brokerSeleccionadoId() !== null;
