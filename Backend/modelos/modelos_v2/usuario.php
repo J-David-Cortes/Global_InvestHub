@@ -184,7 +184,11 @@
         // detalles (incluido el correo duplicado y cualquier error interno):
         // no dice si el correo ya existe ni expone motivos tecnicos.
         private const MENSAJE_REGISTRO_GENERICO = "No se pudo crear la cuenta con estos datos. Si ya tienes cuenta, inicia sesión.";
-        private const VERSION_ACEPTACION = 'borrador-1';
+        // Debe coincidir con VERSION_TEXTOS_LEGALES en
+        // frontend/src/app/config/legal.ts -- no hay forma de compartir esta
+        // constante entre PHP y Angular, asi que si se actualiza un lado hay
+        // que actualizar el otro a mano.
+        private const VERSION_ACEPTACION = 'borrador-2';
 
         public function registro($params){
             $transaccionAbierta = false;
