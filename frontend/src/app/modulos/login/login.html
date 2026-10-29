@@ -20,6 +20,13 @@
                     [value]="clave()" (input)="actualizarClave($any($event.target).value)" required>
             </div>
 
+            @if (sesionExpirada()) {
+            <div class="mensaje-error-login">
+                <i class="bi bi-exclamation-circle"></i>
+                Tu sesión expiró. Inicia sesión de nuevo.
+            </div>
+            }
+
             @if (errorMensaje(); as msg) {
             <div class="mensaje-error-login">
                 <i class="bi bi-exclamation-circle"></i>

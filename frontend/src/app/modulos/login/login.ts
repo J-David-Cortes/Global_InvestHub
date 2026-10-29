@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { Auth } from '../../servicios/auth';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Auth, esRutaAppValida } from '../../servicios/auth';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +11,21 @@ import { Auth } from '../../servicios/auth';
 export class Login {
   private auth = inject(Auth);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   email = signal('');
   clave = signal('');
   enviando = signal(false);
   errorMensaje = signal<string | null>(null);
+  sesionExpirada = signal(false);
+  private returnUrl = '/app';
+
+  constructor() {
+    const params = this.route.snapshot.queryParamMap;
+    this.sesionExpirada.set(params.get('expirada') === '1');
+    const destino = params.get('returnUrl');
+    if (esRutaAppValida(destino)) this.returnUrl = destino;
+  }
 
   puedeEnviar(): boolean {
     return !this.enviando() && this.email().trim() !== '' && this.clave() !== '';
@@ -43,7 +53,7 @@ export class Login {
           this.errorMensaje.set(respuesta.mensaje ?? 'No se pudo iniciar sesión');
           return;
         }
-        this.router.navigateByUrl('/app');
+        this.router.navigateByUrl(this.returnUrl);
       },
       error: (err) => {
         console.error('Error al iniciar sesión:', err);
